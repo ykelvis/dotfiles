@@ -1,0 +1,55 @@
+#avoid flicker
+#out_to_console yes
+#out_to_x no
+double_buffer yes
+#localhost 7634
+#own window to run simultanious 2 or more conkys
+own_window  yes
+#own_window_argb_visual yes
+#own_window_argb_value 222
+own_window_transparent no
+own_window_type override
+own_window_hints undecorate,above,sticky,skip_taskbar,skip_pager
+#nc localhost 7634
+text_buffer_size 1024
+
+#borders
+draw_borders no
+
+#shades
+draw_shades no
+
+#position
+alignment top_left
+gap_x 0
+gap_y 3
+
+#behaviour
+update_interval 2
+
+#colour
+default_color  8f8f8f
+#default_shade_color 000000
+own_window_color 2B2B2B
+
+#font
+use_xft yes
+xftfont Dejavu Sans Mono:size=8
+font Dejavu Sans Mono:size=8
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+#to prevent window from moving
+use_spacer none
+minimum_size 1366 0
+maximum_width 1366
+
+#mpd
+#mpd_host localhost
+#mpd_port 6600
+
+
+
+TEXT
+${color #87CEEB}${font :style=Bold :size=8} ${time %Y-%m-%d|%W/%a} ${time %H:%M:%S %p}${color}${font :size=8}  ${color #ff1800}|${color}${color #FFFF00} ${kernel} | ${uptime_short} | ${loadavg}${color}  ${color #ff1800}|${color} ${color #2E8B57}Root:${color}${color #fbd614}${fs_free /} ${color}/${color #fbd614}${fs_size /}${color} ${color #2E8B57} Home:${color} ${color #fbd614}${fs_free /home/yk/FORMER} ${color}/${color #fbd614}${fs_size /home/yk/FORMER}${color} ${color #2E8B57}Ram:${color} ${color #fbd614}$mem${color}/${color #fbd614}${memmax}${color}  ${color #ff1800}|${color} CPU: ${color #fbd614} ${acpitemp}°C ${cpu cpu0}%${color}  GPU: ${color #fbd614}${execi 20 nvidia-settings -q gpucoretemp |grep gpu\:0 |awk '{print $4}' |cut -c1-2}°C ${execi 20 nvidia-settings -q GPUCurrentClockFreqs |grep gpu\:0 |awk '{print $4}' |cut -c1-7}Hz ${color}  Disk: ${color #fbd614}$diskio${color} ${alignr}${color #ff1800}|${color}${if_existing /proc/net/route wlan0}Signal: ${color e0e0e0}${wireless_link_qual wlan0}%${color}  ${color #87CEEB}↓ ${downspeed wlan0}k/s ${totaldown wlan0} ↑ ${upspeed wlan0}k/s ${totalup wlan0} ${color}${else}${if_existing /proc/net/route ppp0} ${color #ffffff}↓ ${downspeed ppp0}k/s ${totaldown ppp0} ↑ ${upspeed ppp0}k/s ${totalup ppp0} ${color}${else}${if_existing /proc/net/route usb0}${color #ffffff}↓ ${downspeed usb0}k/s ${totaldown usb0} ↑ ${upspeed usb0}k/s ${totalup usb0} ${color}${else}${if_existing /proc/net/route eth0} ${color #ffffff}↓ ${downspeed eth0}k/s ${totaldown eth0} ↑ ${upspeed eth0}k/s ${totalup eth0} ${color}${else}${endif}${endif}${endif}${endif} ${color #ff1800}|${color} Battery: ${color #87CEEB}${battery_percent}%${battery_time}${color}

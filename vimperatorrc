@@ -1,0 +1,27 @@
+set titlestring=""
+set hintchars=qwertyuiopasdfghjkl
+set followhint=0
+noremap j 5j
+noremap k 5k
+noremap q gT
+noremap w gt
+noremap y Y
+noremap Y y
+noremap <C-d> <S-Esc><C-d><S-Esc>
+noremap <c-c> <c-v><c-c>
+noremap <c-a> <C-v><C-a>
+noremap Q :tabmove! -1 <CR>
+noremap W :tabmove! +1 <CR>
+noremap U :undo<space>
+noremap ,en :set encoding=UTF-8<CR>
+noremap ,jp :set encoding=Shift_JIS<CR>
+noremap ,cn :set encoding=GBK<CR>
+noremap ,q :tabopen https://plus.google.com<CR>
+noremap ,w :tabopen https://feedly.com<CR>
+noremap ,a :tabopen http://wikiwiki.jp/kancolle/<CR>
+map ,s :source .vimperatorrc<CR> 
+map ss :stop<CR>
+map sj :set toolbars=navigation<CR>
+map sk :set toolbars=nonavigation<CR>
+map <c-t> :set toolbars=navigation<CR> :tabopen about:newtab<CR> <F6>
+ignorekeys add -except=<C-h>,<C-d>,<tab>{.*}

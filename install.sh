@@ -3,7 +3,8 @@
 USER=$(whoami)
 DIR=$(pwd)
 
-git clone https://github.com/robbyrussell/oh-my-zsh.git oh-my-zsh
+git submodule init
+git submodule update --remote
 
 ln -s $DIR/awesome /home/$USER/.config/
 ln -s $DIR/oh-my-zsh/ /home/$USER/.oh-my-zsh

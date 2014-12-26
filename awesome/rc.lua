@@ -577,6 +577,7 @@ globalkeys = awful.util.table.join(
     -- Standard program
     awful.key({  "Mod1", "Shift"  }, "q",    function () run_or_raise("sakura -c 95 -r 33 -e ncmpcpp",   { name = "ncmpcpp" })        end ),
     awful.key({  "Mod1", "Shift"  }, "w",     function () run_or_raise("qps",   { class = "Qps" })        end ),
+    awful.key({  "Mod1", "Shift"  }, "l",     function () run_or_raise("sakura",   { name = "WeeChat" })        end ),
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey,           }, "#82",    function () awful.util.spawn("amixer -q sset Master 2%-", false) end),
@@ -868,6 +869,8 @@ awful.rules.rules = {
       properties = { tag = tags[1][1] }, callback = function(c) awful.placement.centered(c,nil) end },
     { rule = { class = "Zim" },
       properties = { floating = true, tag = tags[1][3] } },
+    { rule = { name = "WeeChat" },
+      properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
     { rule = { class = "Claws-mail" },
       properties = { floating = true, tag = tags[1][2] } },
     { rule = { class = "Clementine" },

@@ -54,6 +54,11 @@ syntax enable
 "set background=dark
 colorscheme molokai
 
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+inoremap < <><ESC>i
+
 " keymappings
 let mapleader = ","
 nnoremap / /\v

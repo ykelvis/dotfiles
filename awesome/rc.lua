@@ -93,7 +93,7 @@ end
 beautiful.init("~/.config/awesome/newblue/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "sakura -c 80 -r 22"
+terminal = "sakura -c 89 -r 22"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -156,7 +156,7 @@ local mysuspendmenu = {
 }
 
 local mysysmenu = awful.menu({ items = {  { "Applications", xdgmenu },
-                                    { "open terminal", "sakura -c 80 -r 22" },
+                                    { "open terminal", "sakura -c 89 -r 22" },
                                     { "Suspend", mysuspendmenu, beautiful.awesome_icon },
                                     { "Lock", "/usr/bin/bash -c 'i3lock -e -t -i ~/lock.png'" },
                                     { "Exit", "oblogout" },
@@ -184,7 +184,7 @@ local myshortcutmenu = {
 }
 local mymainmenu = awful.menu({ items = { { "File", "pcmanfm" },
                                     { "Firefox", "/usr/bin/firefox" },
-                                    { "Terminal", "sakura -c 80 -r 22" },
+                                    { "Terminal", "sakura -c 89 -r 22" },
                                     { "Shortcuts", myshortcutmenu, beautiful.awesome_icon },
                                     { "AllApps", xdgmenu, beautiful.awesome_icon },
                                     { "Awesome", myawesomemenu, beautiful.awesome_icon },
@@ -596,7 +596,7 @@ globalkeys = awful.util.table.join(
     awful.key({ "Control", modkey }, "l",     function () awful.util.spawn("bash -c 'i3lock -e -t -i ~/lock.png'") end),
     --awful.key({ "Control", "Mod1" }, "h",     function () awful.util.spawn_with_shell("xfce4-popup-clipman")    end),
     awful.key({  "Mod1", "Shift"  }, "e",     function () awful.util.spawn("gnome-character-map")   end),
-    awful.key({ modkey,           }, "t",     function () awful.util.spawn("sakura -c 80 -r 22")    end),
+    awful.key({ modkey,           }, "t",     function () awful.util.spawn("sakura -c 89 -r 22")    end),
     awful.key({ modkey,           }, "e",     function () awful.util.spawn("pcmanfm")               end),
     awful.key({ modkey,           }, "q",     function () awful.util.spawn("xkill", false)          end),
     awful.key({  "Mod1", "Shift"  }, ".",     function () awful.util.spawn_with_shell("mpc next")   end),

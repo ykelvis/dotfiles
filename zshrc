@@ -4,7 +4,7 @@ CASE_SENSITIVE="false"
 DISABLE_AUTO_UPDATE="true"
 HIST_STAMPS="yyyy-mm-dd"
 #ZSH_THEME="gentoo"
-plugins=(git autojump systemd)
+plugins=(git autojump systemd taskwarrior)
 source $ZSH/oh-my-zsh.sh
 
 autoload -U colors && colors

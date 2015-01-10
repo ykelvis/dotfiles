@@ -15,3 +15,4 @@ ln -s $DIR/conkyrc /home/$USER/.conkyrc
 ln -s $DIR/compton.conf /home/$USER/.compton.conf
 ln -s $DIR/vimrc /home/$USER/.vimrc
 ln -s $DIR/vim /home/$USER/.vim
+ln -s $DIR/Xdefaults /home/$USER/.Xdefaults

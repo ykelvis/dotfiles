@@ -616,6 +616,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
     awful.key({ modkey, },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    --awful.key({ "Mod1",           }, "c", function () os.execute("xsel -p -o | xsel -i -b") end), 
     awful.key({ "Mod1" }, "F3",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
@@ -853,8 +854,6 @@ awful.rules.rules = {
       properties = { floating = false } },
     { rule = { class = "Gvim" }, 
       properties = { size_hints_honor = false } },
-    { rule = { class = "guake" }, 
-      properties = { border_width = 0 } },
     { rule = { class = "Pidgin" },
       properties = { floating = true, tag = tags[1][2] } },
     { rule = { class = "Steam" },
@@ -879,23 +878,20 @@ awful.rules.rules = {
       properties = { maximized_vertical = true, border_width = 0 } },
     { rule = { instance = "crx_nckgahadagoaajjgafhacjanaoiihapd" }, 
       properties = { floating = true }, callback = function(c) c:geometry( { width = 260 , height = 460 } ) end },
-    { rule_any = { class = { "Tilda" } }, except = { name = "Tilda 0 Config" },
-      properties = { maximized_vertical = true, maximized_horizontal = true } },
 }
 
 awful.util.spawn_with_shell("[ -z `pgrep compton` ]&&compton")
 awful.util.spawn_with_shell("[ -z `pgrep zim` ]&&zim")
 --naughty.notify({title="Welcome", text=""})
 --awful.util.spawn_with_shell("[ -z `pgrep unagi` ]&&unagi")
---awful.util.spawn_with_shell("[ -z `pgrep guake` ]&&sleep 5s&&guake")
-awful.util.spawn_with_shell("[ -z `pgrep tilda` ]&&sleep 3s&&tilda")
 awful.util.spawn_with_shell("numlockx on")
 awful.util.spawn_with_shell("xbacklight -set 40")
 awful.util.spawn_with_shell("fcitx -r")
 --awful.util.spawn_with_shell("[ `pgrep NetworkManager` ]&&[ -z `pgrep nm-applet` ]&&nm-applet")
 --awful.util.spawn_with_shell("[ `pgrep connmand` ]&&[ -z `pgrep connman-ui-gtk` ]&&connman-ui-gtk")
 --awful.util.spawn_with_shell("[ -z `pgrep xfce4-clipman` ]&&xfce4-clipman")
-awful.util.spawn_with_shell("[ -z `pgrep parcellite` ]&&parcellite")
+--awful.util.spawn_with_shell("[ -z `pgrep parcellite` ]&&parcellite")
+awful.util.spawn_with_shell("[ -z `pgrep copyq` ]&&copyq")
 awful.util.spawn_with_shell("xautolock -time 5 -locker 'i3lock -e -t -i ~/lock.png'")
 awful.util.spawn_with_shell("[ -z `pgrep polkit-` ]&&/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 --awful.util.spawn_with_shell("[ -z `pgrep dropbox` ]&&dropboxd")

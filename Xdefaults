@@ -5,6 +5,9 @@ Xft.hinting:    1
 Xft.hintstyle:  hintfull
 Xft.lcdfilter:  lcddefault
 Xft.rgba:       rgb
+
+xterm*termName: xterm-256color
+
 urxvt*geometry:                80x25
 urxvt*font:xft:Source Code Pro Medium:size=11;antialias=true
 urxvt*boldFont:xft:Source Code Pro Medium:size=11::antialias=true

@@ -284,7 +284,7 @@ alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) 
 #alias urxvtc='urxvtc "$@";if [ $? -eq 2 ]; then urxvtd -q -o -f; urxvtc "$@";fi'
 
 #[[ -z "$TMUX" ]] && exec tmux
-alias tm="$HOME/Dropbox/scripts/tm;tmux attach-session -t work"
+alias tm="tm;tmux attach-session -t work"
 alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
 alias hdoff="xrandr --output HDMI-0 --off"
 alias xx="startx"
@@ -299,4 +299,6 @@ alias b2="archlinuxcn-i686-build"
 alias getold="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt"
 alias checknew="nvchecker nvchecker.ini"
 alias shownew="nvcmp nvchecker.ini"
+alias tmux="tmux -2"
 unset GREP_OPTIONS
+#export TERM="xterm-256color"

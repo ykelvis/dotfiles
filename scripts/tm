@@ -18,5 +18,5 @@ else
     cd ~/git/archlinuxcn
     tmux new-window -t $session_name:3 -n 3
     tmux select-window -t $session_name:0
-    tmux attach-session -t $session_name
+    tmux attach-session -2 -t $session_name
 fi

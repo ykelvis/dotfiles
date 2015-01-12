@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ACTION=`zenity --width=90 --height=200 --list --radiolist --text="Select logout action" --title="Logout" --column "Choice" --column "Action" TRUE LockScreen FALSE Reboot FALSE Shutdown FALSE Suspend`
+ACTION=`zenity --width=90 --height=200 --list --radiolist --text="Select logout action" --title="Logout" --column "Choice" --column "Action" TRUE LockScreen FALSE Suspend FALSE Shutdown FALSE Reboot`
 
 if [ -n "${ACTION}" ];then
   case $ACTION in

@@ -1,9 +1,8 @@
 export ZSH=$HOME/.oh-my-zsh
-#ZSH_THEME="agnoster"
 CASE_SENSITIVE="false"
 DISABLE_AUTO_UPDATE="true"
 HIST_STAMPS="yyyy-mm-dd"
-#ZSH_THEME="gentoo"
+#ZSH_THEME="miloshadzic"
 plugins=(git autojump systemd taskwarrior)
 source $ZSH/oh-my-zsh.sh
 
@@ -14,63 +13,44 @@ autoload -U edit-command-line
 
 [[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
 export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
 
 function prompt_char {
     if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
 }
 
 PROMPT='%{$fg_bold[green]%}%n@%m%{$fg_bold[blue]%}%~$(git_prompt_info)%(?,%{$fg_bold[white]%},%{$fg_bold[red]%})%_$(prompt_char)%{$reset_color%} '
-RPROMPT='%{$fg_bold[white]%}%*%{$reset_color%}'
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg_bold[blue]%})%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg_bold[red]%}%B✘%b%F{154}%f%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg_bold[green]%}✔%F{154}"
-#命令提示符
-#for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-#eval _$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-#eval $color='%{$fg[${(L)color}]%}'
-#(( count = $count + 1 ))
-#done
-#FINISH="%{$terminfo[sgr0]%}"
-#RPROMPT=$(echo "%{\e[1;32m%}%*$FINISH")
-#PROMPT=$(echo "%n%{\e[1;32m%}@%{\e[1;37m%}%M%{\e[1;31m%}:%~>$FINISH ")
-#PROMPT='%{$fg_bold[red]%}➜ %{$fg_bold[green]%}%p%{$fg[cyan]%}%d %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%}% %{$reset_color%}>'
 
-#ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}‹"
-#ZSH_THEME_GIT_PROMPT_SUFFIX="› %{$reset_color%}"
-
+zle -N edit-command-line
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
 bindkey '^U' backward-kill-line
 bindkey '^Y' yank
+bindkey -e
+bindkey "\e[3~" delete-char
 
 export EDITOR=vim
 export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILE=~/.zhistory
 setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS     
+setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY     
 setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE     
-#setopt INTERACTIVE_COMMENTS     
+setopt HIST_IGNORE_SPACE
 setopt AUTO_CD
-setopt complete_in_word 
+setopt complete_in_word
 setopt AUTO_LIST
 setopt AUTO_MENU
 #setopt MENU_COMPLETE
 
 #禁用 core dumps
 limit coredumpsize 0
- 
-#Emacs风格 键绑定
-bindkey -e
-#bindkey -v
-#设置 [DEL]键 为向后删除
-bindkey "\e[3~" delete-char
- 
+
 #以下字符视为单词的一部分
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 #}}}
@@ -115,7 +95,6 @@ zstyle ':completion:*:messages' format $'\e[33m | \e[1;7;32m %d \e[m\e[0;33m |\e
 zstyle ':completion:*:warnings' format $'\e[33m | \e[1;7;33m No Matches \e[m\e[0;33m |\e[m'
 zstyle ':completion:*:corrections' format $'\e[33m | \e[1;7;35m %d [errors: %e] \e[m\e[0;33m |\e[m'
 
-
 #修正大小写
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 #错误校正     
@@ -147,7 +126,6 @@ zstyle ':completion:*:corrections' format $'\e[01;32m -- %d (errors: %e) --\e[0m
  
 # cd ~ 补全顺序
 zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
-#}}}
  
 ##空行(光标在行首)补全 "cd " {{{
 user-complete(){
@@ -191,20 +169,10 @@ autoload run-help
  
 #路径别名 {{{
 #进入相应的路径时只要 cd ~xxx
-hash -d a="/tmp"
 hash -d s="/tmp/N"
-hash -d dt="$HOME/git/dotfiles"
-hash -d gt="$HOME/git"
-#}}}
- 
- 
-#{{{自定义补全
+
 #补全 ping
 zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com www.baidu.com
- 
-#补全 ssh scp sftp 等
-#zstyle -e ':completion::*:*:*:hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
-#}}}
 
 #漂亮又实用的命令高亮界面
 setopt extended_glob
@@ -241,7 +209,7 @@ check-cmd-self-insert() { zle .self-insert && recolor-cmd }
  zle -N self-insert check-cmd-self-insert
  zle -N backward-delete-char check-cmd-backward-delete-char
 
-#
+#alias
 alias ls="ls --color"
 alias ll="ls -l"
 alias vi="vim"
@@ -258,46 +226,40 @@ alias pacrscn='sudo pacman -Rscn'
 alias pacsi='pacman -Sii'
 alias pacss='pacman -Ss'
 alias pacqi='pacman -Qi'
+alias pacql="pacman -Ql"
 alias pacqo='pacman -Qo'
 alias pacqs='pacman -Qs'
 alias pacqdt="pacman -Qdt"
 alias pacscc="sudo pacman -Scc"
-alias pacql="pacman -Ql"
 alias pacdexp="pacman -D --asexp"
 alias pacddep="pacman -D --asdep"
 alias pacsdeps='sudo pacman -S --asdeps'
 alias pacqtdq="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
 
-
 alias yaog='yaourt -G'
 alias yaob='yaourt -B'
+alias yaos='yaourt -S'
+alias yaoqdt='yaourt -Qdt'
+alias yaoss='yaourt -Ss'
 alias yaoqbak='yaourt -Q --backupfile'
 alias yaosyua='yaourt -Syua --devel '
-#
+
 alias splitmusic='cue2tracks -R -c flac -o "%n - %t" "$@" *.cue'
 alias pm25='sed -n "2p" $HOME/.weather/pm25.history|cut -d"(" -f1'
 alias dstatt='dstat -cdlmnpsy'
 
-alias proxy="env http_proxy=localhost:8118 https_proxy=localhost:8118"
-alias proxyset="export http_proxy=localhost:8118;export https_proxy=localhost:8118"
 alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |shuf -n1 -z | xargs -0 feh --bg-fill"
-#alias urxvtc='urxvtc "$@";if [ $? -eq 2 ]; then urxvtd -q -o -f; urxvtc "$@";fi'
 
-#[[ -z "$TMUX" ]] && exec tmux
 alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
 alias hdoff="xrandr --output HDMI-0 --off"
 alias xx="startx"
 alias mc="ncmpcpp"
 alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
 alias ovpn="cd $HOME/Downloads/config;sudo openvpn --config ipv4.ovpn;cd -"
-alias svpnon="sudo shadowvpn -c $HOME/Downloads/shadowvpn/client.conf  -s start"
-alias svpnoff="sudo shadowvpn -c $HOME/Downloads/shadowvpn/client.conf  -s stop"
 
 alias b1="archlinuxcn-x86_64-build"
 alias b2="archlinuxcn-i686-build"
-alias getold="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt"
-alias checknew="nvchecker nvchecker.ini"
-alias shownew="nvcmp nvchecker.ini"
+alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker nvchecker.ini&&nvcmp nvchecker.ini"
 alias tmux="tmux -2"
 unset GREP_OPTIONS
 #export TERM="xterm-256color"

@@ -1,0 +1,17 @@
+# Insert your prefered key mappings here.
+unmapAll
+map q previousTab
+map w nextTab
+map gg scrollToTop
+map G scrollToBottom
+map j scrollDown
+map k scrollUp
+map r reload
+map f LinkHints.activateModeToOpenInNewTab
+map d removeTab
+map u restoreTab
+map H goBack
+map L goForward
+map Q moveTabLeft
+map W moveTabRight
+map / enterFindMode

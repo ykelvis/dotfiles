@@ -12,7 +12,7 @@ autoload -U promptinit&&promptinit
 autoload -U edit-command-line
 
 [[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
-export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/vendor_perl:/usr/bin/core_perl
+export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
 function prompt_char {
     if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
@@ -79,7 +79,7 @@ zstyle ':completion:*' squeeze-shlashes 'yes'
 zstyle ':completion::complete:*' '\\'
  
 #彩色补全菜单
-eval $(dircolors -b)
+#eval $(dircolors -b)
 export ZLSCOLORS="${LS_COLORS}"
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -210,7 +210,7 @@ check-cmd-self-insert() { zle .self-insert && recolor-cmd }
  zle -N backward-delete-char check-cmd-backward-delete-char
 
 #alias
-alias ls="ls --color"
+#alias ls="ls --color"
 alias ll="ls -l"
 alias vi="vim"
 

@@ -257,6 +257,7 @@ alias mc="ncmpcpp"
 alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
 alias ovpn="cd $HOME/Downloads/config;sudo openvpn --config ipv4.ovpn;cd -"
 
+alias b3="mv *pkg.tar.xz ~/repo"
 alias b1="archlinuxcn-x86_64-build"
 alias b2="archlinuxcn-i686-build"
 alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker nvchecker.ini&&nvcmp nvchecker.ini"

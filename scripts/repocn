@@ -1,23 +1,18 @@
-#!/bin/bash
+#!/usr/bin/perl
+use strict;
+use warnings;
 
-first_two(){
-	echo $arg|cut -c1-2;
+sub download_tarball{
+	system("wget https://aur.archlinux.org/packages/`echo $_|cut -c1-2`/$_/$_.tar.gz");
+	system("tar xvf $_.tar.gz");
+	system("rm -rf $_.tar");
 }
 
-get_tarball(){
-	two=`first_two $arg`;
-	wget https://aur.archlinux.org/packages/$two/$arg/$arg.tar.gz;
-	tar xvf $arg.tar.gz;
-	rm -rf $arg.tar.gz;
+sub git_message{
+	system("git add .&&git commit -m 'upgpkg: $_'");
 }
 
-git_message(){
-	git add .;
-	git commit -m "upgpkg: $arg";
+foreach (@ARGV){
+	download_tarball($_);
+	git_message($_);
 }
-
-for arg in "$@"
-do
-	get_tarball $arg;
-	git_message $arg;
-done

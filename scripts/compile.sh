@@ -1,6 +1,6 @@
 #!/bin/bash
 
-compile_it{
+compile_it(){
 	cd $arg;
 	archlinuxcn-x86_64-build;
 	archlinuxcn-i686-build;

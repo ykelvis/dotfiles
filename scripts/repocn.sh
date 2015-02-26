@@ -6,7 +6,7 @@ first_two(){
 
 get_tarball(){
 	two=`first_two $arg`;
-	wget https://aur.archlinux.org/packages/$two/$arg/$arg.tar.gz;
+	wget https://aur.archlinux.org/packages/$two/$arg/$arg.tar.gz&&rm -rf $_;
 	tar xvf $arg.tar.gz;
 	rm -rf $arg.tar.gz;
 }

@@ -272,15 +272,15 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 mcd() { mkdir -p "$1"; cd "$1" }
-cls() { cd "$1"; ls }
-backup() { cp "$1"{,.bak} }
-md5check() { md5sum "$1"|grep "$2" }
-sbs() { du -sm $1|sort -n }
-psg() { ps aux|grep $1 }
-listen() { lsof -P -i -n $1 }
-histg() { history|grep $1 }
-glogger() { git log|grep -B4 $1 }
-makescript() { fc -rnl -999|head -$1 > $2 }
+cls() { cd "$1"; ls; }
+backup() { cp "$1"{,.bak}; }
+md5check() { md5sum "$1"|grep "$2"; }
+sbs() { du -sm "$1"|sort -n; }
+psg() { ps aux|grep $1; }
+listen() { lsof -P -i -n $1; }
+histg() { history|grep $1; }
+glogger() { git log|grep -B4 $1; }
+makescript() { fc -rnl -999|head -$1 > $2; }
 
 extract() { 
     if [ -f $1 ] ; then 
@@ -302,4 +302,3 @@ extract() {
          echo "'$1' is not a valid file"
      fi 
 }
-

@@ -1,0 +1,93 @@
+#alias
+#alias ls="ls --color"
+alias ll="ls -l"
+alias vi="vim"
+
+alias pacsyu='sudo pacman -Syu'
+alias pacsyy='sudo pacman -Syy'
+alias pacsyyu='sudo pacman -Syyu'
+alias pacs='sudo pacman -S'
+alias pacsw='sudo pacman -Sw'
+alias pacu='sudo pacman -U'
+alias pacr='sudo pacman -R'
+alias pacrns='sudo pacman -Rns'
+alias pacrscn='sudo pacman -Rscn'
+alias pacsi='pacman -Sii'
+alias pacss='pacman -Ss'
+alias pacqi='pacman -Qi'
+alias pacql="pacman -Ql"
+alias pacqo='pacman -Qo'
+alias pacqs='pacman -Qs'
+alias pacqdt="pacman -Qdt"
+alias pacscc="sudo pacman -Scc"
+alias pacdexp="pacman -D --asexp"
+alias pacddep="pacman -D --asdep"
+alias pacsdeps='sudo pacman -S --asdeps'
+alias pacqtdq="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
+
+alias yaog='yaourt -G'
+alias yaob='yaourt -B'
+alias yaos='yaourt -S'
+alias yaoqdt='yaourt -Qdt'
+alias yaoss='yaourt -Ss'
+alias yaoqbak='yaourt -Q --backupfile'
+alias yaosyua='yaourt -Syua --devel '
+
+alias splitmusic='cue2tracks -R -c flac -o "%n - %t" "$@" *.cue'
+alias pm25='sed -n "2p" $HOME/.weather/pm25.history|cut -d"(" -f1'
+alias dstatt='dstat -cdlmnpsy'
+
+alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |shuf -n1 -z | xargs -0 feh --bg-fill"
+
+alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
+alias hdoff="xrandr --output HDMI-0 --off"
+alias xx="startx"
+alias mc="ncmpcpp"
+alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
+alias ovpn="cd $HOME/Downloads/config;sudo openvpn --config ipv4.ovpn;cd -"
+
+alias b3="mv *pkg.tar.xz ~/repo"
+alias b1="archlinuxcn-x86_64-build"
+alias b2="archlinuxcn-i686-build"
+alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker nvchecker.ini&&nvcmp nvchecker.ini"
+#alias tmux="tmux -2"
+unset GREP_OPTIONS
+#export TERM="xterm-256color"
+
+#useful functions
+alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
+alias c="clear"
+alias ..='cd ..'
+alias ...='cd ../..'
+alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+mcd() { mkdir -p "$1"; cd "$1" }
+cls() { cd "$1"; ls }
+backup() { cp "$1"{,.bak} }
+md5check() { md5sum "$1"|grep "$2" }
+sbs() { du -sm $1|sort -n }
+psg() { ps aux|grep $1 }
+listen() { lsof -P -i -n $1 }
+histg() { history|grep $1 }
+glogger() { git log|grep -B4 $1 }
+makescript() { fc -rnl -999|head -$1 > $2 }
+
+extract() { 
+    if [ -f $1 ] ; then 
+      case $1 in
+        *.tar.bz2)   tar xjf $1     ;; 
+        *.tar.gz)    tar xzf $1     ;; 
+        *.bz2)       bunzip2 $1     ;; 
+        *.rar)       unrar e $1     ;; 
+        *.gz)        gunzip $1      ;; 
+        *.tar)       tar xf $1      ;; 
+        *.tbz2)      tar xjf $1     ;; 
+        *.tgz)       tar xzf $1     ;; 
+        *.zip)       unzip $1       ;; 
+        *.Z)         uncompress $1  ;; 
+        *.7z)        7z x $1        ;; 
+        *)     echo "'$1' cannot be extracted via extract()" ;; 
+         esac 
+     else
+         echo "'$1' is not a valid file"
+     fi 
+}

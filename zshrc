@@ -274,7 +274,7 @@ alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^
 mcd() { mkdir -p "$1"; cd "$1" }
 cls() { cd "$1"; ls; }
 backup() { cp "$1"{,.bak}; }
-md5check() { md5sum "$1"|grep "$2"; }
+md5check() { md5sum "$1"|grep -i "$2"; }
 sbs() { du -sm "$1"|sort -n; }
 psg() { ps aux|grep $1; }
 listen() { lsof -P -i -n $1; }

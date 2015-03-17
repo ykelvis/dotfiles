@@ -277,7 +277,7 @@ backup() { cp "$1"{,.bak}; }
 md5check() { md5sum "$1"|grep -i "$2"; }
 sbs() { du -sm "$1"|sort -n; }
 psg() { ps aux|grep $1; }
-listen() { lsof -P -i -n $1; }
+listen() { $1 lsof -P -i -n|grep LISTEN; }
 histg() { history|grep $1; }
 glogger() { git log|grep -B4 $1; }
 makescript() { fc -rnl -999|head -$1 > $2; }

@@ -1,18 +1,47 @@
-#!/usr/bin/perl
-use strict;
-use warnings;
+#!/bin/bash
 
-sub download_tarball{
-	system("wget https://aur.archlinux.org/packages/`echo $_|cut -c1-2`/$_/$_.tar.gz&&rm -rf $_");
-	system("tar xvf $_.tar.gz");
-	system("rm -rf $_.tar.gz");
+first_two(){
+	echo $OPTARG|cut -c1-2;
 }
 
-sub git_message{
-	system("git add .&&git commit -m 'upgpkg: $_'");
+get_tarball(){
+	two=`first_two $OPTARG`;
+	wget https://aur.archlinux.org/packages/$two/$OPTARG/$OPTARG.tar.gz&&rm -rf $OPTARG;
+	tar xvf $OPTARG.tar.gz;
+	rm -rf $OPTARG.tar.gz;
 }
 
-foreach (@ARGV){
-	download_tarball($_);
-	git_message($_);
+git_message_upg(){
+	git add .;
+	git commit -m "upgpkg: $OPTARG";
 }
+
+git_message_add(){
+	git add .;
+	git commit -m "addpkg: $OPTARG";
+}
+
+git_message_remove(){
+	git rm -rf $OPTARG;
+	git add --all .;
+	git commit -m "remove: $OPTARG";
+}
+
+while getopts "a:u:r:" opt; do
+	case $opt in
+		a)
+			echo "addpkg: $OPTARG";
+			get_tarball $OPTARG;
+			git_message_add $OPTARG;
+			;;
+		u)
+			echo "upgpkg: $OPTARG";
+			get_tarball $OPTARG;
+			git_message_upg $OPTARG;
+			;;
+		r)
+			echo "remove: $OPTARG";
+			git_message_remove $OPTARG;
+			;;
+	esac
+done

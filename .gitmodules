@@ -40,3 +40,9 @@
 [submodule "vim/bundle/vim-markdown"]
 	path = vim/bundle/vim-markdown
 	url = https://github.com/plasticboy/vim-markdown
+[submodule "vim/bundle/matchit.zip"]
+	path = vim/bundle/matchit.zip
+	url = https://github.com/vim-scripts/matchit.zip
+[submodule "vim/bundle/YouCompleteMe"]
+	path = vim/bundle/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe

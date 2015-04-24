@@ -1,5 +1,7 @@
 #!/bin/bash
 
+is_folder_exists(){ ls $1 2&>/dev/null&&return 0||return 1 };
+
 USER=$(whoami)
 DIR=$(pwd)
 

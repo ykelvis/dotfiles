@@ -275,7 +275,6 @@ mcd() { mkdir -p "$1"; cd "$1" }
 cls() { cd "$1"; ls; }
 backup() { cp "$1"{,.bak}; }
 md5check() { md5sum "$1"|grep -i "$2"; }
-sbs() { du -sm "$1"|sort -n; }
 psg() { ps aux|grep $1; }
 listen() { $1 lsof -P -i -n|grep LISTEN; }
 histg() { history|grep $1; }
@@ -301,4 +300,20 @@ extract() {
      else
          echo "'$1' is not a valid file"
      fi 
+}
+
+sdu(){
+    du -k $@| sort -n | awk '
+         BEGIN {
+            split("KB,MB,GB,TB", Units, ",");
+         }
+         {
+            u = 1;
+            while ($1 >= 1024) {
+               $1 = $1 / 1024;
+               u += 1
+            }
+            $1 = sprintf("%.1f %s", $1, Units[u]);
+            print $0;
+         }'
 }

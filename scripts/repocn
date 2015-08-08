@@ -1,12 +1,7 @@
 #!/bin/bash
 
-first_two(){
-	echo $OPTARG|cut -c1-2;
-}
-
 get_tarball(){
-	two=`first_two $OPTARG`;
-	wget https://aur.archlinux.org/packages/$two/$OPTARG/$OPTARG.tar.gz&&rm -rf $OPTARG;
+	curl -o $OPTARG.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/$OPTARG.tar.gz&&rm -rf $OPTARG;
 	tar xvf $OPTARG.tar.gz;
 	rm -rf $OPTARG.tar.gz;
 }

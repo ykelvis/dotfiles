@@ -18,8 +18,8 @@ noremap ,jp :set encoding=Shift_JIS<CR>
 noremap ,cn :set encoding=GBK<CR>
 noremap ,q :tabopen https://plus.google.com<CR>
 noremap ,w :tabopen https://feedly.com<CR>
-noremap ,a :tabopen http://wikiwiki.jp/kancolle/<CR>
-map ,s :source .vimperatorrc<CR> 
+noremap ,a :tabopen http://dorama.info/drama/d_rate.php<CR>
+map ,s :source ~/.vimperatorrc<CR> 
 map ss :stop<CR>
 map sj :set toolbars=navigation<CR>
 map sk :set toolbars=nonavigation<CR>

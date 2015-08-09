@@ -8,7 +8,7 @@
 }
 #TabsToolbar .tabbrowser-tabs {
     max-height: 25px !important;
-    margin-top: -1px !important;
+    margin-top: -5px !important;
     margin-left: -1px !important;
 }
 #TabsToolbar .tabbrowser-tab {
@@ -82,4 +82,7 @@
     background-clip: padding-box !important;
     border-color: rgba(0,0,0,.25) !important;
     border-radius: 0 !important;
+}
+#nav-bar-customization-target {
+    padding: 0px !important;
 }

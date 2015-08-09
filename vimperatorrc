@@ -1,6 +1,6 @@
 set titlestring=""
 set hintchars=qwertyuiopasdfghjkl
-set followhint=0
+set followhints=0
 noremap j 5j
 noremap k 5k
 noremap q gT
@@ -24,4 +24,3 @@ map ss :stop<CR>
 map sj :set toolbars=navigation<CR>
 map sk :set toolbars=nonavigation<CR>
 map <c-t> :set toolbars=navigation<CR> :tabopen about:newtab<CR> <F6>
-ignorekeys add -except=<C-h>,<C-d>,<tab>{.*}

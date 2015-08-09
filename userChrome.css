@@ -44,7 +44,7 @@
    border-left-color: rgba(255,0,0) !important;
 }
 #TabsToolbar .tabbrowser-tab[selected] {
-    background-color: rgba(0,0,255,.50) !important;
+    background-color: rgba(0,255,0,.70) !important;
     background-clip: padding-box !important;
 
 }

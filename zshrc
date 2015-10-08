@@ -11,8 +11,10 @@ autoload -U compinit&&compinit -u
 autoload -U promptinit&&promptinit
 autoload -U edit-command-line
 
-[[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
 export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
+
+[[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
+[[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
 
 function prompt_char {
     if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
@@ -317,3 +319,6 @@ sdu(){
             print $0;
          }'
 }
+
+alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
+alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"

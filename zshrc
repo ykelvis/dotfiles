@@ -262,7 +262,7 @@ alias ovpn="cd $HOME/Downloads/config;sudo openvpn --config ipv4.ovpn;cd -"
 alias b3="mv *pkg.tar.xz ~/repo"
 alias b1="archlinuxcn-x86_64-build"
 alias b2="archlinuxcn-i686-build"
-alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker archcn.ini&&nvcmp archcn.ini"
+alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker archcn.log&&nvcmp archcn.log"
 #alias tmux="tmux -2"
 unset GREP_OPTIONS
 #export TERM="xterm-256color"

@@ -1,4 +1,4 @@
-execute pathogen#infect()
+"execute pathogen#infect()
 filetype plugin on
 filetype on
 filetype indent on
@@ -105,7 +105,6 @@ Plugin 'jwhitley/vim-matchit'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
-Plugin 'hdima/python-syntax'
 Plugin 'vim-scripts/taglist.vim'
 Plugin 'bling/vim-airline'
 Plugin 'altercation/vim-colors-solarized'
@@ -115,3 +114,5 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tomasr/molokai'
 Plugin 'sickill/vim-monokai'
 Plugin 'terryma/vim-multiple-cursors'
+call vundle#end()
+colorscheme molokai

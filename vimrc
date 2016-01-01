@@ -1,6 +1,6 @@
 execute pathogen#infect()
-filetype on
 filetype plugin on
+filetype on
 filetype indent on
 set tags=tags
 set nocompatible
@@ -98,3 +98,20 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Q. How can I close vim if the only window left open is a NERDTree?
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
+
+set rtp+=~/.vim/bundle/vundle
+call vundle#begin()
+Plugin 'jwhitley/vim-matchit'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'majutsushi/tagbar'
+Plugin 'hdima/python-syntax'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'bling/vim-airline'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-markdown'
+Plugin 'tomasr/molokai'
+Plugin 'sickill/vim-monokai'
+Plugin 'terryma/vim-multiple-cursors'

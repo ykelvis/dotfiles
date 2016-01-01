@@ -1,6 +1,3 @@
-def_key "mouse"
-  mouse_event
-
 def_key "up"
   scroll_up
 def_key "down"

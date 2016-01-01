@@ -11,6 +11,7 @@ autoload -U compinit&&compinit -u
 autoload -U promptinit&&promptinit
 autoload -U edit-command-line
 
+export HOMEBREW_BUILD_FROM_SOURCE=1
 export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
@@ -57,11 +58,6 @@ limit coredumpsize 0
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 #}}}
 
-#自动补全缓存
-#zstyle ':completion::complete:*' use-cache on
-#zstyle ':completion::complete:*' cache-path .zcache
-#zstyle ':completion:*:cd:*' ignore-parents parent pwd
- 
 #自动补全选项
 zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
 zstyle ':completion:*' auto-description 'specify: %d'
@@ -74,8 +70,6 @@ zstyle ':completion:*' verbose false
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -e -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*' menu select
-
-#路径补全
 zstyle ':completion:*' expand 'yes'
 zstyle ':completion:*' squeeze-shlashes 'yes'
 zstyle ':completion::complete:*' '\\'
@@ -254,10 +248,8 @@ alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) 
 
 alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
 alias hdoff="xrandr --output HDMI-0 --off"
-alias xx="startx"
 alias mc="ncmpcpp"
 alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
-alias ovpn="cd $HOME/Downloads/config;sudo openvpn --config ipv4.ovpn;cd -"
 
 alias b3="mv *pkg.tar.xz ~/repo"
 alias b1="archlinuxcn-x86_64-build"
@@ -277,7 +269,7 @@ mcd() { mkdir -p "$1"; cd "$1" }
 cls() { cd "$1"; ls; }
 backup() { cp "$1"{,.bak}; }
 md5check() { md5sum "$1"|grep -i "$2"; }
-psg() { ps aux|grep $1; }
+psg() { ps aux | grep -v grep | grep -i -e VSZ -e "$1" }
 listen() { $1 lsof -P -i -n|grep LISTEN; }
 histg() { history|grep $1; }
 glogger() { git log|grep -B4 $1; }

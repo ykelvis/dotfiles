@@ -51,12 +51,9 @@ setopt AUTO_LIST
 setopt AUTO_MENU
 #setopt MENU_COMPLETE
 
-#禁用 core dumps
 limit coredumpsize 0
 
-#以下字符视为单词的一部分
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
-#}}}
 
 #自动补全选项
 zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
@@ -80,7 +77,6 @@ export ZLSCOLORS="${LS_COLORS}"
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-# 补全提示 标题描述 group matches and descriptions
 zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:options' description 'yes'
@@ -163,11 +159,8 @@ bindkey "\e\e" sudo-command-line
 alias run-help >&/dev/null && unalias run-help
 autoload run-help
  
-#路径别名 {{{
-#进入相应的路径时只要 cd ~xxx
 hash -d s="/tmp/N"
 
-#补全 ping
 zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com www.baidu.com
 
 #漂亮又实用的命令高亮界面
@@ -208,6 +201,7 @@ check-cmd-self-insert() { zle .self-insert && recolor-cmd }
 #alias
 #alias ls="ls --color"
 alias ll="ls -l"
+alias l="ls -al"
 alias vi="vim"
 
 alias pacsyu='sudo pacman -Syu'

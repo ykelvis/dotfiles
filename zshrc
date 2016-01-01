@@ -16,6 +16,8 @@ export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/
 
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
 [[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fasd --init auto)"
 
 function prompt_char {
     if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
@@ -308,3 +310,5 @@ sdu(){
 
 alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
 alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
+alias v='f -e vim'
+alias m='f -e open'

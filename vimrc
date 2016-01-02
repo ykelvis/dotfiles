@@ -4,6 +4,8 @@ filetype indent on
 
 set rtp+=~/.vim/bundle/vundle
 call vundle#begin()
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'kien/ctrlp.vim'
 Plugin 'jwhitley/vim-matchit'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
@@ -70,11 +72,6 @@ set t_Co=256
 syntax enable
 "set background=dark
 colorscheme molokai
-
-inoremap ( ()<ESC>i
-inoremap [ []<ESC>i
-inoremap { {}<ESC>i
-inoremap < <><ESC>i
 
 " keymappings
 let mapleader = ","

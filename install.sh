@@ -1,6 +1,12 @@
 #!/bin/bash
 
-is_folder_exists(){ ls $1 2&>/dev/null&&return 0||return 1 };
+create_folder_if_not(){
+    [[ -x $1 ]]||mkdir -pv $1
+}
+
+backup_file_if_is(){
+    [[ -f $1 ]]&&mv "$1" "$1.bak"
+}
 
 USER=$(whoami)
 DIR=$(pwd)

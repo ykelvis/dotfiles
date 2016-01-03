@@ -1,9 +1,10 @@
-filetype plugin on
 filetype on
+filetype plugin on
 filetype indent on
 
 set rtp+=~/.vim/bundle/vundle
 call vundle#begin()
+Plugin 'scrooloose/syntastic'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
 Plugin 'jwhitley/vim-matchit'
@@ -25,6 +26,7 @@ set tags=tags
 set nocompatible
 set nobackup
 set nowb
+set guifont=Sauce\ Code\ Powerline:h11
 set noswapfile
 set ffs=unix,dos,mac
 set modelines=0
@@ -33,7 +35,6 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set guifont=Source\ code\ pro\ Regular\ 11
 set encoding=utf-8
 set scrolloff=3
 set autoread
@@ -101,6 +102,14 @@ map <leader>e :tabnew<cr>
 "  vim-airline
 let g:airline_powerline_fonts = 1
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " nerdtree
 map <leader>nn :NERDTreeToggle<cr>

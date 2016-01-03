@@ -270,6 +270,8 @@ listen() { $1 lsof -P -i -n|grep LISTEN; }
 histg() { history|grep $1; }
 glogger() { git log|grep -B4 $1; }
 makescript() { fc -rnl -999|head -$1 > $2; }
+trash(){ mv "$@" ~/.Trash/  }
+trash-info(){ ls -al ~/.Trash  }
 
 extract() { 
     if [ -f $1 ] ; then 

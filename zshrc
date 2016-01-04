@@ -206,6 +206,7 @@ check-cmd-self-insert() { zle .self-insert && recolor-cmd }
 alias ll="ls -l"
 alias l="ls -al"
 alias vi="vim"
+alias aria2c="aria2c --file-allocation=none"
 
 alias pacsyu='sudo pacman -Syu'
 alias pacsyy='sudo pacman -Syy'

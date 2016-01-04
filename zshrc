@@ -38,9 +38,10 @@ bindkey -e
 bindkey "\e[3~" delete-char
 
 export EDITOR=vim
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=99999
+export SAVEHIST=99999
 export HISTFILE=~/.zhistory
+#setopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY     
@@ -270,7 +271,7 @@ listen() { $1 lsof -P -i -n|grep LISTEN; }
 histg() { history|grep $1; }
 glogger() { git log|grep -B4 $1; }
 makescript() { fc -rnl -999|head -$1 > $2; }
-trash(){ mv "$@" ~/.Trash/  }
+trash(){ des=`date "+%Y-%m-%d-%H-%M-%S"`;[[ -d ~/.Trash/$des  ]]||mkdir ~/.Trash/$des;for i in $@;do mv $i ~/.Trash/$des/;echo "trashed $i";done  }
 trash-info(){ ls -al ~/.Trash  }
 
 extract() { 

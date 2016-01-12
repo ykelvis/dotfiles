@@ -23,11 +23,11 @@ function prompt_char {
     if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
 }
 
-PROMPT='%{$fg_bold[green]%}%n@%m%{$fg_bold[blue]%}%~$(git_prompt_info)%(?,%{$fg_bold[white]%},%{$fg_bold[red]%})%_$(prompt_char)%{$reset_color%} '
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg_bold[blue]%})%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg_bold[red]%}%B✘%b%F{154}%f%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg_bold[green]%}✔%F{154}"
+PROMPT='%{$fg[green]%}%n@%m%{$fg[magenta]%}%~$(git_prompt_info)%(?,%{$fg_bold[white]%},%{$fg_bold[red]%})%_$(prompt_char)%{$reset_color%} '
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}(%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[cyan]%})%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}%B✘%b%F{154}%f%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%F{154}%f%{$reset_color%}"
 
 zle -N edit-command-line
 bindkey '^xe' edit-command-line

@@ -18,12 +18,6 @@ def_key "{"
 def_key "}"
   scroll_down_artist
 
-def_key "space"
-  press_space
-
-def_key "enter"
-  press_enter
-
 def_key "delete"
   delete_playlist_items
 

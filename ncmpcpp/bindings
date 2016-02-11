@@ -54,7 +54,7 @@ def_key ":"
 def_key "tab"
   next_screen
 
-def_key "shift_tab"
+def_key "shift-tab"
   previous_screen
 
 def_key "f2"
@@ -111,7 +111,7 @@ def_key ">"
 def_key "<"
   previous
 
-def_key "ctrl_h"
+def_key "ctrl-h"
   jump_to_parent_directory
 
 def_key "backspace"
@@ -120,10 +120,10 @@ def_key "backspace"
 def_key "backspace"
   replay_song
 
-def_key "backspace_2"
+def_key "backspace"
   jump_to_parent_directory
 
-def_key "backspace_2"
+def_key "backspace"
   replay_song
 
 def_key "f"
@@ -153,9 +153,6 @@ def_key "R"
 def_key "Y"
   toggle_replay_gain_mode
 
-def_key "t"
-  toggle_space_mode
-
 def_key "|"
   toggle_mouse
 
@@ -165,14 +162,11 @@ def_key "Z"
 def_key "u"
   update_database
 
-def_key "ctrl_v"
+def_key "ctrl-v"
   sort_playlist
 
-def_key "ctrl_r"
+def_key "ctrl-r"
   reverse_playlist
-
-def_key "ctrl_f"
-  apply_filter
 
 def_key "/"
   find
@@ -285,7 +279,7 @@ def_key "\\"
 def_key "L"
   toggle_lyrics_fetcher
 
-def_key "ctrl_l"
+def_key "ctrl-l"
   toggle_screen_lock
 
 def_key "`"
@@ -297,7 +291,7 @@ def_key "`"
 def_key "`"
   refetch_lyrics
 
-def_key "ctrl_p"
+def_key "ctrl-p"
   set_selected_items_priority
 
 def_key "q"

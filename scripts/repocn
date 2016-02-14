@@ -1,25 +1,25 @@
 #!/bin/bash
 
 get_tarball(){
-	curl -o $OPTARG.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/$OPTARG.tar.gz&&rm -rf $OPTARG;
-	tar xvf $OPTARG.tar.gz;
-	rm -rf $OPTARG.tar.gz;
+	curl -o $1.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/$1.tar.gz&&rm -rf $1;
+	tar xvf $1.tar.gz;
+	rm -rf $1.tar.gz;
 }
 
 git_message_upg(){
 	git add .;
-	git commit -m "upgpkg: $OPTARG";
+	git commit -m "upgpkg: $1";
 }
 
 git_message_add(){
 	git add .;
-	git commit -m "addpkg: $OPTARG";
+	git commit -m "addpkg: $1";
 }
 
 git_message_remove(){
-	git rm -rf $OPTARG;
+	git rm -rf $1;
 	git add --all .;
-	git commit -m "remove: $OPTARG";
+	git commit -m "remove: $1";
 }
 
 while getopts "a:u:r:" opt; do

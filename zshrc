@@ -3,7 +3,7 @@ CASE_SENSITIVE="false"
 DISABLE_AUTO_UPDATE="true"
 HIST_STAMPS="yyyy-mm-dd"
 #ZSH_THEME="miloshadzic"
-plugins=(git autojump systemd taskwarrior)
+plugins=(git autojump systemd)
 source $ZSH/oh-my-zsh.sh
 
 autoload -U colors && colors
@@ -17,7 +17,7 @@ export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
 [[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(fasd --init auto)"
+which fasd&>/dev/null&&eval "$(fasd --init auto)"
 
 function prompt_char {
     if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
@@ -326,3 +326,7 @@ alias z='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
 alias c='fasd_cd -d'
 alias cc='fasd_cd -d -i'
+
+export TODOTXT_DEFAULT_ACTION=ls
+alias t='todo.sh'
+tad(){da=`date +%Y-%m-%d`;t add $da $@}

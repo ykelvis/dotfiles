@@ -28,6 +28,6 @@ link_config(){
     done
 }
 
-link_file zshrc vimperatorrc tmux.conf conkyrc compton.conf vimrc Xdefaults
+link_file zshrc vimperatorrc tmux.conf conkyrc compton.conf vimrc Xdefaults aria2.conf
 link_folder oh-my-zsh vim
 link_config mpv awesome

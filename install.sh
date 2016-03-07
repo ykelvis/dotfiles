@@ -5,6 +5,7 @@ DIR=$(pwd)
 
 git submodule init
 git submodule update --remote
+git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/vundle
 
 link_file(){
     for i in $@;do

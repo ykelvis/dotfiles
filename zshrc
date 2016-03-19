@@ -20,7 +20,7 @@ fi
 
 export ZSH_FOLDER=~/.zsh
 ls -al $ZSH_FOLDER &>/dev/null&&
-for i in $ZSH_FOLDER/*;do
+for i in $ZSH_FOLDER/*.zsh;do
     source $i;
 done
 

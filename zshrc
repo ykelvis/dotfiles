@@ -1,47 +1,37 @@
-export ZSH=$HOME/.oh-my-zsh
-CASE_SENSITIVE="false"
-DISABLE_AUTO_UPDATE="true"
-HIST_STAMPS="yyyy-mm-dd"
-#ZSH_THEME="miloshadzic"
-plugins=(git autojump systemd)
-source $ZSH/oh-my-zsh.sh
-
+unset GREP_OPTIONS
+limit coredumpsize 0
 autoload -U colors && colors
 autoload -U compinit&&compinit -u
 autoload -U promptinit&&promptinit
 autoload -U edit-command-line
+export EDITOR=vim
+export HISTSIZE=99999
+export SAVEHIST=99999
+export HISTFILE=~/.zhistory
+export TERM="xterm-256color"
+CASE_SENSITIVE="false"
+DISABLE_AUTO_UPDATE="true"
+HIST_STAMPS="yyyy-mm-dd"
+alias history='fc -il 1'
+
+# Check if $LANG is badly set as it causes issues
+if [[ $LANG == "C"  || $LANG == "" ]]; then
+    >&2 echo "$fg[red]The \$LANG variable is not set. This can cause a lot of problems.$reset_color"
+fi
+
+export ZSH_FOLDER=~/.zsh
+ls -al $ZSH_FOLDER &>/dev/null&&
+for i in $ZSH_FOLDER/*;do
+    source $i;
+done
 
 export HOMEBREW_BUILD_FROM_SOURCE=1
 export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
-[[ -s /etc/profile.d/autojump.sh ]] && . /etc/profile.d/autojump.sh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-which fasd&>/dev/null&&eval "$(fasd --init auto)"
+which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh
+[[ -s /etc/profile.d/autojump.sh ]]&&. /etc/profile.d/autojump.sh
 
-function prompt_char {
-    if [ $UID -eq 0 ]; then echo "#"; else echo $; fi
-}
-
-PROMPT='%{$fg[green]%}%n@%m%{$fg[magenta]%}%~$(git_prompt_info)%(?,%{$fg_bold[white]%},%{$fg_bold[red]%})%_$(prompt_char)%{$reset_color%} '
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}(%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[cyan]%})%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}%B✘%b%F{154}%f%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%F{154}%f%{$reset_color%}"
-
-zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
-bindkey '^U' backward-kill-line
-bindkey '^Y' yank
-bindkey -e
-bindkey "\e[3~" delete-char
-
-export EDITOR=vim
-export HISTSIZE=99999
-export SAVEHIST=99999
-export HISTFILE=~/.zhistory
-#setopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt EXTENDED_HISTORY     
@@ -53,10 +43,64 @@ setopt complete_in_word
 setopt AUTO_LIST
 setopt AUTO_MENU
 #setopt MENU_COMPLETE
+#setopt SHARE_HISTORY
 
-limit coredumpsize 0
-
+zle -N edit-command-line
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
+bindkey '^U' backward-kill-line
+bindkey '^Y' yank
+bindkey -e
+bindkey "\e[3~" delete-char
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+
+#prompt
+local _time="%{$fg[yellow]%}[%*]"
+local _path="%B%{$fg[green]%}%(8~|...|)%7~"
+local _usercol
+if [[ $EUID -lt 1000 ]]; then
+    # red for root, magenta for system users
+    _usercol="%(!.%{$fg[red]%}.%{$fg[magenta]%})"
+else
+    _usercol="$fg[cyan]"
+fi
+local _user="%{$_usercol%}%n@%M:"
+local _prompt="%{$fg[white]%}$"
+
+PROMPT="$_time$_user$_path$_prompt%b%f%k "
+RPROMPT='${vcs_info_msg_0_}'
+if [[ ! -z "$SSH_CLIENT" ]]; then
+    RPROMPT="$RPROMPT ⇄" # ssh icon
+fi
+
+# Git plugin/prompt
+setopt promptsubst
+autoload -Uz vcs_info
+zstyle ":vcs_info:*" enable git
+zstyle ":vcs_info:(git*):*" get-revision true
+zstyle ":vcs_info:(git*):*" check-for-changes true
+
+local _branch="%c%u%m %{$fg[green]%}%b%{$reset_color%}"
+local _repo="%{$fg[green]%}%r %{$fg[yellow]%}%{$reset_color%}"
+local _revision="%{$fg[yellow]%}%.7i%{$reset_color%}"
+local _action="%{$fg[red]%}%a%{$reset_color%}"
+zstyle ":vcs_info:*" stagedstr "%{$fg[yellow]%}✓%{$reset_color%}"
+zstyle ":vcs_info:*" unstagedstr "%{$fg[red]%}✗%{$reset_color%}"
+zstyle ":vcs_info:git*" formats "$_branch:$_revision - $_repo"
+zstyle ":vcs_info:git*" actionformats "$_branch:$_revision:$_action - $_repo"
+zstyle ':vcs_info:git*+set-message:*' hooks git-stash
+# Uncomment to enable vcs_info debug mode
+# zstyle ':vcs_info:*+*:*' debug true
+
+function +vi-git-stash() {
+    if [[ -s "${hook_com[base]}/.git/refs/stash" ]]; then
+        hook_com[misc]="%{$fg_bold[grey]%}~%{$reset_color%}"
+    fi
+}
+
+precmd() {
+    vcs_info
+}
 
 #自动补全选项
 zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
@@ -72,7 +116,6 @@ zstyle ':completion:*:kill:*' command 'ps -e -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*' menu select
 zstyle ':completion:*' expand 'yes'
 zstyle ':completion:*' squeeze-shlashes 'yes'
-zstyle ':completion::complete:*' '\\'
  
 #彩色补全菜单
 #eval $(dircolors -b)
@@ -84,15 +127,12 @@ zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
-
 zstyle ':completion:*:descriptions' format $'\e[33m | \e[1;7;32m %d \e[m\e[33m |\e[m' 
 zstyle ':completion:*:messages' format $'\e[33m | \e[1;7;32m %d \e[m\e[0;33m |\e[m'
 zstyle ':completion:*:warnings' format $'\e[33m | \e[1;7;33m No Matches \e[m\e[0;33m |\e[m'
 zstyle ':completion:*:corrections' format $'\e[33m | \e[1;7;35m %d [errors: %e] \e[m\e[0;33m |\e[m'
-
-#修正大小写
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 #错误校正     
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:match:*' original only
 zstyle ':completion:*:approximate:*' max-errors 2 numeric
@@ -109,34 +149,14 @@ zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:*:*:*:processes' force-list always
 zstyle ':completion:*:processes' command 'ps -au$USER'
 
-#补全类型提示分组
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m'
-zstyle ':completion:*:messages' format $'\e[01;35m -- %d --\e[0m'
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m'
-zstyle ':completion:*:corrections' format $'\e[01;32m -- %d (errors: %e) --\e[0m'
  
 # cd ~ 补全顺序
 zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
  
-##空行(光标在行首)补全 "cd " {{{
 user-complete(){
 case $BUFFER in
-"" )                       # 空行填入 "cd "
+"" )                    
 BUFFER="cd "
-zle end-of-line
-zle expand-or-complete
-;;
-"cd --" )                  # "cd --" 替换为 "cd +"
-BUFFER="cd +"
-zle end-of-line
-zle expand-or-complete
-;;
-"cd +-" )                  # "cd +-" 替换为 "cd -"
-BUFFER="cd -"
 zle end-of-line
 zle expand-or-complete
 ;;
@@ -149,7 +169,6 @@ zle -N user-complete
 bindkey "\t" user-complete
 #}}}
  
-##在命令前插入 sudo 
 sudo-command-line() {
 [[ -z $BUFFER ]] && zle up-history
 [[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
@@ -157,13 +176,8 @@ zle end-of-line
 }
 zle -N sudo-command-line
 bindkey "\e\e" sudo-command-line
- 
-#[Esc][h] man 当前命令时，显示简短说明
-alias run-help >&/dev/null && unalias run-help
-autoload run-help
- 
-hash -d s="/tmp/N"
 
+#hash -d s="/tmp/N"
 zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com www.baidu.com
 
 #漂亮又实用的命令高亮界面
@@ -229,7 +243,6 @@ alias pacdexp="pacman -D --asexp"
 alias pacddep="pacman -D --asdep"
 alias pacsdeps='sudo pacman -S --asdeps'
 alias pacqtdq="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
-
 alias yaog='yaourt -G'
 alias yaob='yaourt -B'
 alias yaos='yaourt -S'
@@ -246,7 +259,7 @@ alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) 
 
 alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
 alias hdoff="xrandr --output HDMI-0 --off"
-alias mc="ncmpcpp"
+alias mp="ncmpcpp"
 alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
 
 alias b3="mv *pkg.tar.xz ~/repo"
@@ -254,28 +267,24 @@ alias b1="archlinuxcn-x86_64-build"
 alias b2="archlinuxcn-i686-build"
 alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker archcn.log&&nvcmp archcn.log"
 #alias tmux="tmux -2"
-unset GREP_OPTIONS
-#export TERM="xterm-256color"
 
 #useful functions
 alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
 alias c="clear"
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ....='cd ../../..'
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
-mcd() { mkdir -p "$1"; cd "$1" }
-cls() { cd "$1"; ls; }
-backup() { cp "$1"{,.bak}; }
-md5check() { md5sum "$1"|grep -i "$2"; }
-psg() { ps aux | grep -v grep | grep -i -e VSZ -e "$1" }
-listen() { $1 lsof -P -i -n|grep LISTEN; }
-histg() { history|grep $1; }
-glogger() { git log|grep -B4 $1; }
-makescript() { fc -rnl -999|head -$1 > $2; }
-trash(){ des=`date "+%Y-%m-%d-%H-%M-%S"`;[[ -d ~/.Trash/$des  ]]||mkdir ~/.Trash/$des;for i in $@;do mv $i ~/.Trash/$des/;echo "trashed $i";done  }
-trash-info(){ ls -al ~/.Trash  }
-
-extract() { 
+mcd(){ mkdir -p "$1"; cd "$1" }
+cls(){ cd "$1"; ls; }
+backup(){ cp "$1"{,.bak}; }
+md5check(){ md5sum "$1"|grep -i "$2"; }
+psg(){ ps aux | grep -v grep | grep -i -e VSZ -e "$1" }
+listen(){ $1 lsof -P -i -n|grep LISTEN; }
+histg(){ history|grep $1; }
+glogger(){ git log|grep -B4 $1; }
+makescript(){ fc -rnl -999|head -$1 > $2; }
+extract(){ 
     if [ -f $1 ] ; then 
       case $1 in
         *.tar.bz2)   tar xjf $1     ;; 
@@ -295,7 +304,6 @@ extract() {
          echo "'$1' is not a valid file"
      fi 
 }
-
 sdu(){
     du -k $@| sort -n | awk '
          BEGIN {
@@ -311,21 +319,24 @@ sdu(){
             print $0;
          }'
 }
-
+myip(){
+    local api
+    case "$1" in
+        "-4")
+            api="http://v4.ipv6-test.com/api/myip.php"
+            ;;
+        "-6")
+            api="http://v6.ipv6-test.com/api/myip.php"
+            ;;
+        *)
+            api="http://ipv6-test.com/api/myip.php"
+            ;;
+    esac
+    curl -s "$api"
+    echo # Newline.
+}
 alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
 alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
-alias v='f -e vim'
-alias m='f -e open'
-alias a='fasd -a'        # any
-alias s='fasd -si'       # show / search / select
-alias d='fasd -d'        # directory
-alias f='fasd -f'        # file
-alias sd='fasd -sid'     # interactive directory selection
-alias sf='fasd -sif'     # interactive file selection
-alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-alias zz='fasd_cd -d -i' # cd with interactive selection
-alias c='fasd_cd -d'
-alias cc='fasd_cd -d -i'
 
 export TODOTXT_DEFAULT_ACTION=ls
 alias t='todo.sh'

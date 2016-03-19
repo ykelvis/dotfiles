@@ -25,7 +25,7 @@ for i in $ZSH_FOLDER/*.zsh;do
 done
 
 export HOMEBREW_BUILD_FROM_SOURCE=1
-export PATH=$HOME/git/dotfiles/scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
+export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
 which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh
@@ -109,7 +109,7 @@ zstyle ':completion:*' format '-- %d --'
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
 zstyle ':completion:*' preserve-prefix '//[^/]##/'
-zstyle ':completion:*' verbose false
+zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -e -o pid,%cpu,tty,cputime,cmd'
 zstyle ':completion:*' menu select

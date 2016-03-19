@@ -3,8 +3,8 @@
 USER=$(whoami)
 DIR=$(pwd)
 
-git submodule init
-git submodule update --remote
+#git submodule init
+#git submodule update --remote
 git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/vundle
 
 link_file(){
@@ -30,5 +30,5 @@ link_config(){
 }
 
 link_file zshrc vimperatorrc tmux.conf conkyrc compton.conf vimrc Xdefaults
-link_folder aria2 vim
+link_folder aria2 vim scripts
 link_config mpv awesome

@@ -55,11 +55,11 @@ WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
 #prompt
 local _time="%{$fg[yellow]%}[%*]"
-local _path="%B%{$fg[green]%}%(8~|...|)%7~"
+local _path="%{$fg[magenta]%}%(8~|...|)%7~"
 local _usercol
 if [[ $EUID -lt 1000 ]]; then
     # red for root, magenta for system users
-    _usercol="%(!.%{$fg[red]%}.%{$fg[magenta]%})"
+    _usercol="%(!.%{$fg[red]%}.%{$fg[green]%})"
 else
     _usercol="$fg[cyan]"
 fi

@@ -6,3 +6,5 @@
 *.db
 */library/*
 /vim/bundle/*
+!/vim/bundle
+*.netrwhist

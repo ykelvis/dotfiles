@@ -276,9 +276,23 @@ alias b2="archlinuxcn-i686-build"
 alias archcnck="pacman -Sl archlinuxcn | awk '{print \$2, \$3}' > old_ver.txt&&nvchecker archcn.log&&nvcmp archcn.log"
 #alias tmux="tmux -2"
 
+#fasd
+alias v='f -e vim'
+alias m='f -e open'
+alias a='fasd -a'         #any
+alias s='fasd -si'        #show / search / select
+alias d='fasd -d'         #directory
+alias f='fasd -f'         #file
+alias sd='fasd -sid'      #interactive directory selection
+alias sf='fasd -sif'      #interactive file selection
+alias z='fasd_cd -d'      #cd, same functionality as j in autojump
+alias zz='fasd_cd -d -i'  #cd with interactive selection
+alias c='fasd_cd -d'
+alias cc='fasd_cd -d -i'
+
 #useful functions
 alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
-alias c="clear"
+alias cr="clear"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'

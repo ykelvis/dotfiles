@@ -77,10 +77,6 @@ local _user="%{$_usercol%}%n@%M:"
 local _prompt="%{$fg[white]%}$"
 
 PROMPT="$_time$_user$_path$_prompt%b%f%k "
-RPROMPT='${vcs_info_msg_0_}'
-if [[ ! -z "$SSH_CLIENT" ]]; then
-    RPROMPT="$RPROMPT ⇄" # ssh icon
-fi
 
 setopt prompt_subst
 autoload -U colors && colors # Enable colors in prompt
@@ -148,6 +144,10 @@ git_prompt_string() {
 
 # Set the right-hand prompt
 RPROMPT='$(git_prompt_string)'
+if [[ ! -z "$SSH_CLIENT" ]]; then
+    RPROMPT="$RPROMPT ⇄" # ssh icon
+fi
+
 
 #自动补全选项
 zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'

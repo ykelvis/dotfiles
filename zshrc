@@ -147,7 +147,7 @@ git_prompt_string() {
 }
 
 # Set the right-hand prompt
-RPS1='$(git_prompt_string)'
+RPROMPT='$(git_prompt_string)'
 
 #自动补全选项
 zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'

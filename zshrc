@@ -88,8 +88,8 @@ zstyle ":vcs_info:*" enable git
 zstyle ":vcs_info:(git*):*" get-revision true
 zstyle ":vcs_info:(git*):*" check-for-changes true
 
-local _branch="%c%u%m %{$fg[green]%}%b%{$reset_color%}"
-local _repo="%{$fg[green]%}%r %{$fg[yellow]%}%{$reset_color%}"
+local _branch="%c%u%m %{$fg[blue]%}%b%{$reset_color%}"
+local _repo="%{$fg[cyan]%}%r %{$fg[yellow]%}%{$reset_color%}"
 local _revision="%{$fg[yellow]%}%.7i%{$reset_color%}"
 local _action="%{$fg[red]%}%a%{$reset_color%}"
 zstyle ":vcs_info:*" stagedstr "%{$fg[yellow]%}✓%{$reset_color%}"

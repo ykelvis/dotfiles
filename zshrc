@@ -14,6 +14,9 @@ DISABLE_AUTO_UPDATE="true"
 HIST_STAMPS="yyyy-mm-dd"
 alias history='fc -il 1'
 
+export HOMEBREW_BUILD_FROM_SOURCE=1
+export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
+
 if [[ $LANG == "C"  || $LANG == "" ]]; then
     >&2 echo "$fg[red]The \$LANG variable is not set. This can cause a lot of problems.$reset_color"
 fi
@@ -25,8 +28,6 @@ for i in $ZSH_FOLDER/*.zsh;do
     source $i;
 done
 
-export HOMEBREW_BUILD_FROM_SOURCE=1
-export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
 which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh

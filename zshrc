@@ -18,8 +18,8 @@ if [[ $LANG == "C"  || $LANG == "" ]]; then
     >&2 echo "$fg[red]The \$LANG variable is not set. This can cause a lot of problems.$reset_color"
 fi
 
+eval "$(fasd --init auto)"
 export ZSH_FOLDER=~/.zsh
-[[ -s $ZSH_FOLDER/fasd ]]&&eval "$(fasd --init auto)"
 ls -al $ZSH_FOLDER &>/dev/null&&
 for i in $ZSH_FOLDER/*.zsh;do
     source $i;

@@ -5,6 +5,6 @@
 *.pid
 *.db
 */library/*
-/vim/bundle/*
-!/vim/bundle
+vim/bundle/*
+!vim/bundle
 *.netrwhist

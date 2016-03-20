@@ -92,7 +92,9 @@ local _branch="%c%u%m %{$fg[blue]%}%b%{$reset_color%}"
 local _repo="%{$fg[cyan]%}%r %{$fg[yellow]%}%{$reset_color%}"
 local _revision="%{$fg[yellow]%}%.7i%{$reset_color%}"
 local _action="%{$fg[red]%}%a%{$reset_color%}"
-zstyle ":vcs_info:*" stagedstr "%{$fg[yellow]%}✓%{$reset_color%}"
+
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ":vcs_info:*" stagedstr "%{$fg[green]%}✓%{$reset_color%}"
 zstyle ":vcs_info:*" unstagedstr "%{$fg[red]%}✗%{$reset_color%}"
 zstyle ":vcs_info:git*" formats "$_branch:$_revision - $_repo"
 zstyle ":vcs_info:git*" actionformats "$_branch:$_revision:$_action - $_repo"

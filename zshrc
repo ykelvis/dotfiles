@@ -79,8 +79,6 @@ local _prompt="%{$fg[white]%}$"
 PROMPT="$_time$_user$_path$_prompt%b%f%k "
 
 setopt prompt_subst
-autoload -U colors && colors # Enable colors in prompt
-
 # Modify the colors and symbols in these variables as desired.
 GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
 GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"

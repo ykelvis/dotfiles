@@ -5,5 +5,4 @@
 *.pid
 *.db
 */library/*
-bundle/*
 *.netrwhist

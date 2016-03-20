@@ -341,7 +341,7 @@ sdu(){
             print $0;
          }'
 }
-myip(){
+ipip(){
     local api
     case "$1" in
         "-4")
@@ -351,7 +351,8 @@ myip(){
             api="http://v6.ipv6-test.com/api/myip.php"
             ;;
         *)
-            api="http://ipv6-test.com/api/myip.php"
+            #api="http://ipv6-test.com/api/myip.php"
+            api="http://ipip.net"
             ;;
     esac
     curl -s "$api"

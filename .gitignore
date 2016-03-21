@@ -4,5 +4,7 @@
 *.state
 *.pid
 *.db
-*/library/*
+/mpd/library/*
+/mpd/playlists/*
+/vim/bundle/*
 *.netrwhist

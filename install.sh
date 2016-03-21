@@ -5,7 +5,8 @@ DIR=$(pwd)
 
 #git submodule init
 #git submodule update --remote
-git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/vundle
+#git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/vundle
+[[ ! -s $DIR/vim/autoload/plug.vim ]]&&curl -fLo $DIR/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 link_file(){
     for i in $@;do

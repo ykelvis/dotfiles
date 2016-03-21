@@ -2,44 +2,55 @@ filetype on
 filetype plugin on
 filetype indent on
 
-set rtp+=~/.vim/bundle/vundle
-call vundle#begin()
-Plugin 'scrooloose/syntastic'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'kien/ctrlp.vim'
-Plugin 'jwhitley/vim-matchit'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'majutsushi/tagbar'
-Plugin 'vim-scripts/taglist.vim'
-Plugin 'bling/vim-airline'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-markdown'
-Plugin 'tomasr/molokai'
-Plugin 'sickill/vim-monokai'
-Plugin 'terryma/vim-multiple-cursors'
-call vundle#end()
+call plug#begin('~/.vim/bundle')
+Plug 'altercation/vim-colors-solarized'
+Plug 'bling/vim-airline'
+Plug 'easymotion/vim-easymotion'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'jwhitley/vim-matchit'
+Plug 'kien/ctrlp.vim'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'klen/python-mode'
+Plug 'majutsushi/tagbar'
+Plug 'mattn/emmet-vim'
+Plug 'scrooloose/syntastic'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'sickill/vim-monokai'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tomasr/molokai'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-scripts/taglist.vim'
+"Plug 'Valloric/YouCompleteMe'
+Plug 'Yggdroot/indentLine'
+call plug#end()
 
 set tags=tags
+set completeopt=longest,menu
 set nocompatible
 set nobackup
+set nowritebackup
 set nowb
 set guifont=Sauce\ Code\ Powerline:h11
 set noswapfile
 set ffs=unix,dos,mac
-set modelines=0
+"set modeline
 set guiheadroom=0
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
 set encoding=utf-8
-set scrolloff=3
+set fenc=utf-8
+set fencs=utf-8,gbk,gb18030,gb2312,cp936,usc-bom,euc-jp
+set enc=utf-8
+set scrolloff=10
 set autoread
 set autoindent
 set smartindent
+"set foldmethod=indent
 set showmode
 set showcmd
 set hidden
@@ -47,12 +58,14 @@ set wildmenu
 set wildmode=list:longest
 set visualbell
 set cursorline
+"set cursorcolumn
 set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set relativenumber
 set ignorecase
+set autochdir
 set smartcase
 set smarttab
 set gdefault
@@ -68,6 +81,7 @@ set colorcolumn=85
 set laststatus=2
 set runtimepath+=$HOME/.vim/
 
+" UI
 " colors
 set t_Co=256
 syntax enable
@@ -101,11 +115,9 @@ map <leader>w :tabnext<cr>
 map <leader>e :tabnew<cr>
 "  vim-airline
 let g:airline_powerline_fonts = 1
-
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
@@ -119,3 +131,18 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
 
+"rainbow parenthese
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+"tagbar
+nmap <Leader>tb :TagbarToggle<CR>
+let g:tagbar_ctags_bin='/usr/bin/ctags'
+let g:tagbar_width=30
+autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+
+"emmet-vim
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall

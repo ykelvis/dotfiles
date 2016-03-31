@@ -152,8 +152,10 @@ alias glgg='git log --graph --color'
 alias glgga='git log --graph --decorate --all'
 alias glgm='git log --graph --max-count=10'
 alias glo='git log --oneline --decorate --color'
-alias glol="git log --graph --pretty=format:'%Cred%h%Creset %Cgreen<%ai> %C(bold blue)[%an]%Creset -%C(yellow)%d%Creset %s' --abbrev-commit"
-alias glola="git log --graph --pretty=format:'%Cred%h%Creset %Cgreen<%ai> %C(bold blue)[%an]%Creset -%C(yellow)%d%Creset %s' --abbrev-commit --all"
+alias gla="git log --graph --pretty=format:'%Cred%h%Creset %Cgreen<%ai> %C(bold blue)[%an]%Creset -%C(yellow)%d%Creset %s' --abbrev-commit"
+alias glaa="git log --graph --pretty=format:'%Cred%h%Creset %Cgreen<%ai> %C(bold blue)[%an]%Creset -%C(yellow)%d%Creset %s' --abbrev-commit --all"
+alias glc="git log --graph --pretty=format:'%Cred%h%Creset %Cgreen<%ci> %C(bold blue)[%cn]%Creset -%C(yellow)%d%Creset %s' --abbrev-commit"
+alias glca="git log --graph --pretty=format:'%Cred%h%Creset %Cgreen<%ci> %C(bold blue)[%cn]%Creset -%C(yellow)%d%Creset %s' --abbrev-commit --all"
 alias glog='git log --oneline --decorate --color --graph'
 alias glp="_git_log_prettily"
 compdef _git glp=git-log

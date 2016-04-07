@@ -146,3 +146,11 @@ autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 "emmet-vim
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
+
+"fix ctags on osx
+if has("unix")
+    let s:uname = system("uname -s")
+    if s:uname == "Darwin\n"
+        let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
+   endif
+endif

@@ -10,7 +10,7 @@ compile_it(){
     archlinuxcn-i686-build -c -r ~/build||s2=1;
     [[ ! -z $s1 ]]&&echo -e "\033[31m$1 x86_64 failed\033[0m";
     [[ ! -z $s2 ]]&&echo -e "\033[31m$1 i686 failed\033[0m";
-    mv *pkg.tar.xz ~/repo;
+    mv *pkg.tar.xz ~/_repo;
     )
 }
 

@@ -384,7 +384,7 @@ ipip(){
             ;;
         *)
             #api="http://ipv6-test.com/api/myip.php"
-            api="http://ipip.net"
+            api="http://myip.ipip.net"
             ;;
     esac
     curl -s "$api"

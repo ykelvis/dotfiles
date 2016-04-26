@@ -3,6 +3,10 @@
 
 rm -rf $HOME/_repo/*&&
 rsync -v -r barch:~/_repo $HOME&&
+while [[ ! $reply == "y" ]];do
+    echo "rsync done, proceed to pgp sign?(y/n)";
+    read reply;
+done;
 (cd $HOME/_repo;for i in *.xz;do gpg --detach-sign $i;done)&&
 rsync -v  $HOME/_repo/* barch:~/_repo&&
 ssh barch "cp ~/_repo/* ~/repo/"&&

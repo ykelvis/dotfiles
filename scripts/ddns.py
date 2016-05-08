@@ -20,7 +20,6 @@ if __name__ == "__main__":
     try:
         proxies = {'http':sys.argv[3],'https':sys.argv[3]}
         ip = requests.get('https://redirector.gvt1.com/report_mapping').text.split()[0]
-        print(ip)
         main(sys.argv[1],sys.argv[2],ip)
     except:
         print('update failed')

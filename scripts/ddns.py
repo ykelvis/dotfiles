@@ -2,6 +2,7 @@
 import requests, sys
 
 def main(hostname,password,addr):
+    cert = "root.crt"
     url = "https://dyn.dns.he.net/nic/update?hostname={}&password={}&myip={}".format(hostname,password,addr)
     print(url)
     r = requests.get(
@@ -9,7 +10,7 @@ def main(hostname,password,addr):
         headers={
         'User-Agent': 'curl/7.43.0'
         },
-        verify=False,
+        verify = cert,
         timeout=5,
         proxies = proxies,
         ).text

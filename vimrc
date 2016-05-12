@@ -23,7 +23,7 @@ Plug 'tomasr/molokai'
 Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-scripts/taglist.vim'
-"Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
 call plug#end()
 
@@ -151,6 +151,7 @@ autocmd FileType html,css EmmetInstall
 if has("unix")
     let s:uname = system("uname -s")
     if s:uname == "Darwin\n"
-        let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
+        "let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
+        let g:tagbar_ctags_bin = "~/.scripts/ctags-osx"
    endif
 endif

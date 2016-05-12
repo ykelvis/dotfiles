@@ -151,7 +151,8 @@ autocmd FileType html,css EmmetInstall
 if has("unix")
     let s:uname = system("uname -s")
     if s:uname == "Darwin\n"
-        "let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
         let g:tagbar_ctags_bin = "~/.scripts/ctags-osx"
+    elseif s:uname == "Linux\n"
+        let g:tagbar_ctags_bin = "~/.scripts/ctags-linux"
    endif
 endif

@@ -2,6 +2,7 @@
 import requests, sys
 
 def main(hostname,password,addr):
+    cert = "root.crt"
     url = "https://dyn.dns.he.net/nic/update?hostname={}&password={}&myip={}".format(hostname,password,addr)
     print(url)
     r = requests.get(
@@ -9,7 +10,7 @@ def main(hostname,password,addr):
         headers={
         'User-Agent': 'curl/7.43.0'
         },
-        verify=False,
+        verify = cert,
         timeout=5,
         proxies = proxies,
         ).text
@@ -19,7 +20,6 @@ if __name__ == "__main__":
     try:
         proxies = {'http':sys.argv[3],'https':sys.argv[3]}
         ip = requests.get('https://redirector.gvt1.com/report_mapping').text.split()[0]
-        print(ip)
         main(sys.argv[1],sys.argv[2],ip)
     except:
         print('update failed')

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 get_tarball(){
-	curl -k -o $1.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/$1.tar.gz&&rm -rf $1;
+    curl -k -o $1.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/$1.tar.gz&&
 	tar xvf $1.tar.gz;
 	rm -rf $1.tar.gz;
 }

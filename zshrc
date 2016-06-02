@@ -262,6 +262,7 @@ alias l="ls -al"
 alias vi="vim"
 alias aria2c="aria2c --file-allocation=none"
 
+alias pacsy='sudo pacman -Sy'
 alias pacsyu='sudo pacman -Syu'
 alias pacsyy='sudo pacman -Syy'
 alias pacsyyu='sudo pacman -Syyu'

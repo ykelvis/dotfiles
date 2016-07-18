@@ -39,7 +39,6 @@ function toggleApplication(_app)
         end
     end
 end
-hs.hotkey.bind(keybind,'k',function() toggleApplication('Telegram Desktop') end)
 
 hs.hotkey.bind('cmd', 'x', toggle_window_maximized)
 hs.hotkey.bind(keybind, 'Left', positionFocusedWindow(hs.layout.left50))
@@ -81,14 +80,15 @@ local key2App = {
     f = 'Finder',
     x = 'Tweetbot',
     c = 'Activity Monitor',
-    d = 'iTerm',
+    e = 'iTerm',
     s = 'Google Chrome',
     z = 'Telegram Desktop',
 }
 for key, app in pairs(key2App) do
-	hs.hotkey.bind(keybind, key, function() hs.application.launchOrFocus(app) end)
+	--hs.hotkey.bind(keybind, key, function() hs.application.launchOrFocus(app) end)
+	hs.hotkey.bind(keybind, key, function() toggleApplication(app) end)
 end
-hs.hotkey.bind(keybind, 'j', function ()hs.alert.show('t > Quiver\nr > Safari\nf > Finder\nx > Tweetbot\nc > Activity Monitor\nd > iTerm\ns > Google Chrome\nz > Telegram Desktop',3) end)
+hs.hotkey.bind(keybind, 'j', function ()hs.alert.show('t > Quiver\nr > Safari\nf > Finder\nx > Tweetbot\nc > Activity Monitor\ne > iTerm\ns > Google Chrome\nz > Telegram Desktop',3) end)
 
 local wifiWatcher = nil
 local lastSSID = nil

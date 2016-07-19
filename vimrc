@@ -11,7 +11,8 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'jwhitley/vim-matchit'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kien/rainbow_parentheses.vim'
-"Plug 'klen/python-mode'
+Plug 'klen/python-mode'
+"Plug 'vim-scripts/taglist.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/syntastic'
@@ -22,7 +23,6 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'tomasr/molokai'
 Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-scripts/taglist.vim'
 Plug 'Valloric/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
 call plug#end()
@@ -81,14 +81,14 @@ set colorcolumn=85
 set laststatus=2
 set runtimepath+=$HOME/.vim/
 
-" UI
-" colors
+"UI
+"colors
 set t_Co=256
 syntax enable
 "set background=dark
 colorscheme molokai
 
-" keymappings
+"keymappings
 let mapleader = ","
 nnoremap / /\v
 vnoremap / /\v
@@ -116,8 +116,9 @@ map <leader>e :tabnew<cr>
 
 "easymotion
 let g:EasyMotion_smartcase = 1
-"  vim-airline
+"vim-airline
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -125,7 +126,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-" nerdtree
+"nerdtree
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
@@ -137,6 +138,11 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+"taglist
+"nmap <Leader>tt :TlistToggle(CR)
+"YouCompleteMe
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "tagbar
 nmap <Leader>tb :TagbarToggle<CR>
 let g:tagbar_ctags_bin='/usr/bin/ctags'

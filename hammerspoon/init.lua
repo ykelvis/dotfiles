@@ -1,3 +1,5 @@
+require('clipboard')
+
 keybind = {"cmd","ctrl"}
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
@@ -40,10 +42,9 @@ function toggleApplication(_app)
     end
 end
 
-hs.hotkey.bind('cmd', 'x', toggle_window_maximized)
+hs.hotkey.bind('alt', 'x', toggle_window_maximized)
 hs.hotkey.bind(keybind, 'Left', positionFocusedWindow(hs.layout.left50))
 hs.hotkey.bind(keybind, 'Right', positionFocusedWindow(hs.layout.right50))
-
 hs.hotkey.bind(keybind, "Down", function()
     local win = hs.window.focusedWindow()
     if win == nil then
@@ -58,7 +59,6 @@ hs.hotkey.bind(keybind, "Down", function()
     f.h = max.h
     win:setFrame(f)
 end)
-
 hs.hotkey.bind(keybind, "Up", function()
     local win = hs.window.focusedWindow()
     if win == nil then

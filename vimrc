@@ -151,6 +151,14 @@ autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 "emmet-vim
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
+"python-mode
+let g:pymode_python = 'python'
+let g:pymode_lint = 1
+let g:pymode_lint_on_write = 1
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_lint_on_fly = 0
+
 "fix ctags on osx
 if has("unix")
     let s:uname = system("uname -s")

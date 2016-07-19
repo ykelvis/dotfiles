@@ -7,3 +7,4 @@
 /mpd/library/*
 /mpd/playlists/*
 *.netrwhist
+/vim/bundle/*

@@ -2,7 +2,7 @@ filetype on
 filetype plugin on
 filetype indent on
 
-call plug#begin('~/.vim/bundle')
+call plug#begin('~/.config/nvim/bundle')
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
 Plug 'easymotion/vim-easymotion'
@@ -113,9 +113,6 @@ inoremap jj <ESC>
 map <leader>q :tabprevious<cr>
 map <leader>w :tabnext<cr>
 map <leader>e :tabnew<cr>
-
-"easymotion
-let g:EasyMotion_smartcase = 1
 "  vim-airline
 let g:airline_powerline_fonts = 1
 set statusline+=%#warningmsg#
@@ -125,6 +122,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
 " nerdtree
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
@@ -132,19 +130,23 @@ map <leader>nf :NERDTreeFind<cr>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
+
 "rainbow parenthese
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
 "tagbar
 nmap <Leader>tb :TagbarToggle<CR>
 let g:tagbar_ctags_bin='/usr/bin/ctags'
 let g:tagbar_width=30
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+
 "emmet-vim
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
+
 "fix ctags on osx
 if has("unix")
     let s:uname = system("uname -s")

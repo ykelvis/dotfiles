@@ -33,3 +33,4 @@ link_config(){
 link_file zshrc vimperatorrc tmux.conf conkyrc compton.conf vimrc Xdefaults
 link_folder aria2 vim scripts zsh
 link_config mpv awesome
+#link_config nvim

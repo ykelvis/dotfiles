@@ -1,5 +1,5 @@
 -- from:
--- https://github.com/Jeppesen-io/homebrew-hammerspoon/blob/master/dot-files/plugins/clipboard.lu
+-- https://github.com/Jeppesen-io/homebrew-hammerspoon/blob/master/dot-files/plugins/clipboard.lua
 
 --[[
 This is my attempt to implement a jumpcut replacement in Lua/Hammerspoon.

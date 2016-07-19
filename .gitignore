@@ -8,3 +8,4 @@
 /mpd/playlists/*
 *.netrwhist
 /vim/bundle/*
+/nvim/bundle/*

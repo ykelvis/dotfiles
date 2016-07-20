@@ -1,6 +1,6 @@
 require('clipboard')
 
-keybind = {"cmd","ctrl"}
+cmd_ctrl = {"cmd","ctrl"}
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
     hs.reload()
@@ -43,9 +43,9 @@ function toggleApplication(_app)
 end
 
 hs.hotkey.bind('alt', 'x', toggle_window_maximized)
-hs.hotkey.bind(keybind, 'Left', positionFocusedWindow(hs.layout.left50))
-hs.hotkey.bind(keybind, 'Right', positionFocusedWindow(hs.layout.right50))
-hs.hotkey.bind(keybind, "Down", function()
+hs.hotkey.bind(cmd_ctrl, 'Left', positionFocusedWindow(hs.layout.left50))
+hs.hotkey.bind(cmd_ctrl, 'Right', positionFocusedWindow(hs.layout.right50))
+hs.hotkey.bind(cmd_ctrl, "Down", function()
     local win = hs.window.focusedWindow()
     if win == nil then
         return
@@ -59,7 +59,7 @@ hs.hotkey.bind(keybind, "Down", function()
     f.h = max.h
     win:setFrame(f)
 end)
-hs.hotkey.bind(keybind, "Up", function()
+hs.hotkey.bind(cmd_ctrl, "Up", function()
     local win = hs.window.focusedWindow()
     if win == nil then
         return
@@ -85,16 +85,27 @@ local key2App = {
     z = 'Telegram Desktop',
 }
 for key, app in pairs(key2App) do
-	--hs.hotkey.bind(keybind, key, function() hs.application.launchOrFocus(app) end)
-	hs.hotkey.bind(keybind, key, function() toggleApplication(app) end)
+	--hs.hotkey.bind(cmd_ctrl, key, function() hs.application.launchOrFocus(app) end)
+	hs.hotkey.bind(cmd_ctrl, key, function() toggleApplication(app) end)
 end
-hs.hotkey.bind(keybind, 'j', function ()hs.alert.show('t > Quiver\nr > Safari\nf > Finder\nx > Tweetbot\nc > Activity Monitor\ne > iTerm\ns > Google Chrome\nz > Telegram Desktop',3) end)
+hs.hotkey.bind(cmd_ctrl, 'j', function ()
+    hs.alert.show('t > Quiver\n' ..
+    'r > Safari\n' ..
+    'f > Finder\n' ..
+    'x > Tweetbot\n' ..
+    'c > Activity Monitor\n' ..
+    'e > iTerm\n' .. 
+    's > Google Chrome\n' ..
+    'z > Telegram Desktop'
+    ,3) 
+end)
 
 local wifiWatcher = nil
 local lastSSID = nil
 function ssidChangedCallback()
     newSSID = hs.wifi.currentNetwork()
     if newSSID ~= lastSSID then
+        hs.notify.new({alwaysPresent=true,autoWithdraw=false,title='wifi changed',subTitle='new ssid: ' .. newSSID}):send()
         hs.alert.show("wifi changed to: " .. newSSID,5)
     else
     end
@@ -108,8 +119,10 @@ function usbDeviceCallback(data)
     if (data["productName"] == "HHKB Professional") then
         if (data["eventType"] == "added") then
             --hs.notify.show('hhkb','hhkb on','hhkb on')
+            hs.notify.new({alwaysPresent=true,autoWithdraw=false,title='HHKB',subTitle='HHKB on'}):send()
             hs.alert.show("hhkb on, built-in disabled.",5)
         elseif (data["eventType"] == "removed") then
+            hs.notify.new({alwaysPresent=true,autoWithdraw=false,title='HHKB',subTitle='HHKB off'}):send()
             hs.alert.show("hhkb off, built-in enabled.",5)
         end
     end

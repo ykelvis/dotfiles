@@ -70,7 +70,22 @@ hs.hotkey.bind(cmd_ctrl, "Up", function()
     f.x = max.x
     f.y = max.y
     f.w = max.w
-    f.h = max.h /2
+    f.h = max.h / 2
+    win:setFrame(f)
+end)
+
+hs.hotkey.bind('alt', "c", function()
+    local win = hs.window.focusedWindow()
+    if win == nil then
+        return
+    end
+    local f = win:frame()
+    local screen = win:screen()
+    local max = screen:frame()
+    f.x = max.w - (max.w * 0.9)
+    f.y = max.h - (max.h * 0.85)
+    f.w = max.w * 0.8
+    f.h = max.h * 0.8
     win:setFrame(f)
 end)
 

@@ -46,14 +46,22 @@ function toggleApplication(_app)
     end
 end
 
-hs.hotkey.bind(alt_ctrl, 'l', function() hs.execute('/usr/local/bin/mpc toggle') end)
-hs.hotkey.bind(alt_ctrl, 'Right', function() hs.execute('/usr/local/bin/mpc next') end)
-hs.hotkey.bind(alt_ctrl, 'Left', function() hs.execute('/usr/local/bin/mpc prev') end)
-hs.hotkey.bind(alt_ctrl, 'Up', function() hs.execute('/usr/local/bin/mpc volume +5') end)
-hs.hotkey.bind(alt_ctrl, 'Down', function() hs.execute('/usr/local/bin/mpc volume -5') end)
+expose = hs.expose.new(nil,{showThumbnails=true}) -- default windowfilter, no thumbnails
+expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
+expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
+expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized
+hs.hotkey.bind('ctrl-cmd','i','Expose',function()expose:toggleShow()end)
+hs.hotkey.bind('ctrl-cmd-shift','i','App Expose',function()expose_app:toggleShow()end)
+
+mpc = '/usr/local/bin/mpc'
+hs.hotkey.bind(alt_ctrl, 'l', function() hs.execute(mpc .. ' toggle') end)
+hs.hotkey.bind(alt_ctrl, 'Right', function() hs.execute(mpc .. ' next') end)
+hs.hotkey.bind(alt_ctrl, 'Left', function() hs.execute(mpc .. ' prev') end)
+hs.hotkey.bind(alt_ctrl, 'Up', function() hs.execute(mpc .. ' volume +5') end)
+hs.hotkey.bind(alt_ctrl, 'Down', function() hs.execute(mpc .. ' volume -5') end)
 hs.hotkey.bind(alt_ctrl, 'k', function() 
-    local text, status, _type, rc = hs.execute('/usr/local/bin/mpc status')
-    local songinfo, status, _type, rc = hs.execute('/usr/local/bin/mpc current')
+    local text = hs.execute(mpc .. ' status')
+    local songinfo = hs.execute(mpc .. ' current')
     hs.alert.show(text ,3)
     hs.notify.new(
     {
@@ -113,15 +121,20 @@ hs.hotkey.bind('alt', "c", function()
     win:setFrame(f)
 end)
 
+--finder keybinding
+hs.hotkey.bind(cmd_ctrl,'f', function()
+   hs.execute('open ~') 
+end)
 local key2App = {
     t = 'Quiver',
     r = 'Safari',
-    f = 'Finder',
+    --f = 'Finder',
     x = 'Tweetbot',
     c = 'Activity Monitor',
     e = 'iTerm',
     s = 'Google Chrome',
     z = 'Telegram Desktop',
+    w = 'Sublime Text'
 }
 for key, app in pairs(key2App) do
 	--hs.hotkey.bind(cmd_ctrl, key, function() hs.application.launchOrFocus(app) end)
@@ -130,12 +143,13 @@ end
 hs.hotkey.bind(cmd_ctrl, 'j', function ()
     hs.alert.show('t > Quiver\n' ..
     'r > Safari\n' ..
-    'f > Finder\n' ..
+    --'f > Finder\n' ..
     'x > Tweetbot\n' ..
     'c > Activity Monitor\n' ..
     'e > iTerm\n' .. 
     's > Google Chrome\n' ..
-    'z > Telegram Desktop'
+    'z > Telegram Desktop\n' ..
+    'w > Sublime Text'
     ,3) 
 end)
 
@@ -213,3 +227,4 @@ function watchBattery()
 end
 batWatcher = hs.battery.watcher.new(watchBattery)
 batWatcher:start()
+

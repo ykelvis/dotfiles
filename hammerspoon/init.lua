@@ -160,7 +160,7 @@ local lastSSID = nil
 function ssidChangedCallback()
     newSSID = hs.wifi.currentNetwork()
     if newSSID ~= lastSSID then
-        send_notification('wifi changed', 'new ssid: ' .. newSSID )
+        send_notification('wifi changed', 'new ssid: ' .. newSSID)
         hs.alert.show("wifi changed to: " .. newSSID,5)
     else
     end
@@ -195,8 +195,8 @@ function watchBattery()
     local isLowerThanMin = currentPercentage <= state.min
     local isBattery = source == 'Battery Power'
     local stateHasChanged = state.remaining ~= currentPercentage
-    local notifyfor10 = (currentPercentage % 10 == 0 )
-    local notifyfor5 = (currentPercentage % 5 == 0 )
+    local notifyfor10 = (currentPercentage % 10 == 0)
+    local notifyfor5 = (currentPercentage % 5 == 0)
 
     if isBattery and notifyfor10 and stateHasChanged and not isLowerThanMin then
         state.remaining = currentPercentage

@@ -1,4 +1,4 @@
-require('clipboard')
+--require('clipboard')
 
 cmd_ctrl = {"cmd","ctrl"}
 alt_ctrl = {"alt","ctrl"}
@@ -10,6 +10,16 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "R", function()
     hs.reload()
 end)
 hs.alert.show("Config loaded",3)
+
+function send_notification(title, text)
+    local message = {
+        alwaysPresent = true,
+        autoWithdraw = false,
+        title = title,
+        informativeText = text
+    }
+    hs.notify.new(message):send()
+end
 
 function positionFocusedWindow(layout)
     return function() hs.window:focusedWindow():moveToUnit(layout) end
@@ -63,14 +73,7 @@ hs.hotkey.bind(alt_ctrl, 'k', function()
     local text = hs.execute(mpc .. ' status')
     local songinfo = hs.execute(mpc .. ' current')
     hs.alert.show(text ,3)
-    hs.notify.new(
-    {
-        alwaysPresent = true,
-        autoWithdraw = false,
-        title = 'Now playing',
-        informativeText = text
-    }
-    ):send()
+    --send_notification('Now playing', text)
     hs.pasteboard.setContents(songinfo)
 end)
 
@@ -157,7 +160,7 @@ local lastSSID = nil
 function ssidChangedCallback()
     newSSID = hs.wifi.currentNetwork()
     if newSSID ~= lastSSID then
-        hs.notify.new({alwaysPresent=true,autoWithdraw=false,title='wifi changed',informativeText='new ssid: ' .. newSSID}):send()
+        send_notification('wifi changed', 'new ssid: ' .. newSSID )
         hs.alert.show("wifi changed to: " .. newSSID,5)
     else
     end
@@ -169,11 +172,10 @@ wifiWatcher:start()
 function usbDeviceCallback(data)
     if (data["productName"] == "HHKB Professional") then
         if (data["eventType"] == "added") then
-            --hs.notify.show('hhkb','hhkb on','hhkb on')
-            hs.notify.new({alwaysPresent=true,autoWithdraw=false,title='HHKB',informativeText='HHKB on'}):send()
+            send_notification('HHKB','HHKB on')
             hs.alert.show("hhkb on, built-in disabled.",5)
         elseif (data["eventType"] == "removed") then
-            hs.notify.new({alwaysPresent=true,autoWithdraw=false,title='HHKB',informativeText='HHKB off'}):send()
+            send_notification('HHKB','HHKB off')
             hs.alert.show("hhkb off, built-in enabled.",5)
         end
     end
@@ -198,33 +200,45 @@ function watchBattery()
 
     if isBattery and notifyfor10 and stateHasChanged and not isLowerThanMin then
         state.remaining = currentPercentage
-        local message = {
-            alwaysPresent = true,
-            autoWithdraw = false,
-            title = 'Battery info',
-            informativeText = 'Battery left: ' .. state.remaining .. "%\nPower Source: " .. source
-        }
-        hs.notify.new(message):send()
+        informativeText = 'Battery left: ' .. state.remaining .. "%\nPower Source: " .. source
+        send_notification('Battery info',informativeText)
     elseif isBattery and notifyfor5 and stateHasChanged and isLowerThanMin then
         state.remaining = currentPercentage
-        local message = {
-            alwaysPresent = true,
-            autoWithdraw = false,
-            title = 'Battery info',
-            informativeText = 'Battery left: ' .. state.remaining .. "%\nPower Source: " .. source
-        }
-        hs.notify.new(message):send()
+        informativeText = 'Battery left: ' .. state.remaining .. "%\nPower Source: " .. source
+        send_notification('Battery info',informativeText)
     elseif state.source ~= source then
-        local message = {
-            alwaysPresent = true,
-            autoWithdraw = false,
-            title = 'Power source',
-            informativeText = 'Now using ' .. source .. '\nnot ' .. state.source 
-        }
-        hs.notify.new(message):send()
+        informativeText = 'Now using ' .. source .. '\nnot ' .. state.source 
+        send_notification('Power source',informativeText)
         state.source = source
     end
 end
 batWatcher = hs.battery.watcher.new(watchBattery)
 batWatcher:start()
 
+local prev_alert = "9999"
+local weather_url = 'http://www.nmc.cn/service/data/real/101010100.json'
+function weather_alert()
+    code, res, table = hs.http.get(weather_url)
+    res = hs.json.decode(res)
+    new_alert = res.warn.alert
+    if new_alert == prev_alert then
+        prev_alert = new_alert
+    else
+        if prev_alert == "9999" then
+            text = "新预警: " .. new_alert
+            hs.alert.show(text, 5)
+            send_notification('Weather alert', text)
+        elseif new_alert == "9999" then
+            text = "预警取消" .. "\n前预警: " .. prev_alert
+            hs.alert.show(text, 5)
+            send_notification('Weather alert', text)
+        else
+            text = "预警变更: " .. new_alert .. "\n前预警: " .. prev_alert
+            hs.alert.show(text, 5)
+            send_notification('Weather alert', text)
+        end
+    end
+    prev_alert = new_alert
+end
+hs.timer.new(300, weather_alert):start()
+weather_alert()

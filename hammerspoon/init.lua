@@ -225,15 +225,15 @@ function weather_alert()
         prev_alert = new_alert
     else
         if prev_alert == "9999" then
-            text = "新预警: " .. new_alert
+            text = "Alert: " .. new_alert
             hs.alert.show(text, 5)
             send_notification('Weather alert', text)
         elseif new_alert == "9999" then
-            text = "预警取消" .. "\n前预警: " .. prev_alert
+            text = "Cancelled" .. "\nPrev: " .. prev_alert
             hs.alert.show(text, 5)
             send_notification('Weather alert', text)
         else
-            text = "预警变更: " .. new_alert .. "\n前预警: " .. prev_alert
+            text = "Changed: " .. new_alert .. "\nPrev: " .. prev_alert
             hs.alert.show(text, 5)
             send_notification('Weather alert', text)
         end

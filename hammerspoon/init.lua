@@ -91,7 +91,7 @@ hs.hotkey.bind(cmd_ctrl, "Down", function()
     f.x = max.x
     f.y = max.y + (max.h / 2)
     f.w = max.w
-    f.h = max.h
+    f.h = max.h / 2
     win:setFrame(f)
 end)
 hs.hotkey.bind(cmd_ctrl, "Up", function()

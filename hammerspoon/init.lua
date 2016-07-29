@@ -137,7 +137,8 @@ local key2App = {
     e = 'iTerm',
     s = 'Google Chrome',
     z = 'Telegram Desktop',
-    w = 'Sublime Text'
+    w = 'Dash',
+    d = 'Sublime Text'
 }
 for key, app in pairs(key2App) do
 	--hs.hotkey.bind(cmd_ctrl, key, function() hs.application.launchOrFocus(app) end)

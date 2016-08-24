@@ -3,6 +3,7 @@ filetype plugin on
 filetype indent on
 
 call plug#begin('~/.vim/bundle')
+Plug 'rust-lang/rust.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
 Plug 'easymotion/vim-easymotion'
@@ -158,6 +159,8 @@ let g:pymode_lint_on_write = 1
 let g:pymode_syntax = 1
 let g:pymode_syntax_all = 1
 let g:pymode_lint_on_fly = 0
+"rust.vim
+let g:rustfmt_autosave = 1
 
 "fix ctags on osx
 if has("unix")

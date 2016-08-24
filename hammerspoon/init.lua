@@ -189,7 +189,7 @@ usbWatcher:start()
 
 local state = {
     source = hs.battery.powerSource(),
-    min = 87,
+    min = 60,
     remaining = 0
 }
 function watchBattery()

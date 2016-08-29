@@ -126,7 +126,7 @@ end)
 
 --finder keybinding
 hs.hotkey.bind(cmd_ctrl,'f', function()
-   hs.execute('open ~') 
+   hs.execute('open ~/Desktop') 
 end)
 local key2App = {
     t = 'Quiver',

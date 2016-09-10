@@ -129,15 +129,16 @@ hs.hotkey.bind(cmd_ctrl,'f', function()
    hs.execute('open ~/Desktop') 
 end)
 local key2App = {
-    t = 'Quiver',
-    r = 'Safari',
+    w = 'Quiver',
+    s = 'Safari',
     --f = 'Finder',
     x = 'Tweetbot',
-    c = 'Activity Monitor',
+    g = 'Activity Monitor',
+    c = 'Dictionary',
     e = 'iTerm',
-    s = 'Google Chrome',
+    r = 'Google Chrome',
     z = 'Telegram Desktop',
-    w = 'Dash',
+    t = 'Dash',
     d = 'Sublime Text',
     v = 'Mail'
 }
@@ -147,16 +148,18 @@ for key, app in pairs(key2App) do
 end
 hs.hotkey.bind(cmd_ctrl, 'j', function ()
     hs.alert.show('t > Quiver\n' ..
-    'r > Safari\n' ..
+    's > Safari\n' ..
     --'f > Finder\n' ..
     'x > Tweetbot\n' ..
-    'c > Activity Monitor\n' ..
+    'g > Activity Monitor\n' ..
     'e > iTerm\n' .. 
-    's > Google Chrome\n' ..
+    'c > Dictionary\n' ..
+    'r > Google Chrome\n' ..
     'z > Telegram Desktop\n' ..
     'd > Sublime Text\n' ..
-    'w > Dash\n' ..
-    'v > Mail'
+    't > Dash\n' ..
+    'v > Mail\n' ..
+    'w > Quiver'
     ,3) 
 end)
 

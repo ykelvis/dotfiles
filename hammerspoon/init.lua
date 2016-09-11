@@ -225,7 +225,7 @@ batWatcher:start()
 local prev_alert = "9999"
 local weather_url = 'http://www.nmc.cn/f/rest/real/54511'
 function weather_alert()
-    code, res, table = hs.http.get(weather_url)
+    res = hs.execute("curl --connect-timeout 1 " .. weather_url)
     res = hs.json.decode(res)
     new_alert = res.warn.alert
     detail = res.warn.issuecontent
@@ -248,5 +248,5 @@ function weather_alert()
     end
     prev_alert = new_alert
 end
-hs.timer.new(300, weather_alert):start()
+hs.timer.new(hs.timer.seconds(180), weather_alert):start()
 weather_alert()

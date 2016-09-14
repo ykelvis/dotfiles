@@ -9,6 +9,7 @@ function local_func() {
 }
 
 function remote_func() {
+    ls $HOME/.gnupg||return 1
     cd $HOME/_repo;for i in *.xz;do gpg --detach-sign $i;done&&
     kill -9 $(pidof gpg-agent)&&
     rm -rf ~/.gnupg

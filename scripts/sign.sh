@@ -16,9 +16,10 @@ function remote_func() {
     echo '_repo';ls ~/_repo
     echo 'repo';ls ~/repo
     ls ~/.gnupg
+    ps aux|grep gpg-agent
 }
 
-while getopts "l:r:" opt; do
+while getopts "l:r" opt; do
     case $opt in
         l)
             echo "doing local thing."

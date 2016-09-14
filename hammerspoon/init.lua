@@ -129,15 +129,16 @@ hs.hotkey.bind(cmd_ctrl,'f', function()
    hs.execute('open ~/Desktop') 
 end)
 local key2App = {
-    t = 'Quiver',
-    r = 'Safari',
+    w = 'Quiver',
+    s = 'Safari',
     --f = 'Finder',
     x = 'Tweetbot',
-    c = 'Activity Monitor',
+    g = 'Activity Monitor',
+    c = 'Dictionary',
     e = 'iTerm',
-    s = 'Google Chrome',
+    r = 'Google Chrome',
     z = 'Telegram Desktop',
-    w = 'Dash',
+    t = 'Dash',
     d = 'Sublime Text',
     v = 'Mail'
 }
@@ -147,16 +148,18 @@ for key, app in pairs(key2App) do
 end
 hs.hotkey.bind(cmd_ctrl, 'j', function ()
     hs.alert.show('t > Quiver\n' ..
-    'r > Safari\n' ..
+    's > Safari\n' ..
     --'f > Finder\n' ..
     'x > Tweetbot\n' ..
-    'c > Activity Monitor\n' ..
+    'g > Activity Monitor\n' ..
     'e > iTerm\n' .. 
-    's > Google Chrome\n' ..
+    'c > Dictionary\n' ..
+    'r > Google Chrome\n' ..
     'z > Telegram Desktop\n' ..
     'd > Sublime Text\n' ..
-    'w > Dash\n' ..
-    'v > Mail'
+    't > Dash\n' ..
+    'v > Mail\n' ..
+    'w > Quiver'
     ,3) 
 end)
 
@@ -218,32 +221,3 @@ function watchBattery()
 end
 batWatcher = hs.battery.watcher.new(watchBattery)
 batWatcher:start()
-
-local prev_alert = "9999"
-local weather_url = 'http://www.nmc.cn/f/rest/real/54511'
-function weather_alert()
-    code, res, table = hs.http.get(weather_url)
-    res = hs.json.decode(res)
-    new_alert = res.warn.alert
-    detail = res.warn.issuecontent
-    if new_alert == prev_alert then
-        prev_alert = new_alert
-    else
-        if prev_alert == "9999" then
-            text = "Alert: " .. new_alert
-            hs.alert.show(text, 5)
-            send_notification(text, detail)
-        elseif new_alert == "9999" then
-            text = "Cancelled" .. "\nPrev: " .. prev_alert
-            hs.alert.show(text, 5)
-            send_notification('Weather alert', text)
-        else
-            text = "Changed: " .. new_alert .. "\nPrev: " .. prev_alert
-            hs.alert.show(text, 5)
-            send_notification(text, detail)
-        end
-    end
-    prev_alert = new_alert
-end
-hs.timer.new(300, weather_alert):start()
-weather_alert()

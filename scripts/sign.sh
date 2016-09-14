@@ -29,8 +29,7 @@ while getopts "l:r" opt; do
             ;;
         r)
             echo "well, doing remote now."
-            remote_func
-            echo "DONE!"
+            remote_func||echo "DONE!"||echo "error"
             ;;
         *)
             echo "what did you say?"

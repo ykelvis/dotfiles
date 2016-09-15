@@ -23,7 +23,7 @@ function remote_func() {
     echo "DONE!"
 }
 
-while getopts "l:r" opt; do
+while getopts ":lr" opt; do
     case $opt in
         l)
             echo "doing local thing."

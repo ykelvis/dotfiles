@@ -10,8 +10,7 @@ function local_func() {
 }
 
 function remote_func() {
-    ls $HOME/.gnupg||echo "no .gnupg dir"&&return 1
-    ls $HOME/_repo/|grep -E "xz$"||echo "no package to sign"&&return 1
+    (
     cd $HOME/_repo;for i in *.xz;do gpg --detach-sign $i;done&&
     kill -9 $(pidof gpg-agent)&&
     rm -rf ~/.gnupg
@@ -21,9 +20,10 @@ function remote_func() {
     ls ~/.gnupg
     ps aux|grep gpg-agent
     echo "DONE!"
+    )
 }
 
-while getopts "l:r" opt; do
+while getopts ":lr" opt; do
     case $opt in
         l)
             echo "doing local thing."

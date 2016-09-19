@@ -111,23 +111,64 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 nnoremap ; :
 inoremap jj <ESC>
-map <leader>q :tabprevious<cr>
-map <leader>w :tabnext<cr>
-map <leader>e :tabnew<cr>
+map <leader>tq :tabprevious<cr>
+map <leader>tw :tabnext<cr>
+map <leader>te :tabnew<cr>
+
+map <leader>hc :nohl<cr>
+map 0 ^
+map <leader>4 $
+map <leader>6 ^
+
+map <leader>ww <C-W>w
+map <leader>wr <C-W>r
+map <leader>wc <C-W>c
+map <leader>wq <C-W>q
+map <Leader>wj <C-W>j
+map <Leader>wk <C-W>k
+map <Leader>wh <C-W>h
+map <Leader>wl <C-W>l
+map <Leader>wv <C-W>v
+map <Leader>ws <C-W>s
+
+nnoremap <leader>bf :b<space>
+nnoremap <Leader>bb :bnext<CR>
+nnoremap <leader>bp :bprevious<CR>
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bw :bw<CR>
+nnoremap <leader>b1 :b1<CR>
+nnoremap <leader>b2 :b2<CR>
+nnoremap <leader>b3 :b3<CR>
+nnoremap <leader>b4 :b4<CR>
+nnoremap <leader>b5 :b5<CR>
+nnoremap <leader>b6 :b6<CR>
+nnoremap <leader>b7 :b7<CR>
+nnoremap <leader>b8 :b8<CR>
+nnoremap <leader>b9 :b9<CR>
 
 "easymotion
 let g:EasyMotion_smartcase = 1
+" Usage:
+" " <Leader><Leader>w : word down
+" " <Leader><Leader>b : word up
+" " <Leader><Leader>s : search up and down
+" " <leader><Leader>f : forward
+" " <Leader><Leader>j : line head down
+" " <Leader><Leader>k : line head up
+
 "vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%{SyntasticStatuslineFllg()}
 set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 "nerdtree
+let NERDTreeShowHidden=1
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>

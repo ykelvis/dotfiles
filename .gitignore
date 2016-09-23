@@ -9,3 +9,4 @@
 *.netrwhist
 /vim/bundle/*
 /nvim/bundle/*
+ranger/history

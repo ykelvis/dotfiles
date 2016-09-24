@@ -10,3 +10,4 @@
 /vim/bundle/*
 /nvim/bundle/*
 ranger/history
+ranger/bookmarks

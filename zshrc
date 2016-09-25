@@ -406,18 +406,19 @@ archcnck(){
 }
 
 brewcaskcheck(){
-    local outdatedlist res ver_installed ver_repo p_name response
+    local outdatedlist response res ver_installed ver_repo p_name rr
     for i in `brew cask list`;do 
         res=`brew cask info $i 2>/dev/null|grep usr -B2 2>/dev/null`;
         ver_installed=`echo $res|tail -1|awk -F"[/]" '{print $(NF)}'`;
         ver_repo=`head -1<<<$res|cut -d" " -f2`;
         p_name=`head -1<<<$res|cut -d":" -f1`;
-        res=`echo $ver_installed|grep $ver_repo`
-        if [[ $res == "" ]];then
+        rr=`echo $ver_installed|grep $ver_repo 2>/dev/null`
+        if [[ $rr == "" ]];then
             printf "outdated: ${p_name} ${ver_installed} > ${ver_repo}"
             outdatelist="${outdatelist} ${p_name}"
             echo ""
         fi
+        unset res ver_installed ver_repo p_name rr
     done
     echo "\033[31mUpdate these packages?\033[0m(y/n)"
     read response

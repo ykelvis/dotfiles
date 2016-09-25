@@ -1,8 +1,9 @@
+#!/usr/local/bin/zsh
 brewcaskcheck(){
     local outdatedlist response res ver_installed ver_repo p_name rr
     for i in `brew cask list`;do 
-        res=`brew cask info $i 2>/dev/null|grep usr -B2 2>/dev/null`;
-        ver_installed=`echo $res|tail -1|awk -F"[/]" '{print $(NF)}'`;
+        res=`brew cask info $i 2>/dev/null`;
+        ver_installed=`echo $res|grep -E "^From" -B1|head -1|awk -F"[/]" '{print $(NF)}'`;
         ver_repo=`head -1<<<$res|cut -d" " -f2`;
         p_name=`head -1<<<$res|cut -d":" -f1`;
         rr=`echo $ver_installed|grep $ver_repo 2>/dev/null`

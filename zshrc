@@ -317,8 +317,6 @@ alias d='fasd -d'         #directory
 alias f='fasd -f'         #file
 alias sd='fasd -sid'      #interactive directory selection
 alias sf='fasd -sif'      #interactive file selection
-alias z='fasd_cd -d'      #cd, same functionality as j in autojump
-alias zz='fasd_cd -d -i'  #cd with interactive selection
 alias c='fasd_cd -d'
 alias cc='fasd_cd -d -i'
 
@@ -397,6 +395,7 @@ export TODOTXT_DEFAULT_ACTION=ls
 alias t='todo.sh'
 tad(){da=`date +%Y-%m-%d`;t add $da $@}
 archcnck(){
+    local name owner
     echo "cheking new version..."
     pacman -Sl archlinuxcn | awk '{print $2, $3}' > old_ver.txt&&nvchecker nvchecker.ini&&nvcmp nvchecker.ini > ~/checklog
     while read cont;do 
@@ -404,4 +403,30 @@ archcnck(){
         owner=`pacman -Si $name 2>/dev/null|grep "Packager"|cut -d":" -f2`;
         printf $cont;echo $owner;
     done < ~/checklog
+}
+
+brewcaskcheck(){
+    local outdatedlist res ver_installed ver_repo p_name response
+    for i in `brew cask list`;do 
+        res=`brew cask info $i 2>/dev/null|grep usr -B2 2>/dev/null`;
+        ver_installed=`echo $res|tail -1|awk -F"[/]" '{print $(NF)}'`;
+        ver_repo=`head -1<<<$res|cut -d" " -f2`;
+        p_name=`head -1<<<$res|cut -d":" -f1`;
+        res=`echo $ver_installed|grep $ver_repo`
+        if [[ $res == "" ]];then
+            printf "outdated: ${p_name} ${ver_installed} > ${ver_repo}"
+            outdatelist="${outdatelist} ${p_name}"
+            echo ""
+        fi
+    done
+    echo "\033[31mUpdate these packages?\033[0m(y/n)"
+    read response
+    if [[ $response == "y" ]];then
+        echo "excuting: brew cask install --force ${outdatelist}"
+    else
+        return 0
+    fi
+    for i in `echo ${outdatelist}|xargs -n1`;do
+        brew cask install --force $i
+    done
 }

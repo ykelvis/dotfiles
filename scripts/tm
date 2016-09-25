@@ -47,9 +47,9 @@ nas(){
     tmux new-window -t "$name:99"
     tmux split-window -h
     tmux send-keys -t work:0.0 Enter cd\ ~/git/bangumi\;vim\ \*py Enter
-    tmux send-keys -t work:0.1 Enter cd\ ~/git/bangumi Enter
-    tmux send-keys -t work:0.2 Enter cd\ ~/git/bangumi Enter
-    tmux send-keys -t work:0.3 Enter cd\ ~/git/bangumi Enter
+    tmux send-keys -t work:0.1 Enter cd\ ~/git/bangumi\;!torrent Enter
+    tmux send-keys -t work:0.2 Enter cd\ ~/git/bangumi\;!tele Enter
+    tmux send-keys -t work:0.3 Enter cd\ ~/git/bangumi\;!taiyi Enter
     tmux send-keys -t work:0.4 Enter cd\ ~/git/bangumi Enter
     tmux send-keys -t work:archcn.0 cd\ ~/git/archlinuxcn Enter
     tmux send-keys -t work:archcn.1 cd\ ~/git/archlinuxcn Enter

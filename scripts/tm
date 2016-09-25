@@ -64,7 +64,7 @@ buildmatchine(){
     tmux split-window -h -p 50
     tmux new-window -t $name:1 -n 1
     tmux split-window -h -p 50
-    tmux send-keys -t work:archcn.0 cd\ ~/git/archlinuxcn Enter
+    tmux send-keys -t work:archcn.0 Enter cd\ ~/git/archlinuxcn Enter
     tmux send-keys -t work:archcn.1 cd\ ~/git/archlinuxcn Enter
     tmux select-window -t 0
     tmux attach-session -t $name

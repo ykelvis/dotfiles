@@ -60,6 +60,7 @@ nas(){
 }
 
 buildmatchine(){
+    cd ~
     tmux new-session -d -s $name -n archcn
     tmux split-window -h -p 50
     tmux new-window -t $name:1 -n 1

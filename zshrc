@@ -321,12 +321,14 @@ tad(){da=`date +%Y-%m-%d`;t add $da $@}
 archcnck(){
     local name owner
     echo "cheking new version..."
-    pacman -Sl archlinuxcn | awk '{print $2, $3}' > old_ver.txt&&nvchecker nvchecker.ini&&nvcmp nvchecker.ini > ~/checklog
+    pacman -Sl archlinuxcn | awk '{print $2, $3}' > old_ver.txt&&nvchecker nvchecker.ini&&nvcmp nvchecker.ini > /tmp/checklog
+    echo "getting details"
+    detail=`pacman -Slq archlinuxcn|xargs pacman -Si|grep -Eo '(^Name|^Packager).*'`
     while read cont;do 
         name=`echo $cont|cut -d" " -f1`;
-        owner=`pacman -Si $name 2>/dev/null|grep "Packager"|cut -d":" -f2`;
+        owner=`echo $detail|grep -E "Name\s*:\s*${name}$" -A1|grep -E "^Packager"|cut -d':' -f2`
         printf $cont;echo $owner;
-    done < ~/checklog
+    done < /tmp/checklog
 }
 #useful functions
 alias cr="clear"
@@ -353,6 +355,7 @@ alias cc='fasd_cd -d -i'
 
 #osx
 if [[ `uname -s` == "Darwin" ]];then
+    unset -f archcnck
     alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
     alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
 else

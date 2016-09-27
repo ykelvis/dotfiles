@@ -28,7 +28,6 @@ for i in $ZSH_FOLDER/*.zsh;do
     source $i;
 done
 
-
 [[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
 which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh
 [[ -s /etc/profile.d/autojump.sh ]]&&. /etc/profile.d/autojump.sh
@@ -141,7 +140,6 @@ if [[ ! -z "$SSH_CLIENT" ]]; then
     RPROMPT="$RPROMPT ⇄" # ssh icon
 fi
 
-
 #自动补全选项
 zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
 zstyle ':completion:*' auto-description 'specify: %d'
@@ -188,7 +186,6 @@ compdef pkill=killall
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:*:*:*:processes' force-list always
 zstyle ':completion:*:processes' command 'ps -au$USER'
-
  
 # cd ~ 补全顺序
 zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
@@ -256,77 +253,6 @@ check-cmd-self-insert() { zle .self-insert && recolor-cmd }
  zle -N backward-delete-char check-cmd-backward-delete-char
 
 #alias
-#alias ls="ls --color"
-alias ll="ls -l"
-alias l="ls -al"
-alias vi="vim"
-alias aria2c="aria2c --file-allocation=none"
-
-alias pacsy='sudo pacman -Sy'
-alias pacsyu='sudo pacman -Syu'
-alias pacsyy='sudo pacman -Syy'
-alias pacsyyu='sudo pacman -Syyu'
-alias pacs='sudo pacman -S'
-alias pacsw='sudo pacman -Sw'
-alias pacu='sudo pacman -U'
-alias pacr='sudo pacman -R'
-alias pacrns='sudo pacman -Rns'
-alias pacrscn='sudo pacman -Rscn'
-alias pacsi='pacman -Sii'
-alias pacss='pacman -Ss'
-alias pacqi='pacman -Qi'
-alias pacql="pacman -Ql"
-alias pacqo='pacman -Qo'
-alias pacqs='pacman -Qs'
-alias pacqdt="pacman -Qdt"
-alias pacscc="sudo pacman -Scc"
-alias pacdexp="pacman -D --asexp"
-alias pacddep="pacman -D --asdep"
-alias pacsdeps='sudo pacman -S --asdeps'
-alias pacqtdq="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
-alias yaog='yaourt -G'
-alias yaob='yaourt -B'
-alias yaos='yaourt -S'
-alias yaoqdt='yaourt -Qdt'
-alias yaoss='yaourt -Ss'
-alias yaoqbak='yaourt -Q --backupfile'
-alias yaosyua='yaourt -Syua --devel '
-
-alias splitmusic='cue2tracks -R -c flac -o "%n - %t" "$@" *.cue'
-alias pm25='sed -n "2p" $HOME/.weather/pm25.history|cut -d"(" -f1'
-alias dstatt='dstat -cdlmnpsy'
-
-alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |shuf -n1 -z | xargs -0 feh --bg-fill"
-
-alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
-alias hdoff="xrandr --output HDMI-0 --off"
-alias mp="ncmpcpp"
-alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
-
-alias b3="mv *pkg.tar.xz ~/repo"
-alias b1="archlinuxcn-x86_64-build"
-alias b2="archlinuxcn-i686-build"
-#alias tmux="tmux -2"
-
-#fasd
-alias v='f -e vim'
-alias m='f -e open'
-alias a='fasd -a'         #any
-alias s='fasd -si'        #show / search / select
-alias d='fasd -d'         #directory
-alias f='fasd -f'         #file
-alias sd='fasd -sid'      #interactive directory selection
-alias sf='fasd -sif'      #interactive file selection
-alias c='fasd_cd -d'
-alias cc='fasd_cd -d -i'
-
-#useful functions
-alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
-alias cr="clear"
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 mcd(){ mkdir -p "$1"; cd "$1" }
 cls(){ cd "$1"; ls; }
 backup(){ cp "$1"{,.bak}; }
@@ -388,8 +314,6 @@ ipip(){
     curl -s "$api"
     echo # Newline.
 }
-alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
-alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
 
 export TODOTXT_DEFAULT_ACTION=ls
 alias t='todo.sh'
@@ -404,4 +328,72 @@ archcnck(){
         printf $cont;echo $owner;
     done < ~/checklog
 }
+#useful functions
+alias cr="clear"
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+alias ll="ls -l"
+alias l="ls -al"
+alias vi="vim"
+alias aria2c="aria2c --file-allocation=none"
+alias mp="ncmpcpp"
+#fasd
+alias v='f -e vim'
+alias m='f -e open'
+alias a='fasd -a'         #any
+alias s='fasd -si'        #show / search / select
+alias d='fasd -d'         #directory
+alias f='fasd -f'         #file
+alias sd='fasd -sid'      #interactive directory selection
+alias sf='fasd -sif'      #interactive file selection
+alias c='fasd_cd -d'
+alias cc='fasd_cd -d -i'
 
+#osx
+if [[ `uname -s` == "Darwin" ]];then
+    alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
+    alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
+else
+    #arch
+    alias pacsy='sudo pacman -Sy'
+    alias pacsyu='sudo pacman -Syu'
+    alias pacsyy='sudo pacman -Syy'
+    alias pacsyyu='sudo pacman -Syyu'
+    alias pacs='sudo pacman -S'
+    alias pacsw='sudo pacman -Sw'
+    alias pacu='sudo pacman -U'
+    alias pacr='sudo pacman -R'
+    alias pacrns='sudo pacman -Rns'
+    alias pacrscn='sudo pacman -Rscn'
+    alias pacsi='pacman -Sii'
+    alias pacss='pacman -Ss'
+    alias pacqi='pacman -Qi'
+    alias pacql="pacman -Ql"
+    alias pacqo='pacman -Qo'
+    alias pacqs='pacman -Qs'
+    alias pacqdt="pacman -Qdt"
+    alias pacscc="sudo pacman -Scc"
+    alias pacdexp="pacman -D --asexp"
+    alias pacddep="pacman -D --asdep"
+    alias pacsdeps='sudo pacman -S --asdeps'
+    alias pacqtdq="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
+    alias yaog='yaourt -G'
+    alias yaob='yaourt -B'
+    alias yaos='yaourt -S'
+    alias yaoqdt='yaourt -Qdt'
+    alias yaoss='yaourt -Ss'
+    alias yaoqbak='yaourt -Q --backupfile'
+    alias yaosyua='yaourt -Syua --devel '
+    alias splitmusic='cue2tracks -R -c flac -o "%n - %t" "$@" *.cue'
+    alias dstatt='dstat -cdlmnpsy'
+    alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |shuf -n1 -z | xargs -0 feh --bg-fill"
+    alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
+    alias hdoff="xrandr --output HDMI-0 --off"
+    alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
+    alias b3="mv *pkg.tar.xz ~/repo"
+    alias b1="archlinuxcn-x86_64-build"
+    alias b2="archlinuxcn-i686-build"
+    alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
+fi

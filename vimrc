@@ -149,6 +149,7 @@ nnoremap <leader>b9 :b9<CR>
 
 "easymotion
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_skipfoldedline=0
 " Usage:
 " " <Leader><Leader>w : word down
 " " <Leader><Leader>b : word up

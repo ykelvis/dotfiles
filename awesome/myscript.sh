@@ -35,12 +35,12 @@ function info_sys
 function info_net
 {
 	local RUNNING_INTERFACE=`ip addr|grep UP|grep -v lo|cut -d" " -f2|cut -d":" -f1`
-	local QUAL=$(iwconfig wifi0 | sed -n 's@.*Quality=\([0-9]*/[0-9]*\).*@100\*\1@p' | bc)
-	local ESSID=`iwconfig wifi0|sed 's/"//g'|grep  ESSID|sed 's/^.*ESSID://'`
-	local SIGNAL=`iwconfig wifi0|sed 's/^.*level=-//'|sed -n '6p'`
+	local QUAL=`iwconfig ${RUNNING_INTERFACE} | sed -n 's@.*Quality=\([0-9]*/[0-9]*\).*@100\*\1@p' | bc`
+	local ESSID=`iwconfig ${RUNNING_INTERFACE}|sed 's/"//g'|grep  ESSID|sed 's/^.*ESSID://'`
+    local SIGNAL=`iwconfig ${RUNNING_INTERFACE}|sed 's/^.*level=-//'|sed -n '6p'`
 	local IPADDRESS=`hostname -i`
-	local DOWNLOAD=`ifconfig wifi0|sed -n 5p|sed 's/^.*bytes //'|sed 's/ .*$//'`
-	local UPLOAD=`ifconfig wifi0|sed -n 7p|sed 's/^.*bytes //'|sed 's/ .*$//'`
+    local DOWNLOAD=`ifconfig ${RUNNING_INTERFACE}|sed -n 5p|sed 's/^.*bytes //'|sed 's/ .*$//'`
+    local UPLOAD=`ifconfig ${RUNNING_INTERFACE}|sed -n 7p|sed 's/^.*bytes //'|sed 's/ .*$//'`
 	echo $ESSID@$SIGNAL/$QUAL
 	echo $IPADDRESS
 	echo ↓`expr $DOWNLOAD / 1024 / 1024`MB ↑`expr $UPLOAD / 1024 / 1024`MB/
@@ -48,6 +48,7 @@ function info_net
 
 function fetch_pm25
 {
+    [[ ! -d ~/.weather ]]&&mkdir ~/.weather
 	curl 'http://www.stateair.net/web/rss/1/1.xml'|\
 	grep -Eo "[0-9]{2}-[0-9]{2}-[0-9]{4}[^<]*<"|\
 	sed 's/<//g' >> ~/.weather/pm25.history&&\
@@ -57,6 +58,7 @@ function fetch_pm25
 
 function fetch_weather
 {
+    [[ ! -d ~/.weather ]]&&mkdir ~/.weather
 	curl "http://weather.yahooapis.com/forecastrss?w=2151330&u=c" > ~/.weather/weather
 }
 

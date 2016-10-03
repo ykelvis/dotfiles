@@ -332,7 +332,7 @@ mytimer_bat:connect_signal("timeout", update_batwidget)
 mytimer_bat:start()
 batterywidget:buttons(
     awful.util.table.join(
-        awful.button({ }, 1, function () awful.util.spawn_with_shell("find ~/.wallpaper -print0 | shuf -n1 -z | xargs -0 feh --bg-fill") end),
+        awful.button({ }, 1, function () awful.util.spawn_with_shell("find ~/.wallpaper/* -print0 | shuf -n1 -z | xargs -0 feh --bg-fill") end),
         awful.button({ }, 3, function () awful.util.spawn_with_shell("sh ~/git/dotfiles/scripts/shutdown_dialog.sh") end)
     )
 )

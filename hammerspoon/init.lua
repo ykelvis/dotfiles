@@ -38,21 +38,12 @@ function toggle_window_maximized()
 end 
 
 --Toggle an application between being the frontmost app, and being hidden
-function toggleApplication(_app)
-    local app = hs.appfinder.appFromName(_app)
-    if not app then
-        hs.application.launchOrFocus(_app)       -- FIXME: This should really launch _app
-        return
-    end
-    local mainwin = app:mainWindow()
-    if mainwin then
-        if mainwin == hs.window.focusedWindow() then
-            mainwin:application():hide()
-        else
-            mainwin:application():activate(true)
-            mainwin:application():unhide()
-            mainwin:focus()
-        end
+function toggleApplication(_app_id)
+    local app = hs.application.frontmostApplication()
+    if app and app:bundleID() == _app_id then
+        app:hide()
+    else
+        hs.application.launchOrFocusByBundleID(_app_id)
     end
 end
 
@@ -129,38 +120,28 @@ hs.hotkey.bind(cmd_ctrl,'f', function()
    hs.execute('open ~/Desktop') 
 end)
 local key2App = {
-    w = 'Quiver',
-    s = 'Safari',
-    --f = 'Finder',
-    x = 'Tweetbot',
-    g = 'Activity Monitor',
-    c = 'Dictionary',
-    e = 'iTerm',
-    r = 'Google Chrome',
-    z = 'Telegram Desktop',
-    t = 'Dash',
-    d = 'Sublime Text',
-    v = 'Mail'
+    w = 'com.happenapps.Quiver',
+    s = 'com.apple.Safari',
+    x = 'com.tapbots.TweetbotMac',
+    g = 'com.apple.ActivityMonitor',
+    c = 'com.apple.Dictionary',
+    e = 'com.googlecode.iterm2',
+    r = 'com.google.Chrome',
+    z = 'org.telegram.desktop',
+    t = 'com.kapeli.dashdoc',
+    d = 'com.sublimetext.3',
+    v = 'com.apple.mail'
 }
 for key, app in pairs(key2App) do
 	--hs.hotkey.bind(cmd_ctrl, key, function() hs.application.launchOrFocus(app) end)
 	hs.hotkey.bind(cmd_ctrl, key, function() toggleApplication(app) end)
 end
 hs.hotkey.bind(cmd_ctrl, 'j', function ()
-    hs.alert.show('t > Quiver\n' ..
-    's > Safari\n' ..
-    --'f > Finder\n' ..
-    'x > Tweetbot\n' ..
-    'g > Activity Monitor\n' ..
-    'e > iTerm\n' .. 
-    'c > Dictionary\n' ..
-    'r > Google Chrome\n' ..
-    'z > Telegram Desktop\n' ..
-    'd > Sublime Text\n' ..
-    't > Dash\n' ..
-    'v > Mail\n' ..
-    'w > Quiver'
-    ,3) 
+    local message = ''
+    for key, id in pairs(key2App) do
+        message = message .. key .. " > " .. id .. "\n" 
+    end
+    hs.alert.show(message, 3)
 end)
 
 local lastSSID = nil

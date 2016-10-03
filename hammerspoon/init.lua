@@ -21,10 +21,6 @@ function send_notification(title, text)
     hs.notify.new(message):send()
 end
 
-function positionFocusedWindow(layout)
-    return function() hs.window:focusedWindow():moveToUnit(layout) end
-end
-
 local frameCache = {}
 function toggle_window_maximized()
     local win = hs.window.focusedWindow()
@@ -51,8 +47,8 @@ expose = hs.expose.new(nil,{showThumbnails=true}) -- default windowfilter, no th
 expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
 expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
 expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized
-hs.hotkey.bind('ctrl-cmd','i','Expose',function()expose:toggleShow()end)
-hs.hotkey.bind('ctrl-cmd-shift','i','App Expose',function()expose_app:toggleShow()end)
+hs.hotkey.bind('ctrl-cmd','i','Expose',function() expose:toggleShow() end)
+hs.hotkey.bind('ctrl-cmd-shift','i','App Expose',function() expose_app:toggleShow() end)
 
 mpc = '/usr/local/bin/mpc'
 hs.hotkey.bind(alt_ctrl, 'l', function() hs.execute(mpc .. ' toggle') end)
@@ -69,52 +65,31 @@ hs.hotkey.bind(alt_ctrl, 'k', function()
 end)
 
 hs.hotkey.bind('alt', 'x', toggle_window_maximized)
-hs.hotkey.bind(cmd_ctrl, 'Left', positionFocusedWindow(hs.layout.left50))
-hs.hotkey.bind(cmd_ctrl, 'Right', positionFocusedWindow(hs.layout.right50))
+hs.hotkey.bind(cmd_ctrl, 'Left', function() 
+    local win = hs.window.frontmostWindow()
+    win:move(hs.layout.left50) 
+end)
+hs.hotkey.bind(cmd_ctrl, 'Right', function() 
+    local win = hs.window.frontmostWindow()
+    win:move(hs.layout.right50) 
+end)
 hs.hotkey.bind(cmd_ctrl, "Down", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then
-        return
-    end
-    local f = win:frame()
-    local screen = win:screen()
-    local max = screen:frame()
-    f.x = max.x
-    f.y = max.y + (max.h / 2)
-    f.w = max.w
-    f.h = max.h / 2
-    win:setFrame(f)
+    local win = hs.window.frontmostWindow()
+    win:move('[0,50,100,100]')
 end)
 hs.hotkey.bind(cmd_ctrl, "Up", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then
-        return
-    end
-    local f = win:frame()
-    local screen = win:screen()
-    local max = screen:frame()
-    f.x = max.x
-    f.y = max.y
-    f.w = max.w
-    f.h = max.h / 2
-    win:setFrame(f)
+    local win = hs.window.frontmostWindow()
+    win:move('[0,0,100,50]')
 end)
-
 hs.hotkey.bind('alt', "c", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then
-        return
-    end
-    local f = win:frame()
-    local screen = win:screen()
-    local max = screen:frame()
-    f.x = max.w - (max.w * 0.9)
-    f.y = max.h - (max.h * 0.85)
-    f.w = max.w * 0.8
-    f.h = max.h * 0.8
-    win:setFrame(f)
+    local win = hs.window.frontmostWindow()
+    win:move('[10,10,90,90]')
 end)
 
+--hs.hotkey.bind(cmd_ctrl, "p", function()
+    --local win = hs.window.frontmostWindow()
+    --win:moveToScreen(win:screen():next(), true, true)
+--end)
 --finder keybinding
 hs.hotkey.bind(cmd_ctrl,'f', function()
    hs.execute('open ~/Desktop') 

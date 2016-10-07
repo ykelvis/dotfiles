@@ -96,15 +96,16 @@ hs.hotkey.bind(cmd_ctrl,'f', function()
 end)
 local key2App = {
     w = 'com.happenapps.Quiver',
-    s = 'com.apple.Safari',
-    x = 'com.tapbots.TweetbotMac',
-    g = 'com.apple.ActivityMonitor',
-    c = 'com.apple.Dictionary',
     e = 'com.googlecode.iterm2',
-    r = 'com.google.Chrome',
-    z = 'org.telegram.desktop',
+    r = 'com.apple.Safari',
     t = 'com.kapeli.dashdoc',
+    s = 'com.google.Chrome',
     d = 'com.sublimetext.3',
+    y = 'io.mpv',
+    g = 'com.apple.ActivityMonitor',
+    z = 'org.telegram.desktop',
+    x = 'com.tapbots.TweetbotMac',
+    c = 'com.apple.Dictionary',
     v = 'com.apple.mail'
 }
 for key, app in pairs(key2App) do

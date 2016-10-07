@@ -400,3 +400,15 @@ else
     alias b2="archlinuxcn-i686-build"
     alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
 fi
+
+MACHINE_TYPE=`uname -m`
+SYS_TYPE=`uname -s`
+if [[ ${SYS_TYPE} == 'Darwin' ]]; then
+    alias gost="gost-osx-64"
+else
+    if [[ ${MACHINE_TYPE} == "x86_64" ]]; then
+        alias gost="gost-linux-64"
+    else
+        alias gost="gost-linux-32"
+    fi
+fi

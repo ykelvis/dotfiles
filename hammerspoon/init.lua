@@ -106,7 +106,8 @@ local key2App = {
     z = 'org.telegram.desktop',
     x = 'com.tapbots.TweetbotMac',
     c = 'com.apple.Dictionary',
-    v = 'com.apple.mail'
+    v = 'com.apple.mail',
+    b = 'org.keepassx.keepassx'
 }
 for key, app in pairs(key2App) do
 	--hs.hotkey.bind(cmd_ctrl, key, function() hs.application.launchOrFocus(app) end)

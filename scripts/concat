@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+ls *.ts|xargs -I {} echo file \'{}\'|sort -n -k2 -t"'" > lists
+ffmpeg -y -f concat -i lists -vcodec copy -acodec copy output.ts

@@ -331,6 +331,7 @@ archcnck(){
     done < /tmp/checklog
 }
 #useful functions
+alias vim='nvim'
 alias cr="clear"
 alias ..='cd ..'
 alias ...='cd ../..'

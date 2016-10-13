@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+yizhibo(){
+    echo $1 $2
+    for i in {0..$2};do 
+        wget -nc http://alcdn.hls.xiaoka.tv/${1}/${i}.ts;
+    done
+}
+echo $1 $2
+yizhibo $1 $2

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -s $1|grep -Eo "https:\/\/photo\.tuchong\.com\/\d+\/f\/\d+\.jpg"|sort -u|xargs -I {} wget {}

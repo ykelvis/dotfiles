@@ -4,11 +4,11 @@ autoload -U colors && colors
 autoload -U compinit&&compinit -u
 autoload -U promptinit&&promptinit
 autoload -U edit-command-line
-export EDITOR=vim
 export HISTSIZE=99999
 export SAVEHIST=99999
 export HISTFILE=~/.zhistory
 export TERM="xterm-256color"
+export EDITOR=vim
 CASE_SENSITIVE="false"
 DISABLE_AUTO_UPDATE="true"
 HIST_STAMPS="yyyy-mm-dd"
@@ -331,11 +331,10 @@ archcnck(){
     done < /tmp/checklog
 }
 #useful functions
-alias vim='nvim -u ~/.vimrc'
 alias cr="clear"
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
 alias ll="ls -l"
 alias l="ls -al"
@@ -343,16 +342,16 @@ alias vi="vim"
 alias aria2c="aria2c --file-allocation=none"
 alias mp="ncmpcpp"
 #fasd
-alias v='f -e vim'
-alias m='f -e open'
-alias a='fasd -a'         #any
-alias s='fasd -si'        #show / search / select
-alias d='fasd -d'         #directory
-alias f='fasd -f'         #file
-alias sd='fasd -sid'      #interactive directory selection
-alias sf='fasd -sif'      #interactive file selection
-alias c='fasd_cd -d'
-alias cc='fasd_cd -d -i'
+alias v="f -e vim"
+alias m="f -e open"
+alias a="fasd -a"         #any
+alias s="fasd -si"        #show / search / select
+alias d="fasd -d"         #directory
+alias f="fasd -f"         #file
+alias sd="fasd -sid"      #interactive directory selection
+alias sf="fasd -sif"      #interactive file selection
+alias c="fasd_cd -d"
+alias cc="fasd_cd -d -i"
 
 #osx
 if [[ `uname -s` == "Darwin" ]];then

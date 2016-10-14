@@ -133,6 +133,8 @@ map <Leader>ws <C-W>s
 
 nnoremap <leader>bf :b<space>
 nnoremap <Leader>bb :bnext<CR>
+nnoremap <Leader>q :bprevious<CR>
+nnoremap <Leader>w :bnext<CR>
 nnoremap <leader>bp :bprevious<CR>
 nnoremap <leader>bn :bnext<CR>
 nnoremap <leader>bd :bd<CR>

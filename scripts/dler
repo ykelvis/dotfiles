@@ -1,0 +1,12 @@
+#!/bin/bash
+
+site=$1
+
+if [[ $site == "tuchong" ]];then 
+    curl -s $2|grep -Eo "https:\/\/photo\.tuchong\.com\/\d+\/f\/\d+\.jpg"|sort -u|xargs -I {} wget -nc --no-proxy {}
+elif [[ $site == "lofter" ]];then
+    curl -s $2|grep -Eo "http:\/\/imglf\d\.nosdn\.127\.net\/img\/[^?]*"|sort -u|xargs -I {} wget -nc --no-proxy {}
+elif [[ $site == "bcy" ]];then
+    curl -s $2|grep -Eo "http:\/\/img\d\.bcyimg\.com\/coser\/\d+\/post\/[^/]*\/[^/]*"|sort -u|xargs -I {} wget -nc --no-proxy {}
+fi
+

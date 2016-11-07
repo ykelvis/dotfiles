@@ -4,6 +4,7 @@ filetype indent on
 
 call plug#begin('~/.vim/bundle')
 Plug 'rust-lang/rust.vim'
+Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
 Plug 'easymotion/vim-easymotion'
@@ -16,7 +17,7 @@ Plug 'kien/rainbow_parentheses.vim'
 "Plug 'vim-scripts/taglist.vim'
 Plug 'majutsushi/tagbar'
 Plug 'mattn/emmet-vim'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree',  { 'on': 'NERDTreeToggle'  }
 Plug 'sickill/vim-monokai'

@@ -4,16 +4,29 @@ autoload -U colors && colors
 autoload -U compinit&&compinit -u
 autoload -U promptinit&&promptinit
 autoload -U edit-command-line
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt EXTENDED_HISTORY
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt AUTO_CD
+setopt complete_in_word
+setopt AUTO_LIST
+setopt AUTO_MENU
+#setopt MENU_COMPLETE
+#setopt SHARE_HISTORY
+
 export HISTSIZE=99999
 export SAVEHIST=99999
 export HISTFILE=~/.zhistory
 export TERM="xterm-256color"
 export EDITOR=vim
-CASE_SENSITIVE="false"
-DISABLE_AUTO_UPDATE="true"
-HIST_STAMPS="yyyy-mm-dd"
-alias history='fc -il 1'
-
+export CASE_SENSITIVE="false"
+export DISABLE_AUTO_UPDATE="true"
+export HIST_STAMPS="yyyy-mm-dd"
 export HOMEBREW_BUILD_FROM_SOURCE=1
 export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
@@ -32,33 +45,17 @@ done
 which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh
 [[ -s /etc/profile.d/autojump.sh ]]&&. /etc/profile.d/autojump.sh
 
-setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt EXTENDED_HISTORY     
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt AUTO_CD
-setopt complete_in_word
-setopt AUTO_LIST
-setopt AUTO_MENU
-#setopt MENU_COMPLETE
-#setopt SHARE_HISTORY
-
-zle -N edit-command-line
 bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
 bindkey '^U' backward-kill-line
 bindkey '^Y' yank
 bindkey -e
 bindkey "\e[3~" delete-char
-
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
+zle -N edit-command-line
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
 
@@ -97,34 +94,27 @@ parse_git_branch() {
 parse_git_state() {
   # Compose this value via multiple conditional appends.
   local GIT_STATE=""
-
   local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
   if [ "$NUM_AHEAD" -gt 0 ]; then
     GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
   fi
-
   local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
   if [ "$NUM_BEHIND" -gt 0 ]; then
     GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
   fi
-
   local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
   if [ -n $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
     GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
   fi
-
   if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
     GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
   fi
-
   if ! git diff --quiet 2> /dev/null; then
     GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
   fi
-
   if ! git diff --cached --quiet 2> /dev/null; then
     GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
   fi
-
   if [[ -n $GIT_STATE ]]; then
     echo "$GIT_PROMPT_PREFIX$GIT_STATE$GIT_PROMPT_SUFFIX"
   fi
@@ -140,36 +130,11 @@ if [[ ! -z "$SSH_CLIENT" ]]; then
     RPROMPT="$RPROMPT ⇄" # ssh icon
 fi
 
-#自动补全选项
-zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand_alias _expand _complete _correct _ignored _approximate
-zstyle ':completion:*' format '-- %d --'
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
-zstyle ':completion:*' preserve-prefix '//[^/]##/'
-zstyle ':completion:*' verbose true
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -e -o pid,%cpu,tty,cputime,cmd'
+zstyle ':auto-fu:highlight' input bold
+zstyle ':auto-fu:highlight' completion fg=black,bold
+zstyle ':auto-fu:var' postdisplay $'\n-azfu-'
+#correction
 zstyle ':completion:*' menu select
-zstyle ':completion:*' expand 'yes'
-zstyle ':completion:*' squeeze-shlashes 'yes'
- 
-#彩色补全菜单
-#eval $(dircolors -b)
-export ZLSCOLORS="${LS_COLORS}"
-zmodload -i zsh/complist
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:descriptions' format $'\e[33m | \e[1;7;32m %d \e[m\e[33m |\e[m' 
-zstyle ':completion:*:messages' format $'\e[33m | \e[1;7;32m %d \e[m\e[0;33m |\e[m'
-zstyle ':completion:*:warnings' format $'\e[33m | \e[1;7;33m No Matches \e[m\e[0;33m |\e[m'
-zstyle ':completion:*:corrections' format $'\e[33m | \e[1;7;35m %d [errors: %e] \e[m\e[0;33m |\e[m'
-#错误校正     
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:match:*' original only
@@ -189,7 +154,7 @@ zstyle ':completion:*:processes' command 'ps -au$USER'
  
 # cd ~ 补全顺序
 zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
- 
+
 user-complete(){
 case $BUFFER in
 "" )                    
@@ -219,38 +184,37 @@ zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com w
 
 #漂亮又实用的命令高亮界面
 setopt extended_glob
- TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
+TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
   
- recolor-cmd() {
-     region_highlight=()
-     colorize=true
-     start_pos=0
-     for arg in ${(z)BUFFER}; do
-         ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
-         ((end_pos=$start_pos+${#arg}))
-         if $colorize; then
-             colorize=false
-             res=$(LC_ALL=C builtin type $arg 2>/dev/null)
-             case $res in
-                 *'reserved word'*)   style="fg=magenta,bold";;
-                 *'alias for'*)       style="fg=cyan,bold";;
-                 *'shell builtin'*)   style="fg=yellow,bold";;
-                 *'shell function'*)  style='fg=green,bold';;
-                 *"$arg is"*)        
-                     [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
-                 *)                   style='none,bold';;
-             esac
-             region_highlight+=("$start_pos $end_pos $style")
-         fi
-         [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
-         start_pos=$end_pos
-     done
- }
+recolor-cmd() {
+    region_highlight=()
+    colorize=true
+    start_pos=0
+    for arg in ${(z)BUFFER}; do
+        ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+        ((end_pos=$start_pos+${#arg}))
+        if $colorize; then
+            colorize=false
+            res=$(LC_ALL=C builtin type $arg 2>/dev/null)
+            case $res in
+                *'reserved word'*)   style="fg=magenta,bold";;
+                *'alias for'*)       style="fg=cyan,bold";;
+                *'shell builtin'*)   style="fg=yellow,bold";;
+                *'shell function'*)  style='fg=green,bold';;
+                *"$arg is"*)        
+                    [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
+                *)                   style='none,bold';;
+            esac
+            region_highlight+=("$start_pos $end_pos $style")
+        fi
+        [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
+        start_pos=$end_pos
+    done
+}
 check-cmd-self-insert() { zle .self-insert && recolor-cmd }
- check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
-  
- zle -N self-insert check-cmd-self-insert
- zle -N backward-delete-char check-cmd-backward-delete-char
+check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
+zle -N self-insert check-cmd-self-insert
+zle -N backward-delete-char check-cmd-backward-delete-char
 
 #alias
 mcd(){ mkdir -p "$1"; cd "$1" }
@@ -331,6 +295,7 @@ archcnck(){
     done < /tmp/checklog
 }
 #useful functions
+alias history='fc -il 1'
 alias -s conf=vim
 alias -s py=vim
 alias -s log="less -MN"

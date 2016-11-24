@@ -43,13 +43,6 @@ function toggleApplication(_app_id)
     end
 end
 
-expose = hs.expose.new(nil,{showThumbnails=true}) -- default windowfilter, no thumbnails
-expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
-expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
-expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized
-hs.hotkey.bind('ctrl-cmd','i','Expose',function() expose:toggleShow() end)
-hs.hotkey.bind('ctrl-cmd-shift','i','App Expose',function() expose_app:toggleShow() end)
-
 mpc = '/usr/local/bin/mpc'
 hs.hotkey.bind(alt_ctrl, 'l', function() hs.execute(mpc .. ' toggle') end)
 hs.hotkey.bind(alt_ctrl, 'Right', function() hs.execute(mpc .. ' next') end)
@@ -99,16 +92,17 @@ local key2App = {
     e = 'com.googlecode.iterm2',
     r = 'com.apple.Safari',
     t = 'com.kapeli.dashdoc',
-    --s = 'com.google.Chrome',
-    s = 'com.google.Chrome.canary',
+    s = 'com.google.Chrome',
+    --s = 'com.google.Chrome.canary',
     d = 'com.sublimetext.3',
     y = 'io.mpv',
-    g = 'com.apple.ActivityMonitor',
-    z = 'org.telegram.desktop',
+    b = 'com.apple.ActivityMonitor',
+    --g = 'org.telegram.desktop',
+    g = 'com.tdesktop.Telegram',
     x = 'com.tapbots.TweetbotMac',
     c = 'com.apple.Dictionary',
     v = 'com.apple.mail',
-    b = 'org.keepassx.keepassx'
+    z = 'com.canoejoy.Clearview'
 }
 for key, app in pairs(key2App) do
 	--hs.hotkey.bind(cmd_ctrl, key, function() hs.application.launchOrFocus(app) end)

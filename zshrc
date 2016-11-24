@@ -331,6 +331,10 @@ archcnck(){
     done < /tmp/checklog
 }
 #useful functions
+alias -s conf=vim
+alias -s py=vim
+alias -s log="less -MN"
+alias -g gp="|grep -i"
 alias cr="clear"
 alias ..="cd .."
 alias ...="cd ../.."

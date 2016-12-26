@@ -25,7 +25,7 @@ normal(){
     tmux split-window -v -p 60
     tmux send-keys -t work:archcn.0 cd\ ~/git/archlinuxcn Enter
     tmux send-keys -t work:archcn.1 cd\ ~/git/archlinuxcn Enter
-    tmux send-keys -t work:99.0 !gost Enter
+    tmux send-keys -t work:99.0 ls Enter
     tmux send-keys -t work:99.1 cd\ ~/Desktop Enter
     tmux send-keys -t work:99.2 ncmpcpp Enter
     tmux select-window -t 0

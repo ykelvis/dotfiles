@@ -43,7 +43,7 @@ function toggleApplication(_app_id)
     end
 end
 
-mpc = '/usr/local/bin/mpc'
+mpc = '/usr/local/bin/mpc --host 127.0.0.1 --port 6600'
 hs.hotkey.bind(alt_ctrl, 'l', function() hs.execute(mpc .. ' toggle') end)
 hs.hotkey.bind(alt_ctrl, 'Right', function() hs.execute(mpc .. ' next') end)
 hs.hotkey.bind(alt_ctrl, 'Left', function() hs.execute(mpc .. ' prev') end)

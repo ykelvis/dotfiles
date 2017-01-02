@@ -7,6 +7,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
+Plug 'davidhalter/jedi-vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 Plug 'jlanzarotta/bufexplorer'
@@ -25,7 +26,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'tomasr/molokai'
 Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-fugitive'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
 call plug#end()
 
@@ -153,7 +154,6 @@ nnoremap <leader>b9 :b9<CR>
 "easymotion
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_skipfoldedline=0
-" Usage:
 " " <Leader><Leader>w : word down
 " " <Leader><Leader>b : word up
 " " <Leader><Leader>s : search up and down
@@ -187,8 +187,8 @@ au Syntax * RainbowParenthesesLoadBraces
 "taglist
 "nmap <Leader>tt :TlistToggle(CR)
 "YouCompleteMe
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"let g:ycm_autoclose_preview_window_after_completion=1
+"map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "tagbar
 nmap <Leader>tb :TagbarToggle<CR>
 let g:tagbar_ctags_bin='/usr/bin/ctags'
@@ -206,6 +206,18 @@ let g:pymode_syntax_all = 1
 let g:pymode_lint_on_fly = 0
 "rust.vim
 let g:rustfmt_autosave = 1
+
+"jedi-vim
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = ",<tab>"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#popup_select_first = 1
+"doc in tab not buffer
+let g:jedi#use_tabs_not_buffers = 0 
 
 "fix ctags on osx
 if has("unix")

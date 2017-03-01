@@ -188,7 +188,7 @@ backup(){ cp "$1"{,.bak}; }
 md5check(){ md5sum "$1"|grep -i "$2"; }
 psg(){ ps aux | grep -v grep | grep -i -e VSZ -e "$1" }
 listen(){ $1 lsof -P -i -n|grep LISTEN; }
-histg(){ history|grep $1; }
+histg(){ fc -il 1|grep $1; }
 glogger(){ git log|grep -B4 $1; }
 makescript(){ fc -rnl -999|head -$1 > $2; }
 extract(){ 
@@ -262,7 +262,6 @@ archcnck(){
 #useful functions
 alias history='fc -il 1'
 alias -s conf=vim
-alias -s py=vim
 alias -s log="less -MN"
 alias -g gp="|grep -i"
 alias cr="clear"
@@ -329,9 +328,9 @@ else
     alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
     alias hdoff="xrandr --output HDMI-0 --off"
     alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
-    alias b3="mv *pkg.tar.xz ~/repo"
     alias b1="archlinuxcn-x86_64-build"
     alias b2="archlinuxcn-i686-build"
+    alias b3="mv *pkg.tar.xz ~/repo"
     alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
 fi
 

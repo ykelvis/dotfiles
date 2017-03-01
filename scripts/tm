@@ -17,17 +17,13 @@ normal(){
     cd ~
     tmux new-session -d -s $name -n 0&&
     tmux new-window -t $name:1 -n 1
-    tmux new-window -t "$name:2" -n archcn
-    tmux split-window -h -p 50
     tmux new-window -t "$name:99"
     tmux split-window -h
     tmux select-pane -L
     tmux split-window -v -p 60
-    tmux send-keys -t work:archcn.0 cd\ ~/git/archlinuxcn Enter
-    tmux send-keys -t work:archcn.1 cd\ ~/git/archlinuxcn Enter
-    tmux send-keys -t work:99.0 ls Enter
+    tmux send-keys -t work:99.0 ls\;cd\ ~/Desktop\;!runproxy Enter
     tmux send-keys -t work:99.1 cd\ ~/Desktop Enter
-    tmux send-keys -t work:99.2 ncmpcpp Enter
+    tmux send-keys -t work:99.2 cd\ ~/Desktop\;ncmpcpp Enter
     tmux select-window -t 0
     tmux attach-session -t $name
 }
@@ -38,14 +34,9 @@ nas(){
     tmux split-window -h -p 50
     tmux select-pane -U
     tmux new-window -t $name:1 -n 1
-    tmux new-window -t "$name:2" -n archcn
-    tmux split-window -h -p 50
     tmux new-window -t "$name:99"
     tmux split-window -h
-    tmux send-keys -t work:0.0 Enter cd\ ~/git/bangumi\;vim\ \*py Enter
-    tmux send-keys -t work:archcn.0 cd\ ~/git/archlinuxcn Enter
-    tmux send-keys -t work:archcn.1 cd\ ~/git/archlinuxcn Enter
-    tmux send-keys -t work:99.0 !gost Enter
+    tmux send-keys -t work:99.0 !runproxy Enter
     tmux send-keys -t work:99.1 !transmission Enter
     tmux select-window -t 0
     tmux attach-session -t $name

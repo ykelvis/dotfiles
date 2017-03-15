@@ -10,7 +10,7 @@ Plug 'bling/vim-airline'
 Plug 'davidhalter/jedi-vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
-Plug 'jlanzarotta/bufexplorer'
+"Plug 'jlanzarotta/bufexplorer'
 Plug 'jwhitley/vim-matchit'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kien/rainbow_parentheses.vim'
@@ -155,6 +155,7 @@ nnoremap <leader>b9 :b9<CR>
 "easymotion
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_skipfoldedline=0
+nmap s <Plug>(easymotion-overwin-f2)
 " " <Leader><Leader>w : word down
 " " <Leader><Leader>b : word up
 " " <Leader><Leader>s : search up and down
@@ -198,6 +199,10 @@ autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 "emmet-vim
 let g:user_emmet_install_global = 0
 autocmd FileType html,css EmmetInstall
+"ale
+let g:ale_linters = {
+\   'python': ["flake8"],
+\}
 "python-mode
 let g:pymode_python = 'python'
 let g:pymode_lint = 1

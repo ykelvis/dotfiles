@@ -28,11 +28,14 @@ class suki:
         self.login_data = json.dumps({"name": self.name,
                                       "password": self.passwd})
         self.session = requests.Session()
+        self.session.proxies = {'http': None, 'https': None}
         self.session.headers = self.headers
         self.screen = curses.initscr()
         curses.noecho()
         curses.curs_set(1)
         self.screen.keypad(1)
+        self.screen.border(1)
+        self.screen.scrollok(True)
 
     def login(self):
         ret = self.session.post(self.url_login, data=self.login_data)
@@ -85,6 +88,8 @@ class suki:
         while True:
             event = self.screen.getkey()
             if event == "q":
+                curses.nocbreak()
+                curses.endwin()
                 break
             elif event == "r":
                 self.my_bangumi()

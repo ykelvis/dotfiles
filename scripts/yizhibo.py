@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 #coding: utf-8
 
 from gevent import monkey
@@ -23,9 +24,11 @@ class Downloader:
 
     def _get_http_session(self, pool_connections, pool_maxsize, max_retries):
             session = requests.Session()
+            session.proxies = {'http': None, 'https': None}
             adapter = requests.adapters.HTTPAdapter(pool_connections=pool_connections, pool_maxsize=pool_maxsize, max_retries=max_retries)
             session.mount('http://', adapter)
             session.mount('https://', adapter)
+
             return session
 
     def run(self, m3u8_url, dir='', output_name='output.ts'):
@@ -100,7 +103,7 @@ if __name__ == '__main__':
         u = i.split('/')[-1].split(".html")[0]
         url = 'http://www.yizhibo.com/live/h5api/get_basic_live_info?scid={}'.format(u)
         print(url)
-        ret = requests.get(url, proxies=None).text
+        ret = requests.get(url).text
         ret = ret.decode('utf-8')
         js = json.loads(ret)
         print(js['msg'].encode('utf-8'))

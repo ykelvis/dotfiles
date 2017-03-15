@@ -31,6 +31,13 @@ export HIST_STAMPS="yyyy-mm-dd"
 export HOMEBREW_BUILD_FROM_SOURCE=1
 export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
+OS=${$(uname)%_*}
+if [[ $OS == "CYGWIN" || $OS == "MSYS" ]]; then
+  OS=Linux
+elif [[ $OS == "Darwin" ]]; then
+  OS=Darwin
+fi
+
 if [[ $LANG == "C"  || $LANG == "" ]]; then
     >&2 echo "$fg[red]The \$LANG variable is not set. This can cause a lot of problems.$reset_color"
 fi
@@ -131,8 +138,8 @@ if [[ ! -z "$SSH_CLIENT" ]]; then
     RPROMPT="$RPROMPT ⇄" # ssh icon
 fi
 
-#correction
 zstyle ':completion:*' menu select
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m'
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:match:*' original only
@@ -178,14 +185,14 @@ zle -N sudo-command-line
 bindkey "\e\e" sudo-command-line
 
 #hash -d s="/tmp/N"
-zstyle ':completion:*:ping:*' hosts 192.168.1.{1,50,51,100,101} www.google.com www.baidu.com
-
+zstyle ':completion:*:ping:*' hosts 192.168.1. 192.168.0. 10. 1.2.4.8 www.google.com www.baidu.com
 
 #alias
 mcd(){ mkdir -p "$1"; cd "$1" }
 cls(){ cd "$1"; ls; }
 backup(){ cp "$1"{,.bak}; }
 md5check(){ md5sum "$1"|grep -i "$2"; }
+sha512check(){ shasum -a 512 "$1"|grep -i "$2"; }
 psg(){ ps aux | grep -v grep | grep -i -e VSZ -e "$1" }
 listen(){ $1 lsof -P -i -n|grep LISTEN; }
 histg(){ fc -il 1|grep $1; }
@@ -241,9 +248,34 @@ ipip(){
             ;;
     esac
     curl -s "$api"
-    echo # Newline.
 }
-
+screen2clipboard () { # 截图到剪贴板 {{{2
+  if [[ $OS == "Darwin" ]]; then
+      local fname="Screen Shot `date +%Y-%m-%d` at `date +%I.%M.%S` `date +%p`"
+      screencapture "$fname"
+      pbcopy < "$fname"
+  else
+      import png:- | xclip -i -selection clipboard -t image/png
+  fi
+}
+mvgb () { # 文件名从 GB 转码，带确认{{{2
+  for i in $*; do
+    local new="`echo $i|iconv -f utf8 -t latin1|iconv -f gbk`"
+    echo $new
+    echo -n 'Sure? '
+    read -q ans && mv -i $i $new
+    echo
+  done
+}
+w_radar(){
+    (
+    mkdir -p /tmp/radar/;cd /tmp/radar
+    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/JC_RADAR_AZ9010_JB" | grep -Eo 'http://pi.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|tail -20|xargs wget -q
+    convert -delay 50 -loop 0 *.png radar.gif
+    mv radar.gif ~/Desktop
+    rm -rf /tmp/radar
+    )
+}
 export TODOTXT_DEFAULT_ACTION=ls
 alias t='todo.sh'
 tad(){da=`date +%Y-%m-%d`;t add $da $@}
@@ -274,6 +306,7 @@ alias l="ls -al"
 alias vi="vim"
 alias aria2c="aria2c --file-allocation=none"
 alias mp="ncmpcpp"
+alias vmarch="VBoxManage startvm arch --type headless"
 #fasd
 alias v="f -e vim"
 alias m="f -e open"
@@ -287,12 +320,13 @@ alias c="fasd_cd -d"
 alias cc="fasd_cd -d -i"
 
 #osx
-if [[ `uname -s` == "Darwin" ]];then
+if [[ $OS == 'Darwin' ]]; then
     unset -f archcnck
     alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
     alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
+    alias ls='ls -G'
 else
-    #arch
+    alias ls='ls --color=auto'
     alias pacsy='sudo pacman -Sy'
     alias pacsyu='sudo pacman -Syu'
     alias pacsyy='sudo pacman -Syy'
@@ -336,7 +370,7 @@ fi
 
 MACHINE_TYPE=`uname -m`
 SYS_TYPE=`uname -s`
-if [[ ${SYS_TYPE} == 'Darwin' ]]; then
+if [[ $OS == "Darwin" ]]; then
     alias gost="gost-osx-64"
 else
     if [[ ${MACHINE_TYPE} == "x86_64" ]]; then
@@ -345,3 +379,5 @@ else
         alias gost="gost-linux-32"
     fi
 fi
+
+unset OS MACHINE_TYPE SYS_TYPE

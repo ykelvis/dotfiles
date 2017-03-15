@@ -269,8 +269,14 @@ mvgb () { # 文件名从 GB 转码，带确认{{{2
 }
 w_radar(){
     (
+    local p
+    if [[ ${1} == '' ]]; then
+        p="JC_RADAR_AZ9010_JB"
+    else
+        p=$1
+    fi
     mkdir -p /tmp/radar/;cd /tmp/radar
-    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/JC_RADAR_AZ9010_JB" | grep -Eo 'http://pi.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|tail -20|xargs wget -q
+    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/${p}" | grep -Eo 'http://pi.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|tail -20|xargs wget -q
     convert -delay 50 -loop 0 *.png radar.gif
     mv radar.gif ~/Desktop
     rm -rf /tmp/radar

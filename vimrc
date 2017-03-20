@@ -235,6 +235,10 @@ let g:jedi#use_tabs_not_buffers = 0
 " }}}
 
 " misc {{{
+if has("autocmd")
+    au BufRead * normal zR
+endif
+
 if has("unix")
     let s:uname = system("uname -s")
     if s:uname == "Darwin\n"

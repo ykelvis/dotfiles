@@ -1,8 +1,10 @@
+syntax enable
 filetype on
 filetype plugin on
 filetype indent on
 
-call plug#begin('~/.vim/bundle')
+" {{{ plugin
+call plug#begin('~/.vim/bundle') 
 Plug 'rust-lang/rust.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
@@ -30,7 +32,10 @@ Plug 'tpope/vim-fugitive'
 "Plug 'Valloric/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
 call plug#end()
+" }}}
 
+" settings {{{
+set lazyredraw
 set tags=tags
 set completeopt=longest,menu
 set nocompatible
@@ -54,7 +59,8 @@ set scrolloff=10
 set autoread
 set autoindent
 set smartindent
-"set foldmethod=indent
+set foldmethod=indent
+set foldenable
 set showmode
 set showcmd
 set hidden
@@ -84,15 +90,15 @@ set formatoptions=qrn1
 set colorcolumn=85
 set laststatus=2
 set runtimepath+=$HOME/.vim/
+" }}}
 
-"UI
-"colors
+" {{{ colors
 set t_Co=256
-syntax enable
 "set background=dark
 colorscheme molokai
+" }}}
 
-"keymappings
+" keymappings {{{
 let mapleader = ","
 nnoremap / /\v
 vnoremap / /\v
@@ -151,7 +157,9 @@ nnoremap <leader>b6 :b6<CR>
 nnoremap <leader>b7 :b7<CR>
 nnoremap <leader>b8 :b8<CR>
 nnoremap <leader>b9 :b9<CR>
+" }}}
 
+" plugin-settings {{{
 "easymotion
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_skipfoldedline=0
@@ -224,8 +232,9 @@ let g:jedi#rename_command = "<leader>r"
 let g:jedi#popup_select_first = 1
 "doc in tab not buffer
 let g:jedi#use_tabs_not_buffers = 0 
+" }}}
 
-"fix ctags on osx
+" misc {{{
 if has("unix")
     let s:uname = system("uname -s")
     if s:uname == "Darwin\n"
@@ -234,3 +243,6 @@ if has("unix")
         let g:tagbar_ctags_bin = "~/.scripts/ctags-linux"
    endif
 endif
+" }}}
+
+" vim:foldmethod=marker:foldlevel=0

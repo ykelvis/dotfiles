@@ -1,4 +1,5 @@
 --require('clipboard')
+require('warnings')
 
 cmd_ctrl = {"cmd","ctrl"}
 alt_ctrl = {"alt","ctrl"}

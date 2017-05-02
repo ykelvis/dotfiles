@@ -14,6 +14,7 @@ import json
 
 class Downloader:
     def __init__(self, pool_size, retry=3):
+        self.proxies = {'http': None, 'https': None}
         self.pool = Pool(pool_size)
         self.session = self._get_http_session(pool_size, pool_size, retry)
         self.retry = retry
@@ -23,13 +24,12 @@ class Downloader:
         self.ts_total = 0
 
     def _get_http_session(self, pool_connections, pool_maxsize, max_retries):
-            session = requests.Session()
-            session.proxies = {'http': None, 'https': None}
-            adapter = requests.adapters.HTTPAdapter(pool_connections=pool_connections, pool_maxsize=pool_maxsize, max_retries=max_retries)
-            session.mount('http://', adapter)
-            session.mount('https://', adapter)
-
-            return session
+        session = requests.Session()
+        session.proxies = self.proxies
+        adapter = requests.adapters.HTTPAdapter(pool_connections=pool_connections, pool_maxsize=pool_maxsize, max_retries=max_retries)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        return session
 
     def run(self, m3u8_url, dir='', output_name='output.ts'):
         self.output_name = output_name
@@ -37,7 +37,7 @@ class Downloader:
         if self.dir and not os.path.isdir(self.dir):
             os.makedirs(self.dir)
 
-        r = self.session.get(m3u8_url, timeout=10, proxies=None)
+        r = self.session.get(m3u8_url, timeout=10, proxies=self.proxies)
         if r.ok:
             body = r.content
             if body:
@@ -65,7 +65,7 @@ class Downloader:
         retry = self.retry
         while retry:
             try:
-                r = self.session.get(url, timeout=20, proxies=None)
+                r = self.session.get(url, timeout=20, proxies=self.proxies)
                 if r.ok:
                     file_name = url.split('/')[-1]
                     print(file_name)

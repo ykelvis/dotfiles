@@ -5,11 +5,11 @@ filetype indent on
 
 " {{{ plugin
 call plug#begin('~/.vim/bundle') 
-Plug 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim', {'for': 'rust' }
 Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
-Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 "Plug 'jlanzarotta/bufexplorer'
@@ -17,7 +17,7 @@ Plug 'jwhitley/vim-matchit'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kien/rainbow_parentheses.vim'
 "Plug 'klen/python-mode'
-"Plug 'vim-scripts/taglist.vim'
+Plug 'vim-scripts/taglist.vim'
 Plug 'majutsushi/tagbar'
 Plug 'w0rp/ale'
 Plug 'mattn/emmet-vim'
@@ -210,6 +210,7 @@ autocmd FileType html,css EmmetInstall
 "ale
 let g:ale_linters = {
 \   'python': ["flake8"],
+\   'go': ["gofmt"],
 \}
 "python-mode
 let g:pymode_python = 'python'

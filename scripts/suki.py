@@ -30,6 +30,7 @@ class suki:
         self.session = requests.Session()
         self.session.proxies = {'http': None, 'https': None}
         self.session.headers = self.headers
+        self.session.trust_env = False
         self.screen = curses.initscr()
         curses.noecho()
         curses.curs_set(1)
@@ -72,10 +73,10 @@ class suki:
         ret = self.session.get(self.url_episode_detail + episode_id[1])
         assert ret.ok
         ret = json.loads(ret.text)
-        if not ret.get('videos', None):
+        if not ret.get('video_files', None):
             self.screen.addstr('episode not valid.')
         else:
-            subprocess.run(['mpv', ret['videos'][0]], stdout=open(devnull, 'w'))
+            subprocess.run(['mpv', ret['video_files'][0]['url']], stdout=open(devnull, 'w'))
             # self.my_bangumi()
 
     def add_to_screen(self, kw, title=''):

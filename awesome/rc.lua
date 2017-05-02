@@ -257,7 +257,7 @@ function get_net()
     return str 
 end
 netinfo = wibox.widget.textbox()
-vicious.register(netinfo, vicious.widgets.net, "<span color=\"#00FFF2\" font=\"Noto Sans Bold 8\">⬇ ${wifi0 down_kb}/${wifi0 up_kb} ⬆</span>", 1)
+vicious.register(netinfo, vicious.widgets.net, "<span color=\"#00FFF2\" font=\"Noto Sans Bold 8\">⬇ ${enp0s3 down_kb}/${enp0s3 up_kb} ⬆</span>", 1)
 netinfo_t = awful.tooltip({ objects = { netinfo },})
 netinfo_t:set_text(get_net())
 -- Sysinfo widget
@@ -723,28 +723,37 @@ for i = 1, keynumber do
     globalkeys = awful.util.table.join(globalkeys,
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
-                        local screen = mouse.screen
-                        if tags[screen][i] then
-                            awful.tag.viewonly(tags[screen][i])
+                        local screen = awful.screen.focused()
+                        local tag = screen.tags[i]
+                        if tag then
+                            awful.tag.viewonly(tag)
+                            tag:view_only()
                         end
                   end),
         awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
-                      local screen = mouse.screen
-                      if tags[screen][i] then
-                          awful.tag.viewtoggle(tags[screen][i])
+                        local screen = awful.screen.focused()
+                        local tag = screen.tags[i]
+                        if tag then
+                            awful.tag.viewtoggle(tag)
                       end
                   end),
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.movetotag(tags[client.focus.screen][i])
+                      if client.focus then
+                          local tag = client.focus.screen.tags[i]
+                          if tag then
+                              client.focus:move_to_tag(tag)
+                          end
                       end
                   end),
         awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
-                      if client.focus and tags[client.focus.screen][i] then
-                          awful.client.toggletag(tags[client.focus.screen][i])
+                      if client.focus then
+                          local tag = client.focus.screen.tags[i]
+                          if tag then
+                              client.focus:toggle_tag(tag)
+                          end
                       end
                   end))
 end

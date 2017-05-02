@@ -34,3 +34,5 @@ link_file zshrc vimperatorrc tmux.conf conkyrc compton.conf vimrc Xdefaults
 link_folder aria2 vim scripts zsh hammerspoon
 link_config mpv awesome ranger nvim
 #link_config nvim
+mkdir "$HOME/.config/gtk-3.0"
+ln -s $DIR/gtk.css "$HOME/.config/gtk-3.0/"

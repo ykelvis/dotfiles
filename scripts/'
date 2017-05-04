@@ -36,31 +36,21 @@ class suki:
         curses.noecho()
         curses.cbreak()
         curses.start_color()
-        self.current_title='/'
-        self.position = 1
-        self.page = 1
         self.screen.keypad(1)
         self.screen.border(0)
         curses.init_pair(1,curses.COLOR_BLACK, curses.COLOR_CYAN)
         self.highlightText = curses.color_pair(1)
         self.normalText = curses.A_NORMAL
         curses.curs_set(0)
-        self.max_row = 10 #max number of rows
+        self.max_row = 20 #max number of rows
         self.box = curses.newwin(self.max_row + 2, 80, 1, 1)
         self.box.box()
-
-    def refresh_screen(self):
-        self.screen.clear()
-        self.screen.refresh()
-        self.screen.addstr('suki.moe - ' + self.name + ' ' + self.current_title)
 
     def login(self):
         ret = self.session.post(self.url_login, data=self.login_data)
         return ret
 
     def my_bangumi(self):
-        self.position = 1
-        self.page = 1
         self.bangumi_list = {}
         ret = self.session.get(self.url_my_bangumi)
         assert ret.ok
@@ -70,9 +60,8 @@ class suki:
             self.bangumi_list[j] = (i['name'], i['id'])
             j += 1
         self.selections = [str(i) for i in self.bangumi_list.keys()]
-        self.add_to_screen(self.bangumi_list)
+        self.add_to_screen(self.bangumi_list, title='SUKI.MOE')
         self.progress = 0
-        self.current_title = '/ '
 
     def bangumi_detail(self, bgm_id):
         self.episode_list = {}
@@ -85,8 +74,7 @@ class suki:
                 self.episode_list[j] = (i['name'], i['id'])
                 j += 1
         self.selections = [str(i) for i in self.episode_list.keys()]
-        self.current_title += ret['data']['name']
-        self.add_to_screen(self.episode_list)
+        self.add_to_screen(self.episode_list, title='SUKI.MOE ' + ret['data']['name'])
         self.progress = 1
 
     def episode_detail(self, episode_id):
@@ -96,100 +84,93 @@ class suki:
         if not ret.get('video_files', None):
             self.screen.addstr('episode not valid.')
         else:
-            # print(ret['video_files'][0]['url'])
+            print(ret['video_files'][0]['url'])
             subprocess.run(['mpv', ret['video_files'][0]['url']], stdout=open(devnull, 'w'))
             # self.my_bangumi()
 
     def add_to_screen(self, kw, title=''):
-        self.refresh_screen()
-        self.current_text=kw
-        self.row_num = len(kw.keys())
-        self.pages = int( ceil( self.row_num / self.max_row ) )
-        if self.row_num == 0:
+        self.screen.refresh()
+        self.screen.addstr(title + "\n")
+        row_num = len(kw.keys())
+        self.pages = int( ceil( row_num / self.max_row ) )
+        self.position = 1
+        self.page = 1
+        if row_num == 0:
             self.box.addstr(1, 1, "There aren't strings", self.highlightText)
         else:
-            for i in range(1, self.max_row + 1):
-                if (i == self.position):
+            for i in kw.keys():
+                if (i == position):
                     self.box.addstr(i, 2,  str(i) + ". " + kw[i][0], self.highlightText)
                 else:
                     self.box.addstr(i, 2,  str(i) + ". " + kw[i][0], self.normalText)
-                if i == self.row_num:
+                if i == row_num:
                     break
-        self.refresh_screen()
+        self.screen.refresh()
         self.box.refresh()
 
     def main_loop(self):
-        key = self.screen.getch()
+        event = ''
         while True:
-            if key in (curses.KEY_DOWN, ord('j')):
+            keypress = self.screen.getch()
+            if keypress == curses.KEY_DOWN:
                 if self.page == 1:
-                    if self.position < self.row_num:
+                    if self.position < i:
                         self.position = self.position + 1
                     else:
                         if self.pages > 1:
                             self.page = self.page + 1
-                            self.position = 1 + (self.max_row * (self.page - 1))
+                            self.position = 1 + ( max_row * ( self.page - 1 ) )
                 elif self.page == self.pages:
-                    if self.position < self.row_num:
+                    if self.position < row_num:
                         self.position = self.position + 1
                 else:
-                    if self.position < self.max_row + (self.max_row * (self.page - 1)):
+                    if self.position < max_row + ( max_row * ( self.page - 1 ) ):
                         self.position = self.position + 1
                     else:
                         self.page = self.page + 1
-                        self.position = 1 + (self.max_row * (self.page - 1))
-            elif key in (curses.KEY_UP, ord('k')):
+                        self.position = 1 + ( max_row * ( self.page - 1 ) )
+            if keypress == curses.KEY_UP:
                 if self.page == 1:
                     if self.position > 1:
                         self.position = self.position - 1
                 else:
-                    if self.position > (1 + (self.max_row * (self.page - 1))):
+                    if self.position > ( 1 + ( max_row * ( self.page - 1 ) ) ):
                         self.position = self.position - 1
                     else:
                         self.page = self.page - 1
-                        self.position = self.max_row + (self.max_row * (self.page - 1))
-            elif key == curses.KEY_LEFT:
+                        self.position = max_row + ( max_row * ( self.page - 1 ) )
+            if keypress == curses.KEY_LEFT:
                 if self.page > 1:
                     self.page = self.page - 1
-                    self.position = 1 + (self.max_row * (self.page - 1))
+                    self.position = 1 + ( max_row * ( self.page - 1 ) )
 
-            elif key == curses.KEY_RIGHT:
+            if keypress == curses.KEY_RIGHT:
                 if self.page < self.pages:
                     self.page = self.page + 1
-                    self.position = (1 + (self.max_row * (self.page - 1)))
-            elif key in (ord("\n"), ord("l")):
-                if self.progress == 0:
-                    self.bangumi_detail(self.bangumi_list[self.position])
-                elif self.progress == 1:
-                    self.episode_detail(self.episode_list[self.position])
+                    self.position = ( 1 + ( max_row * ( self.page - 1 ) ) )
+            if keypress == ord("\n"):
+                if event in self.selections:
+                    if self.progress == 0:
+                        selection = int(event)
+                        self.bangumi_detail(self.bangumi_list[selection])
+                    elif self.progress == 1:
+                        selection = int(event)
+                        self.episode_detail(self.episode_list[selection])
                 else:
                     pass
-                self.position = 1
-                self.page = 1
-            elif key == ord("q"):
+                event = ''
+            elif keypress == "q":
                 curses.nocbreak()
                 curses.endwin()
                 break
-            elif key == ord("r"):
+            elif keypress == "r":
                 self.my_bangumi()
+                event = ''
+            else:
+                event = event + keypress
 
-            self.box.erase()
-            self.screen.border(0)
-            self.box.border(0)
-            for i in range(1 + (self.max_row * (self.page - 1)), self.max_row + 1 + (self.max_row * (self.page - 1))):
-                if self.row_num == 0:
-                    self.box.addstr(1, 1, "There aren't strings", self.highlightText)
-                else:
-                    if (i + (self.max_row * (self.page - 1)) == self.position + (self.max_row * (self.page - 1))):
-                        self.box.addstr(i - (self.max_row * (self.page - 1)), 2, str(i) + ". " + self.current_text[i][0], self.highlightText)
-                    else:
-                        self.box.addstr(i - (self.max_row * (self.page - 1)), 2, str(i) + ". " + self.current_text[i][0], self.normalText)
-                    if i == self.row_num:
-                        break
 
-            self.refresh_screen()
-            self.box.refresh()
-            key = self.screen.getch()
+
 
 if __name__ == '__main__':
     USERNAME = sys.argv[1]

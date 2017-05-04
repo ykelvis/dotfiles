@@ -327,6 +327,7 @@ alias cc="fasd_cd -d -i"
 
 #osx
 if [[ $OS == 'Darwin' ]]; then
+    command -v reattach-to-user-namespace&&alias mpv='reattach-to-user-namespace mpv'
     unset -f archcnck
     alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
     alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"

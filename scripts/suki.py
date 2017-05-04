@@ -32,7 +32,7 @@ class suki:
         self.session.headers = self.headers
         self.session.trust_env = False
         self.screen = curses.initscr()
-        curses.noecho()
+        # curses.noecho()
         curses.curs_set(1)
         self.screen.keypad(1)
         self.screen.border(1)
@@ -76,6 +76,7 @@ class suki:
         if not ret.get('video_files', None):
             self.screen.addstr('episode not valid.')
         else:
+            print(ret['video_files'][0]['url'])
             subprocess.run(['mpv', ret['video_files'][0]['url']], stdout=open(devnull, 'w'))
             # self.my_bangumi()
 
@@ -86,23 +87,31 @@ class suki:
             self.screen.addstr(str(k) + '. ' + v[0] + '\n')
 
     def main_loop(self):
+        event = ''
         while True:
-            event = self.screen.getkey()
-            if event == "q":
+            keypress = self.screen.getkey()
+            if keypress == "\n":
+                if event in self.selections:
+                    if self.progress == 0:
+                        selection = int(event)
+                        self.bangumi_detail(self.bangumi_list[selection])
+                    elif self.progress == 1:
+                        selection = int(event)
+                        self.episode_detail(self.episode_list[selection])
+                else:
+                    pass
+                event = ''
+            elif keypress == "q":
                 curses.nocbreak()
                 curses.endwin()
                 break
-            elif event == "r":
+            elif keypress == "r":
                 self.my_bangumi()
-            elif event in self.selections:
-                if self.progress == 0:
-                    selection = int(event)
-                    self.bangumi_detail(self.bangumi_list[selection])
-                elif self.progress == 1:
-                    selection = int(event)
-                    self.episode_detail(self.episode_list[selection])
+                event = ''
             else:
-                pass
+                event = event + keypress
+
+
 
 
 if __name__ == '__main__':

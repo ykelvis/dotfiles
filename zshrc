@@ -31,6 +31,7 @@ export HIST_STAMPS="yyyy-mm-dd"
 export HOMEBREW_BUILD_FROM_SOURCE=1
 export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 
+stty -ixon
 OS=${$(uname)%_*}
 if [[ $OS == "CYGWIN" || $OS == "MSYS" ]]; then
   OS=Linux

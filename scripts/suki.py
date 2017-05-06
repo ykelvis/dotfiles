@@ -13,13 +13,19 @@ class suki:
         self.name = name
         self.passwd = passwd
         self.progress = 0
+        self.all_bangumi = {}
         self.bangumi_list = {}
         self.episode_list = {}
+        self.onair_anime = {}
+        self.onair_dorama = {}
         self.selections = None
         self.url_login = 'https://suki.moe/api/user/login'
+        self.url_all_bangumi = 'https://suki.moe/api/home/bangumi?count=-1&order_by=air_date&page=1&sort=desc'
         self.url_my_bangumi = 'https://suki.moe/api/home/my_bangumi'
         self.url_bangumi_detail = 'https://suki.moe/api/home/bangumi/'
         self.url_episode_detail = 'https://suki.moe/api/home/episode/'
+        self.url_onair_anime = 'https://suki.moe/api/home/on_air?type=2'
+        self.url_onair_dorama = 'https://suki.moe/api/home/on_air?type=6'
         self.headers = {'origin': 'https://suki.moe',
                         'referer': 'https://suki.moe',
                         'content-type': 'application/json',
@@ -45,40 +51,68 @@ class suki:
         self.highlightText = curses.color_pair(1)
         self.normalText = curses.A_NORMAL
         curses.curs_set(0)
-        self.max_row = 10 #max number of rows
-        self.box = curses.newwin(self.max_row + 2, 80, 1, 1)
+        self.max_row = 20 #max number of rows
+        self.box = curses.newwin(self.max_row + 2, 70, 1, 1)
         self.box.box()
 
     def refresh_screen(self):
         self.screen.clear()
         self.screen.refresh()
         self.screen.addstr('suki.moe - ' + self.name + ' ' + self.current_title)
+        self.screen.addstr(3, 72, "Home: r")
+        self.screen.addstr(4, 72, "UP: k/↑")
+        self.screen.addstr(5, 72, "DOWN: j/↓")
+        self.screen.addstr(6, 72, "Enter: l/enter")
+        self.screen.addstr(7, 72, "Quit: q")
+
+    def get_json(self, url):
+        ret = self.session.get(url)
+        ret = json.loads(ret.text)
+        return ret
 
     def login(self):
         ret = self.session.post(self.url_login, data=self.login_data)
-        return ret
+        if ret.status_code != 200:
+            self.add_to_screen({1: ['login failed.']})
+        self.show_mainmenu()
 
-    def my_bangumi(self):
-        self.position = 1
-        self.page = 1
+    def show_mainmenu(self):
+        self.current_title = '/ '
+        self.refresh_screen()
+        ret = self.get_json(self.url_onair_anime)
+        j = 1
+        for i in ret['data']:
+            self.onair_anime[j] = (i['name'], i['id'])
+            j += 1
+        ret = self.get_json(self.url_onair_dorama)
+        j = 1
+        for i in ret['data']:
+            self.onair_dorama[j] = (i['name'], i['id'])
+            j += 1
+        self.onair_list = [None ,self.onair_anime, self.onair_dorama]
+        self.add_to_screen({1: ['on air anime'], 2: ['on air dorama'], 3: ['my watchlist'], 4: ['all bangumi']})
+        self.progress = 0
+
+    def make_bangumi_list(self, url):
         self.bangumi_list = {}
-        ret = self.session.get(self.url_my_bangumi)
-        assert ret.ok
-        ret = json.loads(ret.text)
+        ret = self.get_json(url)
         j = 1
         for i in ret['data']:
             self.bangumi_list[j] = (i['name'], i['id'])
             j += 1
         self.selections = [str(i) for i in self.bangumi_list.keys()]
+
+    def my_bangumi(self):
+        self.position = 1
+        self.page = 1
+        self.make_bangumi_list(self.url_my_bangumi)
         self.add_to_screen(self.bangumi_list)
-        self.progress = 0
+        self.progress = 1
         self.current_title = '/ '
 
     def bangumi_detail(self, bgm_id):
         self.episode_list = {}
-        ret = self.session.get(self.url_bangumi_detail + bgm_id[1])
-        assert ret.ok
-        ret = json.loads(ret.text)
+        ret = self.get_json(self.url_bangumi_detail + bgm_id[1])
         j = 1
         for i in ret['data']['episodes']:
             if i.get('id', None):
@@ -87,12 +121,10 @@ class suki:
         self.selections = [str(i) for i in self.episode_list.keys()]
         self.current_title += ret['data']['name']
         self.add_to_screen(self.episode_list)
-        self.progress = 1
+        self.progress = 2
 
     def episode_detail(self, episode_id):
-        ret = self.session.get(self.url_episode_detail + episode_id[1])
-        assert ret.ok
-        ret = json.loads(ret.text)
+        ret = self.get_json(self.url_episode_detail + episode_id[1])
         if not ret.get('video_files', None):
             self.screen.addstr('episode not valid.')
         else:
@@ -159,8 +191,21 @@ class suki:
                     self.position = (1 + (self.max_row * (self.page - 1)))
             elif key in (ord("\n"), ord("l")):
                 if self.progress == 0:
-                    self.bangumi_detail(self.bangumi_list[self.position])
+                    if self.position == 1:
+                        self.make_bangumi_list(self.url_onair_anime)
+                        self.add_to_screen(self.onair_list[self.position])
+                    elif self.position == 2:
+                        self.make_bangumi_list(self.url_onair_dorama)
+                        self.add_to_screen(self.onair_list[self.position])
+                    elif self.position == 3:
+                        self.my_bangumi()
+                    elif self.position == 4:
+                        self.make_bangumi_list(self.url_all_bangumi)
+                        self.add_to_screen(self.bangumi_list)
+                    self.progress = 1
                 elif self.progress == 1:
+                    self.bangumi_detail(self.bangumi_list[self.position])
+                elif self.progress == 2:
                     self.episode_detail(self.episode_list[self.position])
                 else:
                     pass
@@ -171,7 +216,7 @@ class suki:
                 curses.endwin()
                 break
             elif key == ord("r"):
-                self.my_bangumi()
+                self.show_mainmenu()
 
             self.box.erase()
             self.screen.border(0)
@@ -194,8 +239,11 @@ class suki:
 if __name__ == '__main__':
     USERNAME = sys.argv[1]
     PASSWORD = sys.argv[2]
-
+    
+    # try:
     sk = suki(USERNAME, PASSWORD)
     sk.login()
-    sk.my_bangumi()
     sk.main_loop()
+    # except:
+        # curses.nocbreak()
+        # curses.endwin()

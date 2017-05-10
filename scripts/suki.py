@@ -10,11 +10,12 @@ from math import ceil
 
 
 class suki:
-    def __init__(self, domain_name, name, passwd, proxy):
-        self.domain_name = domain_name if "://" in domain_name else "https://{}".format(domain_name)
-        self.domain_name = self.domain_name.rstrip("/")
+    def __init__(self, host, name, passwd, player, proxy):
+        self.host = host if "://" in host else "https://{}".format(host)
+        self.host = self.host.rstrip("/")
         self.name = name
         self.passwd = passwd
+        self.player = player
         self.progress = 0
         self.all_bangumi = {}
         self.bangumi_list = {}
@@ -22,15 +23,15 @@ class suki:
         self.onair_anime = {}
         self.onair_dorama = {}
         self.selections = None
-        self.url_login = '{}/api/user/login'.format(self.domain_name)
-        self.url_all_bangumi = '{}/api/home/bangumi?count=-1&order_by=air_date&page=1&sort=desc'.format(self.domain_name)
-        self.url_my_bangumi = '{}/api/home/my_bangumi'.format(self.domain_name)
-        self.url_bangumi_detail = '{}/api/home/bangumi/'.format(self.domain_name)
-        self.url_episode_detail = '{}/api/home/episode/'.format(self.domain_name)
-        self.url_onair_anime = '{}/api/home/on_air?type=2'.format(self.domain_name)
-        self.url_onair_dorama = '{}/api/home/on_air?type=6'.format(self.domain_name)
-        self.headers = {'origin': self.domain_name,
-                        'referer': self.domain_name,
+        self.url_login = '{}/api/user/login'.format(self.host)
+        self.url_all_bangumi = '{}/api/home/bangumi?count=-1&order_by=air_date&page=1&sort=desc'.format(self.host)
+        self.url_my_bangumi = '{}/api/home/my_bangumi'.format(self.host)
+        self.url_bangumi_detail = '{}/api/home/bangumi/'.format(self.host)
+        self.url_episode_detail = '{}/api/home/episode/'.format(self.host)
+        self.url_onair_anime = '{}/api/home/on_air?type=2'.format(self.host)
+        self.url_onair_dorama = '{}/api/home/on_air?type=6'.format(self.host)
+        self.headers = {'origin': self.host,
+                        'referer': self.host,
                         'content-type': 'application/json',
                         'accept': 'application/json, text/plain, */*',
                         'accept-encoding': 'gzip, deflate, br',
@@ -62,7 +63,7 @@ class suki:
     def refresh_screen(self):
         self.screen.clear()
         self.screen.refresh()
-        self.screen.addstr(self.domain_name.split("://")[1] + ' - ' + self.name + ' ' + self.current_title)
+        self.screen.addstr(self.host.split("://")[1] + ' - ' + self.name + ' ' + self.current_title)
         self.screen.addstr(2, 72, "Home: r")
         self.screen.addstr(3, 72, "UP: k/↑")
         self.screen.addstr(4, 72, "DOWN: j/↓")
@@ -92,9 +93,9 @@ class suki:
     def show_mainmenu(self):
         self.current_title = '/ '
         self.onair_list = [None ,self.onair_anime, self.onair_dorama]
-        self.add_to_screen({1: ['on air anime'], 
-                            2: ['on air dorama'], 
-                            3: ['my watchlist'], 
+        self.add_to_screen({1: ['on air anime'],
+                            2: ['on air dorama'],
+                            3: ['my watchlist'],
                             4: ['all bangumi']})
         self.progress = 0
         ret = self.get_json(self.url_onair_anime)
@@ -160,7 +161,7 @@ class suki:
             self.screen.addstr('episode not valid.')
         else:
             # print(ret['video_files'][0]['url'])
-            subprocess.run(['mpv', ret['video_files'][0]['url']], stdout=open(devnull, 'w'))
+            subprocess.run([self.player, ret['video_files'][0]['url']], stdout=open(devnull, 'w'))
             # self.my_bangumi()
 
     def add_to_screen(self, kw, title=''):
@@ -275,27 +276,37 @@ class suki:
             curses.endwin()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='')
-    parser.add_argument('-u','--username', 
-                        help='username of your account', 
-                        required=True, 
+    description = '{}\n\t{}\n\t{}'.format('Command Line Utility for Albireo/Deneb',
+                                          'https://github.com/lordfriend/Albireo',
+                                          'https://github.com/lordfriend/Deneb')
+    parser = argparse.ArgumentParser(description=description,
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-u','--username',
+                        help='username of your account',
+                        required=True,
                         dest="username")
-    parser.add_argument('-p','--password', 
-                        help='password of your account', 
-                        required=True, 
+    parser.add_argument('-p','--password',
+                        help='password of your account',
+                        required=True,
                         dest="password")
-    parser.add_argument('--http-proxy', 
-                        help='set http proxy', 
-                        required=False, 
-                        dest="http_proxy", 
+    parser.add_argument('--http-proxy',
+                        help='set http proxy',
+                        required=False,
+                        dest="http_proxy",
                         default=None)
-    parser.add_argument('link', 
-                        type=str, 
+    parser.add_argument('--player',
+                        help='local player to be used',
+                        required=False,
+                        dest="player",
+                        default='mpv')
+    parser.add_argument('link',
+                        type=str,
                         help='link to your site, https://site.com')
     args = vars(parser.parse_args())
-    
-    sk = suki(args['link'], 
-              args['username'], 
-              args['password'], 
+
+    sk = suki(args['link'],
+              args['username'],
+              args['password'],
+              args['player'],
               args['http_proxy'])
     sk.run()

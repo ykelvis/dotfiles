@@ -42,20 +42,20 @@ class suki:
         self.session.headers = self.headers
         self.session.trust_env = False
         self.screen = curses.initscr()
-        curses.noecho()
-        curses.cbreak()
-        curses.start_color()
         self.current_title='/'
         self.position = 1
         self.page = 1
+        self.max_row = 20
+        self.max_col = 70
         self.screen.keypad(1)
         self.screen.border(0)
-        curses.init_pair(1,curses.COLOR_BLACK, curses.COLOR_CYAN)
+        curses.noecho()
+        curses.cbreak()
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_CYAN)
         self.highlightText = curses.color_pair(1)
         self.normalText = curses.A_NORMAL
         curses.curs_set(0)
-        self.max_row = 20
-        self.max_col = 70
         self.box = curses.newwin(self.max_row + 2, self.max_col, 1, 1)
         self.box.box()
 
@@ -63,13 +63,13 @@ class suki:
         self.screen.clear()
         self.screen.refresh()
         self.screen.addstr(self.domain_name.split("://")[1] + ' - ' + self.name + ' ' + self.current_title)
-        self.screen.addstr(3, 72, "Home: r")
-        self.screen.addstr(4, 72, "UP: k/↑")
-        self.screen.addstr(5, 72, "DOWN: j/↓")
-        self.screen.addstr(6, 72, "Enter: l/enter")
-        self.screen.addstr(7, 72, "Page UP: ←")
-        self.screen.addstr(8, 72, "Page DOWN: →")
-        self.screen.addstr(9, 72, "Quit: q")
+        self.screen.addstr(2, 72, "Home: r")
+        self.screen.addstr(3, 72, "UP: k/↑")
+        self.screen.addstr(4, 72, "DOWN: j/↓")
+        self.screen.addstr(5, 72, "Enter: l/enter")
+        self.screen.addstr(6, 72, "Page UP: ←")
+        self.screen.addstr(7, 72, "Page DOWN: →")
+        self.screen.addstr(8, 72, "Quit: q")
 
     def get_json(self, url, post=False, data={}):
         try:
@@ -91,7 +91,6 @@ class suki:
 
     def show_mainmenu(self):
         self.current_title = '/ '
-        self.refresh_screen()
         self.onair_list = [None ,self.onair_anime, self.onair_dorama]
         self.add_to_screen({1: ['on air anime'], 
                             2: ['on air dorama'], 
@@ -113,6 +112,8 @@ class suki:
         for i in ret['data']:
             self.onair_dorama[k] = (i['name'], i['id'])
             k += 1
+        self.refresh_screen()
+        self.box.refresh()
 
     def make_bangumi_list(self, url):
         self.bangumi_list = {}
@@ -164,7 +165,6 @@ class suki:
 
     def add_to_screen(self, kw, title=''):
         self.position = 1
-        self.refresh_screen()
         self.current_text=kw
         self.row_num = len(kw.keys())
         self.pages = int(ceil(self.row_num / self.max_row))
@@ -178,8 +178,6 @@ class suki:
                     self.box.addstr(i, 2,  str(i) + ". " + kw[i][0][:65], self.normalText)
                 if i == self.row_num:
                     break
-        self.refresh_screen()
-        self.box.refresh()
 
     def main_loop(self):
         key = self.screen.getch()

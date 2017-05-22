@@ -23,27 +23,27 @@ class suki:
         self.onair_anime = {}
         self.onair_dorama = {}
         self.selections = None
-        self.url_login = '{}/api/user/login'.format(self.host)
-        self.url_all_bangumi = '{}/api/home/bangumi?count=-1&order_by=air_date&page=1&sort=desc'.format(self.host)
-        self.url_my_bangumi = '{}/api/home/my_bangumi'.format(self.host)
-        self.url_bangumi_detail = '{}/api/home/bangumi/'.format(self.host)
-        self.url_episode_detail = '{}/api/home/episode/'.format(self.host)
-        self.url_onair_anime = '{}/api/home/on_air?type=2'.format(self.host)
-        self.url_onair_dorama = '{}/api/home/on_air?type=6'.format(self.host)
-        self.headers = {'origin': self.host,
-                        'referer': self.host,
-                        'content-type': 'application/json',
-                        'accept': 'application/json, text/plain, */*',
-                        'accept-encoding': 'gzip, deflate, br',
-                        'user-agent': 'CURSERS 1.0'}
+        self.url_login = "{}/api/user/login".format(self.host)
+        self.url_all_bangumi = "{}/api/home/bangumi?count=-1&order_by=air_date&page=1&sort=desc".format(self.host)
+        self.url_my_bangumi = "{}/api/home/my_bangumi".format(self.host)
+        self.url_bangumi_detail = "{}/api/home/bangumi/".format(self.host)
+        self.url_episode_detail = "{}/api/home/episode/".format(self.host)
+        self.url_onair_anime = "{}/api/home/on_air?type=2".format(self.host)
+        self.url_onair_dorama = "{}/api/home/on_air?type=6".format(self.host)
+        self.headers = {"origin": self.host,
+                        "referer": self.host,
+                        "content-type": "application/json",
+                        "accept": "application/json, text/plain, */*",
+                        "accept-encoding": "gzip, deflate, br",
+                        "user-agent": "CURSERS 1.0"}
         self.login_data = json.dumps({"name": self.name,
                                       "password": self.passwd})
         self.session = requests.Session()
-        self.session.proxies = {'http': proxy, 'https': proxy}
+        self.session.proxies = {"http": proxy, "https": proxy}
         self.session.headers = self.headers
         self.session.trust_env = False
         self.screen = curses.initscr()
-        self.current_title='/'
+        self.current_title="/"
         self.position = 1
         self.page = 1
         self.max_row = 20
@@ -63,7 +63,7 @@ class suki:
     def refresh_screen(self):
         self.screen.clear()
         self.screen.refresh()
-        self.screen.addstr(self.host.split("://")[1] + ' - ' + self.name + ' ' + self.current_title)
+        self.screen.addstr(self.host.split("://")[1] + " - " + self.name + " " + self.current_title)
         self.screen.addstr(2, 72, "Home: r")
         self.screen.addstr(3, 72, "UP: k/↑")
         self.screen.addstr(4, 72, "DOWN: j/↓")
@@ -86,32 +86,32 @@ class suki:
     def login(self):
         ret = self.get_json(self.url_login, post=True, data=self.login_data)
         if not ret or ret.status_code != 200:
-            self.add_to_screen({1: ['login failed.']})
+            self.add_to_screen({1: ["login failed."]})
         else:
             self.show_mainmenu()
 
     def show_mainmenu(self):
-        self.current_title = '/ '
+        self.current_title = "/ "
         self.onair_list = [None ,self.onair_anime, self.onair_dorama]
-        self.add_to_screen({1: ['on air anime'],
-                            2: ['on air dorama'],
-                            3: ['my watchlist'],
-                            4: ['all bangumi']})
+        self.add_to_screen({1: ["on air anime"],
+                            2: ["on air dorama"],
+                            3: ["my watchlist"],
+                            4: ["all bangumi"]})
         self.progress = 0
         ret = self.get_json(self.url_onair_anime)
         if not ret:
-            self.add_to_screen({1: ['network error.']})
+            self.add_to_screen({1: ["network error."]})
             return
         j, k = 1, 1
-        for i in ret['data']:
-            self.onair_anime[j] = (i['name'], i['id'])
+        for i in ret["data"]:
+            self.onair_anime[j] = (i["name"], i["id"])
             j += 1
         ret = self.get_json(self.url_onair_dorama)
         if not ret:
-            self.add_to_screen({1: ['network error.']})
+            self.add_to_screen({1: ["network error."]})
             return
-        for i in ret['data']:
-            self.onair_dorama[k] = (i['name'], i['id'])
+        for i in ret["data"]:
+            self.onair_dorama[k] = (i["name"], i["id"])
             k += 1
         self.refresh_screen()
         self.box.refresh()
@@ -120,11 +120,11 @@ class suki:
         self.bangumi_list = {}
         ret = self.get_json(url)
         if not ret:
-            self.add_to_screen({1: ['network error.']})
+            self.add_to_screen({1: ["network error."]})
             return
         j = 1
-        for i in ret['data']:
-            self.bangumi_list[j] = (i['name'], i['id'])
+        for i in ret["data"]:
+            self.bangumi_list[j] = (i["name"], i["id"])
             j += 1
         self.selections = [str(i) for i in self.bangumi_list.keys()]
 
@@ -134,37 +134,37 @@ class suki:
         self.make_bangumi_list(self.url_my_bangumi)
         self.add_to_screen(self.bangumi_list)
         self.progress = 1
-        self.current_title = '/ '
+        self.current_title = "/ "
 
     def bangumi_detail(self, bgm_id):
         self.episode_list = {}
         ret = self.get_json(self.url_bangumi_detail + bgm_id[1])
         if not ret:
-            self.add_to_screen({1: ['network error.']})
+            self.add_to_screen({1: ["network error."]})
             return
         j = 1
-        for i in ret['data']['episodes']:
-            if i.get('id', None):
-                self.episode_list[j] = (i['name'], i['id'])
+        for i in ret["data"]["episodes"]:
+            if i.get("id", None):
+                self.episode_list[j] = (i["name"], i["id"])
                 j += 1
         self.selections = [str(i) for i in self.episode_list.keys()]
-        self.current_title += ret['data']['name']
+        self.current_title += ret["data"]["name"]
         self.add_to_screen(self.episode_list)
         self.progress = 2
 
     def episode_detail(self, episode_id):
         ret = self.get_json(self.url_episode_detail + episode_id[1])
         if not ret:
-            self.add_to_screen({1: ['network error.']})
+            self.add_to_screen({1: ["network error."]})
             return
-        if not ret.get('video_files', None):
-            self.screen.addstr('episode not valid.')
+        if not ret.get("video_files", None):
+            self.screen.addstr("episode not valid.")
         else:
-            # print(ret['video_files'][0]['url'])
-            subprocess.run([self.player, ret['video_files'][0]['url']], stdout=open(devnull, 'w'))
+            # self.add_to_screen({1:[ret["video_files"][0]["url"]]})
+            subprocess.run([self.player, self.host + ret["video_files"][0]["url"]], stdout=open(devnull, "w"))
             # self.my_bangumi()
 
-    def add_to_screen(self, kw, title=''):
+    def add_to_screen(self, kw, title=""):
         self.position = 1
         self.current_text=kw
         self.row_num = len(kw.keys())
@@ -183,7 +183,7 @@ class suki:
     def main_loop(self):
         key = self.screen.getch()
         while True:
-            if key in (curses.KEY_DOWN, ord('j')):
+            if key in (curses.KEY_DOWN, ord("j")):
                 if self.page == 1:
                     if self.position < self.row_num:
                         self.position = self.position + 1
@@ -200,7 +200,7 @@ class suki:
                     else:
                         self.page = self.page + 1
                         self.position = 1 + (self.max_row * (self.page - 1))
-            elif key in (curses.KEY_UP, ord('k')):
+            elif key in (curses.KEY_UP, ord("k")):
                 if self.page == 1:
                     if self.position > 1:
                         self.position = self.position - 1
@@ -275,38 +275,40 @@ class suki:
             curses.nocbreak()
             curses.endwin()
 
-if __name__ == '__main__':
-    description = '{}\n\t{}\n\t{}'.format('Command Line Utility for Albireo/Deneb',
-                                          'https://github.com/lordfriend/Albireo',
-                                          'https://github.com/lordfriend/Deneb')
+if __name__ == "__main__":
+    description = "{}\n\t{}\n\t{}".format("Command Line Utility for Albireo/Deneb",
+                                          "https://github.com/lordfriend/Albireo",
+                                          "https://github.com/lordfriend/Deneb")
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-u','--username',
-                        help='username of your account',
+    parser.add_argument("-u","--username",
+                        help="username of your account",
                         required=True,
                         dest="username")
-    parser.add_argument('-p','--password',
-                        help='password of your account',
+    parser.add_argument("-p","--password",
+                        help="password of your account",
                         required=True,
                         dest="password")
-    parser.add_argument('--http-proxy',
-                        help='set http proxy',
+    parser.add_argument("--http-proxy",
+                        help="set http proxy",
                         required=False,
                         dest="http_proxy",
                         default=None)
-    parser.add_argument('--player',
-                        help='local player to be used',
+    parser.add_argument("--player",
+                        help="local player to be used",
                         required=False,
                         dest="player",
-                        default='mpv')
-    parser.add_argument('link',
+                        default="mpv")
+    parser.add_argument("link",
                         type=str,
-                        help='link to your site, https://site.com')
+                        nargs="+",
+                        help="link to your site, https://site.com")
     args = vars(parser.parse_args())
+    print(args)
 
-    sk = suki(args['link'],
-              args['username'],
-              args['password'],
-              args['player'],
-              args['http_proxy'])
+    sk = suki(args["link"][0],
+              args["username"],
+              args["password"],
+              args["player"],
+              args["http_proxy"])
     sk.run()

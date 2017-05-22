@@ -1,5 +1,4 @@
 #!/bin/bash
-
 name="work"
 hostname=`hostname`
 
@@ -7,8 +6,8 @@ if [[ -n $TMUX ]];then
     echo "don't use tmux in tmux."
     exit
 fi
-res=`tmux ls|grep -E "^work"`
-if [[ ${res} != "" ]];then
+ret=`tmux ls|grep -E "^work"`
+if [[ ${ret} != "" ]];then
     tmux attach-session -t $name
     exit
 fi
@@ -21,7 +20,7 @@ normal(){
     tmux split-window -h
     tmux select-pane -L
     tmux split-window -v -p 60
-    tmux send-keys -t work:99.0 ls\;cd\ ~/Desktop\;!runproxy Enter
+    #tmux send-keys -t work:99.0 ls\;cd\ ~/Desktop\;!runproxy Enter
     tmux send-keys -t work:99.1 cd\ ~/Desktop Enter
     tmux send-keys -t work:99.2 cd\ ~/Desktop\;ncmpcpp Enter
     tmux select-window -t 0

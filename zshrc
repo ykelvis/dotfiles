@@ -243,6 +243,9 @@ ipip(){
         "-6")
             api="http://v6.ipv6-test.com/api/myip.php"
             ;;
+        "-q")
+            api="http://freeapi.ipip.net/$2"
+            ;;
         *)
             #api="http://ipv6-test.com/api/myip.php"
             api="http://myip.ipip.net"
@@ -277,7 +280,7 @@ w_radar(){
         p=$1
     fi
     mkdir -p /tmp/radar/;cd /tmp/radar
-    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/${p}" | grep -Eo 'http://pi.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|tail -20|xargs wget -q
+    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/${p}" | grep -Eo 'http://pi.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|tail -10|xargs wget -q
     convert -delay 50 -loop 0 *.png radar.gif
     mv radar.gif ~/Desktop
     rm -rf /tmp/radar
@@ -286,6 +289,56 @@ w_radar(){
 export TODOTXT_DEFAULT_ACTION=ls
 alias t='todo.sh'
 tad(){da=`date +%Y-%m-%d`;t add $da $@}
+proxy_on() {
+    export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+
+    if [[ $1 == "-p" ]]; then
+        echo -n "username: "; read username
+        if [[ $username != "" ]]; then
+            echo -n "password: "
+            read -es password
+            local pre="$username:$password@"
+        fi
+        echo -n "server: "; read server
+        echo -n "port: "; read port
+        export http_proxy="http://$pre$server:$port/"
+    elif (( $# > 0 )); then
+        valid=$(echo $@ | sed 's/\([0-9]\{1,3\}.\)\{4\}:\([0-9]\+\)/&/p')
+        if [[ $valid != $@ ]]; then
+            >&2 echo "Invalid address"
+            return 1
+        fi
+        export http_proxy="http://$1/"
+    elif (( $# == 0 )); then
+        export http_proxy="http://127.0.0.1:8080"
+    fi
+
+    export all_proxy=$http_proxy
+    export https_proxy=$http_proxy
+    export ftp_proxy=$http_proxy
+    export rsync_proxy=$http_proxy
+    export ALL_PROXY=$http_proxy
+    export HTTP_PROXY=$http_proxy
+    export HTTPS_PROXY=$http_proxy
+    export FTP_PROXY=$http_proxy
+    export RSYNC_PROXY=$http_proxy
+    echo "Proxy environment variable set."
+}
+
+proxy_off(){
+    unset no_proxy
+    unset all_proxy
+    unset http_proxy
+    unset https_proxy
+    unset ftp_proxy
+    unset rsync_proxy
+    unset ALL_PROXY
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset FTP_PROXY
+    unset RSYNC_PROXY
+    echo -e "Proxy environment variable removed."
+}
 archcnck(){
     local name owner
     echo "cheking new version..."

@@ -161,7 +161,7 @@ class suki:
             self.screen.addstr("episode not valid.")
         else:
             # self.add_to_screen({1:[ret["video_files"][0]["url"]]})
-            subprocess.run([self.player, self.host + ret["video_files"][0]["url"]], stdout=open(devnull, "w"))
+            subprocess.run([self.player, ret["video_files"][0]["url"]], stdout=open(devnull, "w"))
             # self.my_bangumi()
 
     def add_to_screen(self, kw, title=""):

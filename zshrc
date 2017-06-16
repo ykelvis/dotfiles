@@ -181,4 +181,4 @@ bindkey "\e\e" sudo-command-line
 
 #hash -d s="/tmp/N"
 zstyle ':completion:*:ping:*' hosts 192.168.1. 192.168.0. 10. 1.2.4.8 www.google.com www.baidu.com
-[[ -z $TMUX ]]&&tm
+#[[ -z $TMUX ]]&&exec tm

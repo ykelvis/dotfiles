@@ -160,8 +160,10 @@ class suki:
         if not ret.get("video_files", None):
             self.screen.addstr("episode not valid.")
         else:
-            # self.add_to_screen({1:[ret["video_files"][0]["url"]]})
-            subprocess.run([self.player, ret["video_files"][0]["url"]], stdout=open(devnull, "w"))
+            url = ret["video_files"][0]["url"]
+            url = url if url.startswith("http") else self.host + url
+            # self.add_to_screen({1:[url]})
+            subprocess.run([self.player, url], stdout=open(devnull, "w"))
             # self.my_bangumi()
 
     def add_to_screen(self, kw, title=""):

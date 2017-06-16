@@ -9,7 +9,7 @@ Plug 'rust-lang/rust.vim', {'for': 'rust' }
 Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'bling/vim-airline'
-Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+"Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 "Plug 'jlanzarotta/bufexplorer'
@@ -21,7 +21,7 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'majutsushi/tagbar'
 Plug 'w0rp/ale'
 Plug 'mattn/emmet-vim'
-"Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree',  { 'on': 'NERDTreeToggle'  }
 Plug 'sickill/vim-monokai'

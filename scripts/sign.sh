@@ -18,7 +18,7 @@ function remote_func() {
     echo '_repo';ls ~/_repo
     echo 'repo';ls ~/repo
     ls ~/.gnupg
-    ps aux|grep gpg-agent
+    ps aux|grep gpg-agent|grep yk|awk '{print $2}'|xargs kill -9
     echo "DONE!"
     )
 }
@@ -28,6 +28,7 @@ while getopts ":lr" opt; do
         l)
             echo "doing local thing."
             local_func
+            ssh -t barch zsh
             ;;
         r)
             echo "well, doing remote now."

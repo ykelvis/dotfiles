@@ -1,14 +1,14 @@
-#!/usr/local/bin/python3
-import requests, sys
+#!/usr/bin/env python3
+import requests
+import sys
 
-def main(hostname,password,addr):
+def main(hostname, password, addr):
     cert = "root.crt"
-    url = "https://dyn.dns.he.net/nic/update?hostname={}&password={}&myip={}".format(hostname,password,addr)
-    print(url)
+    url = "https://dyn.dns.he.net/nic/update?hostname={}&password={}&myip={}".format(hostname, password, addr)
     r = requests.get(
         url,
         headers={
-        'User-Agent': 'curl/7.43.0'
+            'User-Agent': 'curl/7.43.0'
         },
         verify = cert,
         timeout=5,
@@ -18,8 +18,8 @@ def main(hostname,password,addr):
 
 if __name__ == "__main__":
     try:
-        proxies = {'http':sys.argv[3],'https':sys.argv[3]}
+        proxies = {'http':sys.argv[3], 'https':sys.argv[3]}
         ip = requests.get('https://redirector.gvt1.com/report_mapping').text.split()[0]
-        main(sys.argv[1],sys.argv[2],ip)
+        main(sys.argv[1], sys.argv[2], ip)
     except:
         print('update failed')

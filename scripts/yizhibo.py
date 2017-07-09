@@ -12,9 +12,13 @@ import sys
 import time
 import json
 
+proxies = {'http': None, 'https': None}
+headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
 class Downloader:
     def __init__(self, pool_size, retry=3):
-        self.proxies = {'http': None, 'https': None}
+        self.proxies = proxies
+        self.headers = headers
         self.pool = Pool(pool_size)
         self.session = self._get_http_session(pool_size, pool_size, retry)
         self.retry = retry
@@ -26,6 +30,7 @@ class Downloader:
     def _get_http_session(self, pool_connections, pool_maxsize, max_retries):
         session = requests.Session()
         session.proxies = self.proxies
+        session.headers = self.headers
         adapter = requests.adapters.HTTPAdapter(pool_connections=pool_connections, pool_maxsize=pool_maxsize, max_retries=max_retries)
         session.mount('http://', adapter)
         session.mount('https://', adapter)
@@ -103,9 +108,9 @@ if __name__ == '__main__':
         u = i.split('/')[-1].split(".html")[0]
         url = 'http://www.yizhibo.com/live/h5api/get_basic_live_info?scid={}'.format(u)
         print(url)
-        ret = requests.get(url).text
-        ret = ret.decode('utf-8')
-        js = json.loads(ret)
+        js = requests.get(url, proxies=proxies, headers=headers).json()
+        # ret = ret.decode('utf-8')
+        # js = json.loads(ret)
         print(js['msg'].encode('utf-8'))
         nickname = js['data']['nickname']
         live_title = js['data']['live_title']

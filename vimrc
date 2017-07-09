@@ -21,7 +21,7 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'majutsushi/tagbar'
 Plug 'w0rp/ale'
 Plug 'mattn/emmet-vim'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree',  { 'on': 'NERDTreeToggle'  }
 Plug 'sickill/vim-monokai'
@@ -31,6 +31,7 @@ Plug 'tpope/vim-markdown'
 Plug 'tpope/vim-fugitive'
 "Plug 'Valloric/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
+Plug 'mhinz/vim-signify'
 call plug#end()
 " }}}
 

@@ -20,7 +20,7 @@ normal(){
     tmux split-window -h
     tmux select-pane -L
     tmux split-window -v -p 60
-    #tmux send-keys -t work:99.0 ls\;cd\ ~/Desktop\;!runproxy Enter
+    tmux send-keys -t work:99.0 cd\ ~/Desktop\;mac_startup.sh Enter
     tmux send-keys -t work:99.1 cd\ ~/Desktop Enter
     tmux send-keys -t work:99.2 cd\ ~/Desktop\;ncmpcpp Enter
     tmux select-window -t 0
@@ -54,14 +54,14 @@ buildmatchine(){
 }
 
 case ${hostname} in
-    *build*)
-        buildmatchine
+    rigel)
+        normal
         ;;
     *nas*)
         nas
         ;;
     *)
-        normal
+        buildmatchine
         ;;
 esac
 

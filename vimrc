@@ -36,6 +36,7 @@ call plug#end()
 " }}}
 
 " settings {{{
+set conceallevel=0
 set lazyredraw
 set tags=tags
 set completeopt=longest,menu

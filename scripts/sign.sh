@@ -13,12 +13,14 @@ function remote_func() {
     (
     cd $HOME/_repo;for i in *.xz;do gpg --detach-sign $i;done&&
     kill -9 $(pidof gpg-agent)&&
-    rm -rf ~/.gnupg
+    rm -rf ~/.gnupg&&
+    mkdir -p ~/archive
     cp ~/_repo/* ~/repo/;mv ~/_repo/* ~/archive/&&
     echo '_repo';ls ~/_repo
     echo 'repo';ls ~/repo
     ls ~/.gnupg
     ps aux|grep gpg-agent|grep yk|awk '{print $2}'|xargs kill -9
+    ps aux|grep pinentry-curses|grep yk|awk '{print $2}'|xargs kill -9
     echo "DONE!"
     )
 }

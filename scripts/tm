@@ -54,7 +54,7 @@ buildmatchine(){
 }
 
 case ${hostname} in
-    rigel)
+    Rigel)
         normal
         ;;
     *nas*)

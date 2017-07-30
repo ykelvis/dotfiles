@@ -182,3 +182,9 @@ bindkey "\e\e" sudo-command-line
 #hash -d s="/tmp/N"
 zstyle ':completion:*:ping:*' hosts 192.168.1. 192.168.0. 10. 1.2.4.8 www.google.com www.baidu.com
 #[[ -z $TMUX ]]&&exec tm
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > ~/.ssh-agent-thing
+fi
+if [[ "$SSH_AGENT_PID" == "" ]]; then
+    eval "$(<~/.ssh-agent-thing)"
+fi

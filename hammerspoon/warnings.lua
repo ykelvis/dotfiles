@@ -26,7 +26,7 @@ local function telegram_update_callback(exit_code, std_out, std_err)
     if std_out == '' then
         return
     end
-    if tonumber(std_out) > 1024000 then
+    if tonumber(std_out) > 2048000 then
         hs.notify.show('Telegram', 'BOOM!', ''):send()
         hs.alert("telegram boom")
         return

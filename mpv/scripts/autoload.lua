@@ -48,9 +48,9 @@ end
 
 function find_and_add_entries()
     local path = mp.get_property("path", "")
-    if string.find(path, "/Volumes") ~= nil then
-        return
-    end
+    --if string.find(path, "/Volumes") ~= nil then
+        --return
+    --end
     local dir, filename = mputils.split_path(path)
     if #dir == 0 then
         return

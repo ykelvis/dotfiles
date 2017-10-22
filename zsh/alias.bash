@@ -71,6 +71,9 @@ ipip(){
         "-q")
             api="http://freeapi.ipip.net/$2"
             ;;
+        "-v")
+            api="https://api.ip.sb/geoip/$2"
+            ;;
         *)
             #api="http://ipv6-test.com/api/myip.php"
             api="http://myip.ipip.net"
@@ -105,8 +108,8 @@ w_radar(){
         p=$1
     fi
     mkdir -p /tmp/radar/;cd /tmp/radar
-    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/${p}" | grep -Eo 'http://pi.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|tail -10|xargs wget -q
-    convert -delay 50 -loop 0 *.png radar.gif
+    curl -s --compressed "http://products.weather.com.cn/product/radar/index/procode/${p}.shtml" | grep -Eo 'http://i.weather.com.cn/i/product/pic/l[^"]+'|sort|uniq|grep -v 20170823033600000|tail -20|xargs wget -q
+    convert -delay 30 -loop 0 *.png radar.gif
     mv radar.gif ~/Desktop
     rm -rf /tmp/radar
     )

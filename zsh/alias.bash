@@ -263,10 +263,13 @@ MACHINE_TYPE=`uname -m`
 SYS_TYPE=`uname -s`
 if [[ $OS == "Darwin" ]]; then
     alias gost="gost-osx-64"
+    alias cow="cow-mac64"
 else
     if [[ ${MACHINE_TYPE} == "x86_64" ]]; then
         alias gost="gost-linux-64"
+        alias cow="cow-linux64"
     else
         alias gost="gost-linux-32"
+        alias cow="cow-linux32"
     fi
 fi

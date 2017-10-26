@@ -14,6 +14,26 @@ else
     alias -g gp="|grep -i"
 fi
 
+256tab(){
+    for k in `seq 0 1`;do
+        for j in `seq $((16+k*18)) 36 $((196+k*18))`;do
+            for i in `seq $j $((j+17))`; do
+                printf "\e[01;$1;38;5;%sm%4s" $i $i;
+            done;echo;
+        done;
+    done
+}
+
+bin-exist(){[[ -n ${commands[$1]} ]]}
+#man page to pdf
+(bin-exist ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
+
+#help command for builtins
+help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
+
+(bin-exist ffmpeg) && extract_mp3() { ffmpeg -i $1 -acodec libmp3lame -metadata TITLE="$2" ${2// /_}.mp3 }
+
+calc(){ awk "BEGIN{ print $* }" ; }
 mcd(){ mkdir -p "$1"; cd "$1"; }
 cls(){ cd "$1"; ls; }
 backup(){ cp "$1"{,.bak}; }
@@ -208,6 +228,21 @@ alias sd="fasd -sid"      #interactive directory selection
 alias sf="fasd -sif"      #interactive file selection
 alias c="fasd_cd -d"
 alias cc="fasd_cd -d -i"
+# alias and listing colors
+alias -g A="|awk"
+alias -g B='|sed -r "s:\x1B\[[0-9;]*[mK]::g"'       # remove color, make things boring
+alias -g C="|wc"
+alias -g E="|sed"
+alias -g G='|GREP_COLOR=$(echo 3$[$(date +%N)%6+1]'\'';1;7'\'') egrep -i --color=always'
+alias -g H="|head -n $(($LINES-2))"
+alias -g L="|less"
+alias -g P="|column -t"
+alias -g R="|tac"
+alias -g S="|sort"
+alias -g T="|tail -n $(($LINES-2))"
+alias -g X="|xargs"
+alias -g N="> /dev/null"
+alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
 
 #osx
 if [[ $OS == "Darwin" ]]; then
@@ -273,3 +308,4 @@ else
         alias cow="cow-linux32"
     fi
 fi
+

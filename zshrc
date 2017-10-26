@@ -7,18 +7,39 @@ autoload -U edit-command-line
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 autoload predict-on
-setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
+
 setopt EXTENDED_HISTORY
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt AUTO_CD
-setopt complete_in_word
 setopt AUTO_LIST
 setopt AUTO_MENU
 #setopt MENU_COMPLETE
 #setopt SHARE_HISTORY
+setopt complete_aliases         #do not expand aliases _before_ completion has finished
+setopt auto_cd                  # if not a command, try to cd to it.
+setopt auto_pushd               # automatically pushd directories on dirstack
+setopt auto_continue            #automatically send SIGCON to disowned jobs
+setopt extended_glob            # so that patterns like ^() *~() ()# can be used
+setopt pushd_ignore_dups        # do not push dups on stack
+setopt pushd_silent             # be quiet about pushds and popds
+setopt brace_ccl                # expand alphabetic brace expressions
+#setopt chase_links             # ~/ln -> /; cd ln; pwd -> /
+setopt complete_in_word         # stays where it is and completion is done from both ends
+setopt correct                  # spell check for commands only
+#setopt equals extended_glob    # use extra globbing operators
+setopt no_hist_beep             # don not beep on history expansion errors
+setopt hash_list_all            # search all paths before command completion
+setopt hist_ignore_all_dups     # when runing a command several times, only store one
+setopt hist_reduce_blanks       # reduce whitespace in history
+setopt hist_ignore_space        # do not remember commands starting with space
+setopt share_history            # share history among sessions
+setopt hist_verify              # reload full command when runing from history
+setopt hist_expire_dups_first   #remove dups when max size reached
+setopt interactive_comments     # comments in history
+setopt list_types               # show ls -F style marks in file completion
+setopt long_list_jobs           # show pid in bg job list
+setopt numeric_glob_sort        # when globbing numbered files, use real counting
+setopt inc_append_history       # append to history once executed
+setopt prompt_subst             # prompt more dynamic, allow function in prompt
+setopt nonomatch
 
 export HISTSIZE=99999
 export SAVEHIST=99999
@@ -29,24 +50,8 @@ export CASE_SENSITIVE="false"
 export DISABLE_AUTO_UPDATE="true"
 export HIST_STAMPS="yyyy-mm-dd"
 export HOMEBREW_BUILD_FROM_SOURCE=1
-export PATH=$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
-
-stty -ixon
-if [[ $LANG == "C"  || $LANG == "" ]]; then
-    >&2 echo "$fg[red]The \$LANG variable is not set. This can cause a lot of problems.$reset_color"
-fi
-
-eval "$(fasd --init auto)"
-export ZSH_FOLDER=~/.zsh
-ls -al $ZSH_FOLDER &>/dev/null&&
-source $ZSH_FOLDER/alias.bash
-for i in $ZSH_FOLDER/*.zsh;do
-    source $i;
-done
-
-[[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
-which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh
-[[ -s /etc/profile.d/autojump.sh ]]&&. /etc/profile.d/autojump.sh
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
+export PATH=$PATH:$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin
 
 bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
@@ -61,6 +66,35 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
 WORDCHARS='*?_-[]~=&;!#$%^(){}<>'
+
+LANG=en_US.UTF-8
+LANGUAGE=en_US
+export LANG LANGUAGE
+
+eval "$(fasd --init auto)"
+export ZSH_FOLDER=~/.zsh
+ls -al $ZSH_FOLDER &>/dev/null &&
+source $ZSH_FOLDER/alias.bash
+for i in $ZSH_FOLDER/*.zsh; do
+    source $i;
+done
+
+[[ -s $HOME/.perl5/etc/bashrc ]] && source $HOME/.perl5/etc/bashrc
+which brew&>/dev/null&&[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]]&&. $(brew --prefix)/etc/profile.d/autojump.sh
+[[ -s /etc/profile.d/autojump.sh ]]&&. /etc/profile.d/autojump.sh
+
+#MOST like colored man pages
+export PAGER=less
+export LESS_TERMCAP_md=$'\E[1;31m'      #bold1
+export LESS_TERMCAP_mb=$'\E[1;31m'
+export LESS_TERMCAP_me=$'\E[m'
+export LESS_TERMCAP_so=$'\E[01;7;34m'  #search highlight
+export LESS_TERMCAP_se=$'\E[m'
+export LESS_TERMCAP_us=$'\E[1;2;32m'    #bold2
+export LESS_TERMCAP_ue=$'\E[m'
+export LESS="-M -i -R --shift 5"
+export LESSCHARSET=utf-8
+export READNULLCMD=less
 
 #prompt
 local _time="%{$fg[yellow]%}[%*]"
@@ -130,20 +164,54 @@ git_prompt_string() {
 # Set the right-hand prompt
 RPROMPT='$(git_prompt_string)'
 if [[ ! -z "$SSH_CLIENT" ]]; then
-    RPROMPT="$RPROMPT ⇄" # ssh icon
+    RPROMPT="$RPROMPT %{$fg[red]%}⇄%{$reset_color%}" # ssh icon
 fi
 
-zstyle ':completion:*' menu select
-zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m'
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle ':completion:*:approximate:*' max-errors 2 numeric
+# 命令补全参数{{{
+#   zsytle ':completion:*:completer:context or command:argument:tag'
+zmodload -i zsh/complist        # for menu-list completion
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" "ma=${${use_256color+1;7;38;5;143}:-1;7;33}"
+#ignore list in completion
+zstyle ':completion:*' ignore-parents parent pwd directory
+#menu selection in completion
+zstyle ':completion:*' menu select=2
+#zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*' completer _oldlist _expand _force_rehash _complete _match #_user_expand
-zstyle ':completion:*' completer _complete _prefix _correct _prefix _match _approximate
-zstyle ':completion::prefix-1:*' completer _complete
-zstyle ':completion:predict:*' completer _complete
-zstyle ':completion:incremental:*' completer _complete _correct
+zstyle ':completion:*:match:*' original only
+#zstyle ':completion:*' user-expand _pinyin
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
+## case-insensitive (uppercase from lowercase) completion
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
+### case-insensitive (all) completion
+#zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:*:*:*:processes' force-list always
+zstyle ':completion:*:processes' command 'ps -au$USER'
+zstyle ':completion:*:*:kill:*:processes' list-colors "=(#b) #([0-9]#)*=36=1;31"
+#use cache to speed up pacman completion
+zstyle ':completion::complete:*' use-cache on
+#zstyle ':completion::complete:*' cache-path .zcache
+#group matches and descriptions
+zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:descriptions' format $'\e[33m == \e[1;7;36m %d \e[m\e[33m ==\e[m'
+zstyle ':completion:*:messages' format $'\e[33m == \e[1;7;36m %d \e[m\e[0;33m ==\e[m'
+zstyle ':completion:*:warnings' format $'\e[33m == \e[1;7;31m No Matches Found \e[m\e[0;33m ==\e[m'
+zstyle ':completion:*:corrections' format $'\e[33m == \e[1;7;37m %d (errors: %e) \e[m\e[0;33m ==\e[m'
+# dabbrev for zsh!! M-/ M-,
+zstyle ':completion:*:history-words' stop yes
+zstyle ':completion:*:history-words' remove-all-dups yes
+zstyle ':completion:*:history-words' list false
+zstyle ':completion:*:history-words' menu yes select
+
+#force rehash when command not found
+#  http://zshwiki.org/home/examples/compsys/general
+_force_rehash() {
+    (( CURRENT == 1 )) && rehash
+    return 1    # Because we did not really complete anything
+}
 
 #kill 命令补全     
 compdef pkill=kill
@@ -156,7 +224,7 @@ zstyle ':completion:*:processes' command 'ps -au$USER'
 zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
 
 user-complete(){
-case $BUFFER in
+    case $BUFFER in
 "" )                    
 BUFFER="cd "
 zle end-of-line
@@ -172,16 +240,16 @@ bindkey "\t" user-complete
 #}}}
  
 sudo-command-line() {
-[[ -z $BUFFER ]] && zle up-history
-[[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
-zle end-of-line
+    [[ -z $BUFFER ]] && zle up-history
+    [[ $BUFFER != sudo\ * ]] && BUFFER="sudo $BUFFER"
+    zle end-of-line
 }
 zle -N sudo-command-line
 bindkey "\e\e" sudo-command-line
 
 #hash -d s="/tmp/N"
 zstyle ':completion:*:ping:*' hosts 192.168.1. 192.168.0. 10. 1.2.4.8 www.google.com www.baidu.com
-#[[ -z $TMUX ]]&&exec tm
+
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent > ~/.ssh-agent-thing
 fi

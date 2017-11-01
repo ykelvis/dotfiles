@@ -257,7 +257,7 @@ if [[ "$SSH_AGENT_PID" == "" ]]; then
     eval "$(<~/.ssh-agent-thing)"
 fi
 
-if [ -z "$TMUX" ]
-then
-    tm
-fi
+#if [ -z "$TMUX" ]
+#then
+    #tm
+#fi

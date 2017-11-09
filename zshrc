@@ -110,6 +110,9 @@ local _user="%{$_usercol%}%n@%M:"
 local _prompt="%{$fg[white]%}$"
 
 PROMPT="$_time$_user$_path$_prompt%b%f%k "
+if [[ ! -z "$SSH_CLIENT" ]]; then
+    PROMPT="%{$bg[blue]%}SSH%{$reset_color%}$PROMPT " # ssh icon
+fi
 
 setopt prompt_subst
 # Modify the colors and symbols in these variables as desired.
@@ -163,9 +166,6 @@ git_prompt_string() {
 }
 # Set the right-hand prompt
 RPROMPT='$(git_prompt_string)'
-if [[ ! -z "$SSH_CLIENT" ]]; then
-    RPROMPT="$RPROMPT %{$fg[red]%}⇄%{$reset_color%}" # ssh icon
-fi
 
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'

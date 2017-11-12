@@ -111,7 +111,7 @@ local _prompt="%{$fg[white]%}$"
 
 PROMPT="$_time$_user$_path$_prompt%b%f%k "
 if [[ ! -z "$SSH_CLIENT" ]]; then
-    PROMPT="%{$bg[blue]%}SSH%{$reset_color%}$PROMPT " # ssh icon
+    PROMPT="%{$bg[blue]%}SSH%{$reset_color%}$PROMPT" # ssh icon
 fi
 
 setopt prompt_subst

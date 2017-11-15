@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+import configparser
+import base64
+import argparse
+import json
+from collections import namedtuple
+
+Server = namedtuple("Server", ["title", "schema", "server", "server_port",
+                    "method", "password", "module"])
+
+
+def main(path):
+    p = configparser.ConfigParser(allow_no_value=True, strict=False)
+    try:
+        p.read(path, encoding='utf-8')
+    except:
+        print('read failed')
+        return 0
+    if not p.has_section('Proxy'):
+        print('no proxy section found')
+        return 0
+    proxies = []
+    for i in p.items('Proxy'):
+        if i[1].startswith('custom'):
+            li = i[1].replace(' ', '').split(',')
+            li.insert(0, i[0])
+            s = Server._make(li)
+            proxies.append(s)
+    return proxies
+
+
+def gen_base64(server):
+    ret = []
+    for i in server:
+        userinfo = "{}:{}".format(i.method, i.password)
+        userinfo = base64.b64encode(userinfo.encode()).decode()
+        ret.append("ss://{}@{}:{}#{}".format(userinfo,
+                                             i.server,
+                                             i.server_port,
+                                             i.title))
+    return "\n".join(ret)
+
+
+def gen_gui_config(server):
+    ret = {
+          "configs": [],
+          "localPort": 1080,
+          "index": 0,
+          "global": False,
+          "enabled": True,
+          "isDefault": False
+    }
+    for i in server:
+        ret["configs"].append({
+            "server": i.server,
+            "server_port": int(i.server_port),
+            "local_port": 1080,
+            "password": i.password,
+            "method": i.method,
+            "remarks": i.title
+            })
+    return json.dumps(ret, indent=4)
+
+
+if __name__ == '__main__':
+    switch = {
+        "base64": gen_base64,
+        "gui-config": gen_gui_config
+    }
+
+    description = "-f|--format\tbase64|gui-config"
+    parser = argparse.ArgumentParser(description=description,
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("-f", "--format",
+                        help="set format",
+                        required=False,
+                        dest="format",
+                        default="gui-config")
+    parser.add_argument("path",
+                        type=str,
+                        nargs="+",
+                        help="path to surge config file")
+
+    args = vars(parser.parse_args())
+
+    s = main(args["path"])
+    ret = switch[args["format"]](s)
+    print(ret)

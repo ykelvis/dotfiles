@@ -24,6 +24,14 @@ fi
     done
 }
 
+show_256_colours() {
+    for i in {0..255} ; do
+    printf "\x1b[38;5;${i}m%3d " "${i}"
+    if (( $i == 15 )) || (( $i > 15 )) && (( ($i-15) % 12 == 0 )); then
+        echo;
+    fi
+    done
+}
 bin-exist(){[[ -n ${commands[$1]} ]]}
 #man page to pdf
 (bin-exist ps2pdf) && man2pdf() {  man -t ${1:?Specify man as arg} | ps2pdf -dCompatibility=1.3 - - > ${1}.pdf; }
@@ -243,7 +251,8 @@ alias -g T="|tail -n $(($LINES-2))"
 alias -g X="|xargs"
 alias -g N="> /dev/null"
 alias -g NF="./*(oc[1])"      # last modified(inode time) file or directory
-
+#ssh-indent
+alias sshi="ssh-ident"
 #osx
 if [[ $OS == "Darwin" ]]; then
     command -v reattach-to-user-namespace&&alias mpv='reattach-to-user-namespace mpv'
@@ -251,6 +260,7 @@ if [[ $OS == "Darwin" ]]; then
     alias keyoff="sudo kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
     alias keyon="sudo kextload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext/"
     alias ls='ls -G'
+    alias shuf="gshuf"
 else
     alias ls='ls --color=auto'
     alias pacsy='sudo pacman -Sy'

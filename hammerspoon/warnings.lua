@@ -7,7 +7,7 @@ local swap = nil
 local telegram = nil
 
 local function swap_update_callback(exit_code, std_out, std_err)
-    if tonumber(std_out) > 4 then
+    if tonumber(std_out) > 6 then
         hs.notify.show('Swap', 'BOOM!', ''):send()
         hs.alert("swap boom")
         return

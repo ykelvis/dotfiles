@@ -39,42 +39,10 @@ end
 -- }}}attempt to index local 'color a nil value'
 
 function run_or_raise(cmd, properties)
-    local clients = client.get()
-    local focused = awful.client.next(0)
-    local findex = 0
-    local matched_clients = {}
-    local n = 0
-    for i, c in pairs(clients) do
-        --make an array of matched clients
-        if match(properties, c) then
-            n = n + 1
-            matched_clients[n] = c
-            if c == focused then
-                findex = n
-            end
-        end
+    local matcher = function (c)
+        return awful.rules.match(c, properties)
     end
-    if n > 0 then
-        local c = matched_clients[1]
-        -- if the focused window matched switch focus to next in list
-        if 0 < findex and findex < n then
-            c = matched_clients[findex+1]
-        end
-        local ctags = c:tags()
-        if #ctags == 0 then
-            -- ctags is empty, show client on current tag
-            local curtag = awful.tag.selected()
-            awful.client.movetotag(curtag, c)
-        else
-            -- Otherwise, pop to first tag client is visible on
-            awful.tag.viewonly(ctags[1])
-        end
-        -- And then focus the client
-        client.focus = c
-        c:raise()
-        return
-    end
-    awful.util.spawn(cmd)
+    awful.client.run_or_raise(cmd, matcher)
 end
 
 -- Returns true if all pairs in table1 are present in table2
@@ -102,7 +70,11 @@ editor_cmd = terminal .. " -e " .. editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+cmd = "Mod4"
+ctl = "Control"
+sht = "Shift"
+opt = "Mod1"
+browser = "Chromium"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
@@ -142,9 +114,8 @@ naughty.config.defaults = {
 }
 -- {{{ Tags
 tags = {
-  names  = {  "0000", "0001", "0010", "0011", "0100", "0101" },
-  layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1]
-}}
+  names  = {  "0000", "0001", "0010", "0011", "0100", "0101", "0110" },
+  layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1]}}
  
 for s = 1, screen.count() do
     tags[s] = awful.tag(tags.names, s, tags.layout)
@@ -189,7 +160,7 @@ local mymainmenu = awful.menu({ items = { { "File", "pcmanfm" },
                                     { "AllApps", xdgmenu, beautiful.awesome_icon },
                                     { "Awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "Suspend", mysuspendmenu, beautiful.awesome_icon },
-                                    { "Next", "pkill sleep"},
+                                    { "Next", "feh --randomize --bg-fill ~/.wallpaper/*"},
                                     { "Lock", "/usr/bin/bash -c 'i3lock -e -t -i ~/lock.png'"},
                                     { "Exit", "oblogout" },
                                   }
@@ -225,7 +196,7 @@ splitr = wibox.widget.textbox()
 splitr:set_markup("<span color=\"#FFD200\">" .. "  " .. "</span>")
 --Volume widget
 volwidget = wibox.widget.textbox()
-vicious.register(volwidget, vicious.widgets.volume, "<span color=\"#ADFF00\" font=\"Noto Sans Bold 8\">🔊 $1%</span>", 3, "Master")
+vicious.register(volwidget, vicious.widgets.volume, "<span color=\"#ADFF00\" font=\"Noto Sans Bold 10\">🔊 $1%</span>", 3, "Master")
 volwidget:buttons(
     awful.util.table.join(
         awful.button({ }, 1, function () awful.util.spawn("amixer -q sset Master toggle")   end),
@@ -257,7 +228,7 @@ function get_net()
     return str 
 end
 netinfo = wibox.widget.textbox()
-vicious.register(netinfo, vicious.widgets.net, "<span color=\"#00FFF2\" font=\"Noto Sans Bold 8\">⬇ ${enp0s3 down_kb}/${enp0s3 up_kb} ⬆</span>", 1)
+vicious.register(netinfo, vicious.widgets.net, "<span color=\"#00FFF2\" font=\"Noto Sans Bold 10\">⬇ ${wlp3s0 down_kb}/${wlp3s0 up_kb} ⬆</span>", 1)
 netinfo_t = awful.tooltip({ objects = { netinfo },})
 netinfo_t:set_text(get_net())
 -- Sysinfo widget
@@ -268,7 +239,7 @@ function get_sysinfo()
     return str 
 end
 sysload = wibox.widget.textbox()
-vicious.register(sysload, vicious.widgets.uptime, "<span color=\"#F92672\" font=\"Noto Sans Bold 8\">$4 $5 $6</span>", 5)
+vicious.register(sysload, vicious.widgets.uptime, "<span color=\"#F92672\" font=\"Noto Sans Bold 10\">$4 $5 $6</span>", 5)
 sysload_t = awful.tooltip({ objects = { sysload },})
 sysload_t:set_text(get_sysinfo())
 -- Textclock widget
@@ -278,7 +249,7 @@ function get_time()
     fd:close()
     return str 
 end
-mytextclock = awful.widget.textclock("<span font=\"Noto Sans Bold 8\" color=\"#00FF16\">%b-%d/%a %I:%M:%S %p</span>", 1)
+mytextclock = awful.widget.textclock("<span font=\"Noto Sans Bold 10\" color=\"#00FF16\">%b-%d/%a %I:%M:%S %p</span>", 1)
 mytextclock_t = awful.tooltip({ objects = {mytextclock},})
 mytextclock_t:set_text(get_time())
 mytextclock:buttons(
@@ -332,7 +303,7 @@ mytimer_bat:connect_signal("timeout", update_batwidget)
 mytimer_bat:start()
 batterywidget:buttons(
     awful.util.table.join(
-        awful.button({ }, 1, function () awful.util.spawn_with_shell("find ~/.wallpaper/* -print0 | shuf -n1 -z | xargs -0 feh --bg-fill") end),
+        awful.button({ }, 1, function () awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*") end),
         awful.button({ }, 3, function () awful.util.spawn_with_shell("sh ~/git/dotfiles/scripts/shutdown_dialog.sh") end)
     )
 )
@@ -348,7 +319,7 @@ tempwidget:set_align("right")
 function get_weather_statusbar(widget)
      local status = io.popen("~/.config/awesome/myscript.sh display_temp_only"):read("*all")
      local color = "#FFC100"
-     tempwidget:set_markup("<span font=\"Noto Sans Bold 8\" color=\"" .. color .. "\">" .. status .. "</span>")
+     tempwidget:set_markup("<span font=\"Noto Sans Bold 10\" color=\"" .. color .. "\">" .. status .. "</span>")
 end
 get_weather_statusbar(tempwidget)
 weather_t = awful.tooltip({ objects = { tempwidget },})
@@ -389,7 +360,6 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 --update scripts
 mytimer = timer({ timeout = 120 })
 mytimer:connect_signal("timeout", function () 
---awful.util.spawn_with_shell("find ~/.wallpaper -print0 | shuf -n1 -z | xargs -0 feh --bg-fill") 
 weather_t:set_text(get_weather())
 mytextclock_t:set_text(get_time())
 netinfo_t:set_text(get_net())
@@ -398,8 +368,9 @@ get_weather_statusbar(tempwidget)
 end)
 mytimer:start()
 
-mytimer_w = timer({ timeout = 919 })
+mytimer_w = timer({ timeout = 600 })
 mytimer_w:connect_signal("timeout", function () awful.util.spawn_with_shell("~/.config/awesome/myscript.sh update") end)
+awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*") 
 mytimer_w:start()
 
 --mpdwidget = wibox.widget.background(mpdwidget, "#B89B4F")
@@ -417,9 +388,9 @@ mypromptbox = {}
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
-                    awful.button({ modkey }, 1, awful.client.movetotag),
+                    awful.button({ cmd }, 1, awful.client.movetotag),
                     awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
+                    awful.button({ cmd }, 3, awful.client.toggletag),
                     awful.button({ }, 4, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
                     awful.button({ }, 5, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end)
                     )
@@ -481,7 +452,7 @@ for s = 1, screen.count() do
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", 
       screen = s, 
-      height = 20 })
+      height = 25 })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
@@ -537,38 +508,38 @@ root.buttons(awful.util.table.join(
 ))
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    awful.key({ ctl }, "Left", awful.tag.viewprev),
+    awful.key({ ctl }, "Right", awful.tag.viewnext),
+    awful.key({ cmd }, "Escape", awful.tag.history.restore),
 
-    awful.key({ modkey,           }, "j",
+    awful.key({ cmd }, "j",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "k",
+    awful.key({ cmd }, "k",
         function ()
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
 
-    awful.key({ "Mod1",           }, "Tab",
+    awful.key({ opt }, "Tab",
         function ()
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ "Mod1", "Shift"   }, "Tab",
+    awful.key({ opt, sht }, "Tab",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
+    awful.key({ cmd }, "w", function () mymainmenu:show() end),
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
-    awful.key({ modkey,           }, "Tab",
+    awful.key({ cmd, sht }, "j", function () awful.client.swap.byidx(  1)    end),
+    awful.key({ cmd, sht }, "k", function () awful.client.swap.byidx( -1)    end),
+    awful.key({ cmd, ctl }, "j", function () awful.screen.focus_relative( 1) end),
+    awful.key({ cmd, ctl }, "k", function () awful.screen.focus_relative(-1) end),
+    awful.key({ cmd }, "Tab",
         function ()
             awful.client.focus.history.previous()
             if client.focus then
@@ -576,49 +547,46 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- Standard program
-    awful.key({  "Mod1", "Shift"  }, "q",    function () run_or_raise("sakura -c 95 -r 33 -e ncmpcpp",   { name = "ncmpcpp" })        end ),
-    awful.key({  "Mod1", "Shift"  }, "w",     function () run_or_raise("qps",   { class = "Qps" })        end ),
-    awful.key({  "Mod1", "Shift"  }, "l",     function () run_or_raise("sakura",   { name = "WeeChat" })        end ),
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey,           }, "#82",    function () awful.util.spawn("amixer -q sset Master 2%-", false) end),
-    awful.key({ modkey,           }, "#86",    function () awful.util.spawn("amixer -q sset Master 2%+", false) end),
-    awful.key({ "Mod1",           }, "r",    function () awful.util.spawn_with_shell("bash -c '~/.config/awesome/myscript.sh dmenu_start'", true)      end),
-    awful.key({ modkey, "Shift"   }, "q", function() awful.util.spawn_with_shell("zenity --question&&echo 'awesome.quit()' | awesome-client", false) end),
-    awful.key({ modkey,           }, "g",     function () awful.util.spawn("subl3")              end),
-    awful.key({                   }, "Print", function () awful.util.spawn_with_shell('import -window root -quality 100 /tmp/$(date "+%Y-%m-%d_%H:%M:%S").png', false) end),
-    --awful.key({ modkey,           }, "`", false, function () awful.util.spawn_with_shell('scrot -s /tmp/`date "+%Y-%m-%d_%H:%M:%S"`.png', false) end),
-    awful.key({ modkey,           }, "`", false, function () awful.util.spawn_with_shell('import -quality 100 /tmp/`date "+%Y-%m-%d_%H:%M:%S"`.png', false) end),
-    awful.key({         "Control" }, "m", false, function () awful.util.spawn("bash -c '~/.config/awesome/myscript.sh nowplaying'", false)  end),
-    awful.key({ "Mod1"          , }, "`", false, function () awful.util.spawn("bash -c '~/.config/awesome/myscript.sh input_m'",false)      end),
-    awful.key({ modkey,           }, "#87",   function () awful.util.spawn("xbacklight -dec 10", false)         end),
-    awful.key({ modkey,           }, "#89",   function () awful.util.spawn("xbacklight -inc 10", false)         end),
-    awful.key({ modkey,           }, "#88",   function () awful.util.spawn("xbacklight -set 50", false)         end),
-    awful.key({ "Control", modkey }, "l",     function () awful.util.spawn("bash -c 'i3lock -e -t -i ~/lock.png'") end),
-    --awful.key({ "Control", "Mod1" }, "h",     function () awful.util.spawn_with_shell("xfce4-popup-clipman")    end),
-    awful.key({  "Mod1", "Shift"  }, "e",     function () awful.util.spawn("gnome-character-map")   end),
-    awful.key({ modkey,           }, "t",     function () awful.util.spawn("sakura -c 89 -r 22")    end),
-    awful.key({ modkey,           }, "e",     function () awful.util.spawn("pcmanfm")               end),
-    awful.key({ modkey,           }, "q",     function () awful.util.spawn("xkill", false)          end),
-    awful.key({  "Mod1", "Shift"  }, ".",     function () awful.util.spawn_with_shell("mpc next")   end),
-    awful.key({  "Mod1", "Shift"  }, ",",     function () awful.util.spawn_with_shell("mpc prev")   end),
-    awful.key({  "Mod1", "Shift"  }, "/",     function () awful.util.spawn_with_shell("mpc volume +5")   end),
-    awful.key({  "Mod1", "Shift"  }, "m",     function () awful.util.spawn_with_shell("mpc volume -5")   end),
-    awful.key({  "Mod1", "Shift"  }, ";",     function () awful.util.spawn_with_shell("mpc pause")   end),
-    awful.key({  "Mod1", "Shift"  }, "'",     function () awful.util.spawn_with_shell("mpc play")   end),
-    awful.key({  "Mod1", "Shift"  }, "d",     function () awful.util.spawn("xfce4-appfinder")       end),
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
-    awful.key({ modkey, "Control" }, "n", awful.client.restore),
-    awful.key({ modkey, },            "r",     function () mypromptbox[mouse.screen]:run() end),
-    --awful.key({ "Mod1",           }, "c", function () os.execute("xsel -p -o | xsel -i -b") end), 
-    awful.key({ "Mod1" }, "F3",
+    awful.key({ cmd, ctl }, "e", function () run_or_raise("sakura -c 89 -r 22",   { name = "sakura" })        end ),
+    awful.key({ cmd, ctl }, "s", function () run_or_raise(browser, {class = browser}) end),
+    awful.key({ cmd, ctl }, "w", function () run_or_raise("zim", {class = "Zim"}) end),
+    awful.key({ cmd, ctl }, "r", awesome.restart),
+    awful.key({ cmd }, "#82", function () awful.util.spawn("amixer -q sset Master 2%-", false) end),
+    awful.key({ cmd }, "#86", function () awful.util.spawn("amixer -q sset Master 2%+", false) end),
+    awful.key({ opt }, "r", function () awful.util.spawn_with_shell("bash -c '~/.config/awesome/myscript.sh dmenu_start'", true)      end),
+    awful.key({ cmd, sht }, "q", function() awful.util.spawn_with_shell("zenity --question&&echo 'awesome.quit()' | awesome-client", false) end),
+    awful.key({ cmd, ctl }, "d", function () run_or_raise("subl3", {name = "Sublime Text"}) end),
+    awful.key({ cmd, ctl }, "5", function () awful.util.spawn_with_shell('import -window root -quality 100 /tmp/$(date "+%Y-%m-%d_%H:%M:%S").png', false) end),
+    awful.key({ cmd, ctl }, "4", false, function () awful.util.spawn_with_shell('import -quality 100 /tmp/`date "+%Y-%m-%d_%H:%M:%S"`.png', false) end),
+    awful.key({ ctl }, "m", false, function () awful.util.spawn("bash -c '~/.config/awesome/myscript.sh nowplaying'", false) end),
+    awful.key({ opt }, "`", false, function () awful.util.spawn("bash -c '~/.config/awesome/myscript.sh input_m'",false) end),
+    awful.key({ cmd }, "#87", function () awful.util.spawn("xbacklight -dec 10", false)         end),
+    awful.key({ cmd }, "#89", function () awful.util.spawn("xbacklight -inc 10", false)         end),
+    awful.key({ cmd }, "#88", function () awful.util.spawn("xbacklight -set 50", false)         end),
+    awful.key({ ctl, cmd }, "l", function () awful.util.spawn("bash -c 'i3lock -e -t -i ~/lock.png'") end),
+    --awful.key({ ctl opt }, "h", function () awful.util.spawn_with_shell("xfce4-popup-clipman")    end),
+    awful.key({ opt, sht }, "e", function () awful.util.spawn("gnome-character-map")   end),
+    awful.key({ cmd }, "t", function () awful.util.spawn("sakura -c 89 -r 22")    end),
+    awful.key({ cmd }, "e", function () awful.util.spawn("pcmanfm")               end),
+    awful.key({ cmd }, "q", function () awful.util.spawn("xkill", false)          end),
+    awful.key({ opt, ctl }, ".", function () awful.util.spawn_with_shell("mpc next")   end),
+    awful.key({ opt, ctl }, ",", function () awful.util.spawn_with_shell("mpc prev")   end),
+    awful.key({ opt, ctl }, "/", function () awful.util.spawn_with_shell("mpc volume +5")   end),
+    awful.key({ opt, ctl }, "m", function () awful.util.spawn_with_shell("mpc volume -5")   end),
+    awful.key({ opt, ctl }, "l", function () awful.util.spawn_with_shell("mpc toggle")   end),
+    awful.key({ opt, ctl }, "k", function () awful.util.spawn_with_shell("mpc status")   end),
+    awful.key({ sht }, "space", function () awful.util.spawn_with_shell("albert toggle")   end),
+    awful.key({ opt, sht }, "d", function () awful.util.spawn("xfce4-appfinder")       end),
+    awful.key({ cmd }, "l", function () awful.tag.incmwfact( 0.05)    end),
+    awful.key({ cmd }, "h", function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ cmd, sht }, "h", function () awful.tag.incnmaster( 1)      end),
+    awful.key({ cmd, sht }, "l", function () awful.tag.incnmaster(-1)      end),
+    awful.key({ cmd, ctl }, "h", function () awful.tag.incncol( 1)         end),
+    awful.key({ cmd, ctl }, "l", function () awful.tag.incncol(-1)         end),
+    awful.key({ cmd }, "space", function () awful.layout.inc(layouts,  1) end),
+    awful.key({ cmd, sht }, "space", function () awful.layout.inc(layouts, -1) end),
+    --awful.key({ opt,           }, "c", function () os.execute("xsel -p -o | xsel -i -b") end), 
+    awful.key({ opt }, "F3",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
                   mypromptbox[mouse.screen].widget,
@@ -626,23 +594,23 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ cmd }, "p", function() menubar.show() end)
 )
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "u", awful.titlebar.toggle),
-    awful.key({ modkey,           }, "c",       function (c) c:kill()                           end),
-    awful.key({ modkey, "Control" }, "space",   awful.client.floating.toggle                        ),
-    awful.key({ modkey, "Control" }, "Return",  function (c) c:swap(awful.client.getmaster())   end),
-    awful.key({ modkey,           }, "o",       awful.client.movetoscreen                        ),
-    awful.key({ modkey,           }, "a",       function (c) c.ontop = not c.ontop              end),
-    awful.key({ modkey,           }, "y",       awful.titlebar.toggle                                   ),
-    awful.key({ modkey,           }, "z",       function (c) c.minimized = true                 end),
-    awful.key({ modkey,           }, "f",      
-        function (c) 
+    awful.key({ cmd }, "u", awful.titlebar.toggle),
+    awful.key({ cmd }, "c", function (c) c:kill() end),
+    awful.key({ cmd, ctl }, "space", awful.client.floating.toggle                        ),
+    awful.key({ cmd, ctl }, "Return", function (c) c:swap(awful.client.getmaster())   end),
+    awful.key({ cmd }, "o", awful.client.movetoscreen),
+    awful.key({ cmd }, "a", function (c) c.ontop = not c.ontop end),
+    awful.key({ cmd }, "y", awful.titlebar.toggle                                   ),
+    awful.key({ cmd }, "z", function (c) c.minimized = true end),
+    awful.key({ cmd }, "f",
+        function (c)
             c.fullscreen = not c.fullscreen
-            c.ontop = c.ontop 
+            c.ontop = c.ontop
         end),
-    awful.key({ modkey,           }, "x",
+    awful.key({ cmd }, "x",
         function (c)
             if c.maximized_horizontal == true then
                 if c.maximized_vertical == false then
@@ -664,47 +632,47 @@ clientkeys = awful.util.table.join(
                 end           
             end
         end),
-    awful.key({ modkey,           }, "s",
+    awful.key({ cmd }, "s",
         function (c)
             c.sticky = not c.sticky
         end),
-    awful.key({ modkey,           }, "d",
+    awful.key({ cmd }, "d",
         function (c)
             c.maximized_vertical   = not c.maximized_vertical
         end),
-    awful.key({ modkey,           }, "b",
+    awful.key({ cmd }, "b",
         function (c)
             c.maximized_horizontal   = not c.maximized_horizontal
         end),
-    awful.key({ "Control", modkey   }, "Left",
+    awful.key({ ctl, cmd }, "Left",
         function ()
             awful.client.moveresize(-10, 0, 0, 0)
         end),
-    awful.key({ "Control", modkey   }, "Right",
+    awful.key({ ctl, cmd }, "Right",
         function ()
             awful.client.moveresize(10, 0, 0, 0)
         end),
-    awful.key({ "Control", modkey   }, "Up",
+    awful.key({ ctl, cmd }, "Up",
         function ()
             awful.client.moveresize(0, -10, 0, 0)
         end),
-    awful.key({ "Control", modkey   }, "Down",
+    awful.key({ ctl, cmd }, "Down",
         function ()
             awful.client.moveresize(0, 10, 0, 0)
         end),
-    awful.key({  "Mod1",                       }, "h",
+    awful.key({ opt }, "h",
         function ()
             awful.tag.incmwfact(-0.05)
         end),
-    awful.key({  "Mod1",                       }, "j",
+    awful.key({ opt }, "j",
         function ()
             awful.client.incwfact(-0.05)
         end),
-    awful.key({  "Mod1",                       }, "k",
+    awful.key({ opt }, "k",
         function ()
             awful.client.incwfact(0.05)
         end),
-    awful.key({  "Mod1",                       }, "l",
+    awful.key({ opt }, "l",
         function ()
             awful.tag.incmwfact( 0.05)
         end)
@@ -721,7 +689,7 @@ end
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, keynumber do
     globalkeys = awful.util.table.join(globalkeys,
-        awful.key({ modkey }, "#" .. i + 9,
+        awful.key({ ctl }, "#" .. i + 9,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -730,7 +698,7 @@ for i = 1, keynumber do
                             tag:view_only()
                         end
                   end),
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ sht, ctl }, "#" .. i + 9,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -738,7 +706,7 @@ for i = 1, keynumber do
                             awful.tag.viewtoggle(tag)
                       end
                   end),
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
+        awful.key({ ctl, sht }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -747,7 +715,7 @@ for i = 1, keynumber do
                           end
                       end
                   end),
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ cmd, ctl, sht }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -760,8 +728,8 @@ end
 
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-    awful.button({ "Mod1" }, 1, awful.mouse.client.move),
-    awful.button({ "Mod1" }, 3, awful.mouse.client.resize))
+    awful.button({ opt }, 1, awful.mouse.client.move),
+    awful.button({ opt }, 3, awful.mouse.client.resize))
 root.keys(globalkeys)
 --config keybindings
 
@@ -862,49 +830,30 @@ awful.rules.rules = {
        },
     { rule = { class = "Sakura" }, 
       properties = { floating = false } },
-    { rule = { class = "Gvim" }, 
-      properties = { size_hints_honor = false } },
-    { rule = { class = "Pidgin" },
-      properties = { floating = true, tag = tags[1][2] } },
     { rule = { class = "Steam" },
-      properties = { floating = true, tag = tags[1][4] } },
-    { rule = { class = "Hexchat" },
-      properties = { tag = tags[1][2] } },
+      properties = { floating = true, tag = tags[1][6] } },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][3] } },
-    { rule = { class = "Liferea" },
-      properties = { floating = true, tag = tags[1][2] } },
     { rule = { class = "Cr3" },
       properties = { tag = tags[1][1] }, callback = function(c) awful.placement.centered(c,nil) end },
     { rule = { class = "Zim" },
-      properties = { floating = true, tag = tags[1][3] } },
+      properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
     { rule = { name = "WeeChat" },
       properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
-    { rule = { class = "Claws-mail" },
+    { rule = { class = browser}, 
       properties = { floating = true, tag = tags[1][2] } },
-    { rule = { class = "Clementine" },
-      properties = { floating = true, tag = tags[1][2] } },
-    { rule = { class = "Zathura" }, 
-      properties = { maximized_vertical = true, border_width = 0 } },
-    { rule = { instance = "crx_nckgahadagoaajjgafhacjanaoiihapd" }, 
-      properties = { floating = true }, callback = function(c) c:geometry( { width = 260 , height = 460 } ) end },
 }
 
 awful.util.spawn_with_shell("[ -z `pgrep compton` ]&&compton")
 awful.util.spawn_with_shell("[ -z `pgrep zim` ]&&zim")
+awful.util.spawn_with_shell("[ -z `pgrep steam` ]&&steam")
+awful.util.spawn_with_shell("[ -z `pgrep albert` ]&&albert")
 --naughty.notify({title="Welcome", text=""})
---awful.util.spawn_with_shell("[ -z `pgrep unagi` ]&&unagi")
 awful.util.spawn_with_shell("numlockx on")
 awful.util.spawn_with_shell("xbacklight -set 40")
 awful.util.spawn_with_shell("fcitx -r")
---awful.util.spawn_with_shell("[ `pgrep NetworkManager` ]&&[ -z `pgrep nm-applet` ]&&nm-applet")
---awful.util.spawn_with_shell("[ `pgrep connmand` ]&&[ -z `pgrep connman-ui-gtk` ]&&connman-ui-gtk")
---awful.util.spawn_with_shell("[ -z `pgrep xfce4-clipman` ]&&xfce4-clipman")
---awful.util.spawn_with_shell("[ -z `pgrep parcellite` ]&&parcellite")
 awful.util.spawn_with_shell("[ -z `pgrep copyq` ]&&copyq")
 awful.util.spawn_with_shell("xautolock -time 5 -locker 'i3lock -e -t -i ~/lock.png'")
 awful.util.spawn_with_shell("[ -z `pgrep polkit-` ]&&/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
---awful.util.spawn_with_shell("[ -z `pgrep dropbox` ]&&dropboxd")
 awful.util.spawn_with_shell("[ -z `pgrep pnmixer` ]&&pnmixer")
---awful.util.spawn_with_shell("[ -z `pgrep claws-mail` ]&&claws-mail")
-awful.util.spawn_with_shell("sh ~/.fehbg")
+awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*")

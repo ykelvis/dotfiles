@@ -114,9 +114,9 @@ naughty.config.defaults = {
 }
 -- {{{ Tags
 tags = {
-  names  = {  "0000", "0001", "0010", "0011", "0100", "0101", "0110" },
+  names = { "0000", "0001", "0010", "0011", "0100", "0101", "0110" },
   layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1]}}
- 
+
 for s = 1, screen.count() do
     tags[s] = awful.tag(tags.names, s, tags.layout)
 end
@@ -126,7 +126,7 @@ local mysuspendmenu = {
    {"Suspend", "systemctl suspend"},
 }
 
-local mysysmenu = awful.menu({ items = {  { "Applications", xdgmenu },
+local mysysmenu = awful.menu({ items = { { "Applications", xdgmenu },
                                     { "open terminal", "sakura -c 89 -r 22" },
                                     { "Suspend", mysuspendmenu, beautiful.awesome_icon },
                                     { "Lock", "/usr/bin/bash -c 'i3lock -e -t -i ~/lock.png'" },
@@ -199,8 +199,8 @@ volwidget = wibox.widget.textbox()
 vicious.register(volwidget, vicious.widgets.volume, "<span color=\"#ADFF00\" font=\"Noto Sans Bold 10\">🔊 $1%</span>", 3, "Master")
 volwidget:buttons(
     awful.util.table.join(
-        awful.button({ }, 1, function () awful.util.spawn("amixer -q sset Master toggle")   end),
-        awful.button({ }, 3, function () awful.util.spawn( terminal .. " -e alsamixer")   end),
+        awful.button({ }, 1, function () awful.util.spawn("amixer -q sset Master toggle") end),
+        awful.button({ }, 3, function () awful.util.spawn( terminal .. " -e alsamixer") end),
         awful.button({ }, 4, function () awful.util.spawn("amixer -q sset Master 2%+,2%+") end),
         awful.button({ }, 5, function () awful.util.spawn("amixer -q sset Master 2%-,2%-") end)
     )
@@ -225,44 +225,44 @@ function get_net()
     local fd = io.popen("~/.config/awesome/myscript.sh netinfo")
     local str = fd:read("*all")
     fd:close()
-    return str 
+    return str
 end
 netinfo = wibox.widget.textbox()
 vicious.register(netinfo, vicious.widgets.net, "<span color=\"#00FFF2\" font=\"Noto Sans Bold 10\">⬇ ${wlp3s0 down_kb}/${wlp3s0 up_kb} ⬆</span>", 1)
-netinfo_t = awful.tooltip({ objects = { netinfo },})
+netinfo_t = awful.tooltip({ objects = { netinfo } })
 netinfo_t:set_text(get_net())
 -- Sysinfo widget
 function get_sysinfo()
     local fd = io.popen("~/.config/awesome/myscript.sh sysinfo")
     local str = fd:read("*all")
     fd:close()
-    return str 
+    return str
 end
 sysload = wibox.widget.textbox()
 vicious.register(sysload, vicious.widgets.uptime, "<span color=\"#F92672\" font=\"Noto Sans Bold 10\">$4 $5 $6</span>", 5)
-sysload_t = awful.tooltip({ objects = { sysload },})
+sysload_t = awful.tooltip({ objects = { sysload } })
 sysload_t:set_text(get_sysinfo())
 -- Textclock widget
 function get_time()
     local fd = io.popen("~/.config/awesome/myscript.sh time")
     local str = fd:read("*all")
     fd:close()
-    return str 
+    return str
 end
 mytextclock = awful.widget.textclock("<span font=\"Noto Sans Bold 10\" color=\"#00FF16\">%b-%d/%a %I:%M:%S %p</span>", 1)
-mytextclock_t = awful.tooltip({ objects = {mytextclock},})
+mytextclock_t = awful.tooltip({ objects = {mytextclock} })
 mytextclock_t:set_text(get_time())
 mytextclock:buttons(
     awful.util.table.join(
-        awful.button({ }, 3, function () awful.util.spawn("zenity --calendar")   end)
+        awful.button({ }, 3, function () awful.util.spawn("zenity --calendar") end)
     )
 )
 -- Battery widget
 --{{{ battery indicator, using smapi
 local battery_state = {
-    Unknown     = '<span color="yellow">? ',
-    Full        = '<span color="#ffffff">↯',
-    Charging    = '<span color="#00FF16">+ ',
+    Unknown = '<span color="yellow">? ',
+    Full = '<span color="#ffffff">↯',
+    Charging = '<span color="#00FF16">+ ',
     Discharging = '<span color="#1e90ff">– ',
 }
 function update_batwidget()
@@ -283,8 +283,8 @@ function update_batwidget()
     local percent = tonumber(f:read('*l'))
     f:close()
     if  percent <= 30 and percent > 10 and state == 'Discharging' then
-        naughty.notify({ title = "Battery Warning", 
-            text = "Battery low! " .. percent .."%" .. " left!", 
+        naughty.notify({ title = "Battery Warning",
+            text = "Battery low! " .. percent .."%" .. " left!",
             fg = "#ffffff",
             bg = "#C91C1C",
             timeout = 15,
@@ -312,7 +312,7 @@ function get_weather()
     local fd = io.popen("~/.config/awesome/myscript.sh tooltip_temp")
     local str = fd:read("*all")
     fd:close()
-    return str 
+    return str
 end
 tempwidget = wibox.widget.textbox()
 tempwidget:set_align("right")
@@ -333,15 +333,15 @@ weather_t:set_text(get_weather())
 mpdwidget = wibox.widget.textbox()
 vicious.register(mpdwidget, vicious.widgets.mpd,
   function (widget, args)
-    if args["{state}"] == "Stop" then 
+    if args["{state}"] == "Stop" then
       return " - "
-    else 
+    else
       return ' ' .. args["{Artist}"]..' - '.. args["{Title}"] .. ' '
     end
   end, 10)
 mpdwidget:buttons(
     awful.util.table.join(
-        awful.button({ }, 3, function () awful.util.spawn("sakura -c 95 -r 33 -e ncmpcpp")   end)
+        awful.button({ }, 3, function () awful.util.spawn("sakura -c 95 -r 33 -e ncmpcpp") end)
     )
 )
 -- }}}
@@ -351,7 +351,7 @@ cpuwidget = awful.widget.graph()
 -- Graph properties
 cpuwidget:set_width(50)
 cpuwidget:set_background_color("#494B4F")
-cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 10,0 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"}, 
+cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 10,0 }, stops = { {0, "#FF5656"}, {0.5, "#88A175"},
                     {1, "#AECF96" }}})
 -- Register widget
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
@@ -359,18 +359,18 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 
 --update scripts
 mytimer = timer({ timeout = 120 })
-mytimer:connect_signal("timeout", function () 
-weather_t:set_text(get_weather())
-mytextclock_t:set_text(get_time())
-netinfo_t:set_text(get_net())
-sysload_t:set_text(get_sysinfo())
-get_weather_statusbar(tempwidget)
+mytimer:connect_signal("timeout", function ()
+    weather_t:set_text(get_weather())
+    mytextclock_t:set_text(get_time())
+    netinfo_t:set_text(get_net())
+    sysload_t:set_text(get_sysinfo())
+    get_weather_statusbar(tempwidget)
 end)
 mytimer:start()
 
 mytimer_w = timer({ timeout = 600 })
 mytimer_w:connect_signal("timeout", function () awful.util.spawn_with_shell("~/.config/awesome/myscript.sh update") end)
-awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*") 
+awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*")
 mytimer_w:start()
 
 --mpdwidget = wibox.widget.background(mpdwidget, "#B89B4F")
@@ -414,7 +414,7 @@ mytasklist.buttons = awful.util.table.join(
                                           end),
                      awful.button({ }, 2, function (c)
                                               c.maximized_horizontal = not c.maximized_horizontal
-                                              c.maximized_vertical   = not c.maximized_vertical
+                                              c.maximized_vertical = not c.maximized_vertical
                                           end),
                      awful.button({ }, 3, function () mymainmenu:toggle() end),
                      awful.button({ }, 4, function ()
@@ -450,8 +450,8 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", 
-      screen = s, 
+    mywibox[s] = awful.wibox({ position = "top",
+      screen = s,
       height = 25 })
 
     -- Widgets that are aligned to the left
@@ -474,7 +474,7 @@ for s = 1, screen.count() do
     --right_layout:add(netupicon)
     right_layout:add(tempwidget)
     right_layout:add(splitr)
-    --right_layout:add(sysicon)    
+    --right_layout:add(sysicon)
     right_layout:add(sysload)
     right_layout:add(splitr)
     --right_layout:add(volicon)
@@ -535,8 +535,8 @@ globalkeys = awful.util.table.join(
         end),
     awful.key({ cmd }, "w", function () mymainmenu:show() end),
     -- Layout manipulation
-    awful.key({ cmd, sht }, "j", function () awful.client.swap.byidx(  1)    end),
-    awful.key({ cmd, sht }, "k", function () awful.client.swap.byidx( -1)    end),
+    awful.key({ cmd, sht }, "j", function () awful.client.swap.byidx(  1) end),
+    awful.key({ cmd, sht }, "k", function () awful.client.swap.byidx( -1) end),
     awful.key({ cmd, ctl }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ cmd, ctl }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ cmd }, "Tab",
@@ -547,45 +547,45 @@ globalkeys = awful.util.table.join(
             end
         end),
     -- Standard program
-    awful.key({ cmd, ctl }, "e", function () run_or_raise("sakura -c 89 -r 22",   { name = "sakura" })        end ),
+    awful.key({ cmd, ctl }, "e", function () run_or_raise("sakura -c 89 -r 22", { name = "sakura" }) end ),
     awful.key({ cmd, ctl }, "s", function () run_or_raise(browser, {class = browser}) end),
     awful.key({ cmd, ctl }, "w", function () run_or_raise("zim", {class = "Zim"}) end),
     awful.key({ cmd, ctl }, "r", awesome.restart),
     awful.key({ cmd }, "#82", function () awful.util.spawn("amixer -q sset Master 2%-", false) end),
     awful.key({ cmd }, "#86", function () awful.util.spawn("amixer -q sset Master 2%+", false) end),
-    awful.key({ opt }, "r", function () awful.util.spawn_with_shell("bash -c '~/.config/awesome/myscript.sh dmenu_start'", true)      end),
+    awful.key({ opt }, "r", function () awful.util.spawn_with_shell("bash -c '~/.config/awesome/myscript.sh dmenu_start'", true) end),
     awful.key({ cmd, sht }, "q", function() awful.util.spawn_with_shell("zenity --question&&echo 'awesome.quit()' | awesome-client", false) end),
     awful.key({ cmd, ctl }, "d", function () run_or_raise("subl3", {name = "Sublime Text"}) end),
     awful.key({ cmd, ctl }, "5", function () awful.util.spawn_with_shell('import -window root -quality 100 /tmp/$(date "+%Y-%m-%d_%H:%M:%S").png', false) end),
     awful.key({ cmd, ctl }, "4", false, function () awful.util.spawn_with_shell('import -quality 100 /tmp/`date "+%Y-%m-%d_%H:%M:%S"`.png', false) end),
     awful.key({ ctl }, "m", false, function () awful.util.spawn("bash -c '~/.config/awesome/myscript.sh nowplaying'", false) end),
     awful.key({ opt }, "`", false, function () awful.util.spawn("bash -c '~/.config/awesome/myscript.sh input_m'",false) end),
-    awful.key({ cmd }, "#87", function () awful.util.spawn("xbacklight -dec 10", false)         end),
-    awful.key({ cmd }, "#89", function () awful.util.spawn("xbacklight -inc 10", false)         end),
-    awful.key({ cmd }, "#88", function () awful.util.spawn("xbacklight -set 50", false)         end),
+    awful.key({ cmd }, "#87", function () awful.util.spawn("xbacklight -dec 10", false) end),
+    awful.key({ cmd }, "#89", function () awful.util.spawn("xbacklight -inc 10", false) end),
+    awful.key({ cmd }, "#88", function () awful.util.spawn("xbacklight -set 50", false) end),
     awful.key({ ctl, cmd }, "l", function () awful.util.spawn("bash -c 'i3lock -e -t -i ~/lock.png'") end),
-    --awful.key({ ctl opt }, "h", function () awful.util.spawn_with_shell("xfce4-popup-clipman")    end),
-    awful.key({ opt, sht }, "e", function () awful.util.spawn("gnome-character-map")   end),
-    awful.key({ cmd }, "t", function () awful.util.spawn("sakura -c 89 -r 22")    end),
-    awful.key({ cmd }, "e", function () awful.util.spawn("pcmanfm")               end),
-    awful.key({ cmd }, "q", function () awful.util.spawn("xkill", false)          end),
-    awful.key({ opt, ctl }, ".", function () awful.util.spawn_with_shell("mpc next")   end),
-    awful.key({ opt, ctl }, ",", function () awful.util.spawn_with_shell("mpc prev")   end),
-    awful.key({ opt, ctl }, "/", function () awful.util.spawn_with_shell("mpc volume +5")   end),
-    awful.key({ opt, ctl }, "m", function () awful.util.spawn_with_shell("mpc volume -5")   end),
-    awful.key({ opt, ctl }, "l", function () awful.util.spawn_with_shell("mpc toggle")   end),
-    awful.key({ opt, ctl }, "k", function () awful.util.spawn_with_shell("mpc status")   end),
-    awful.key({ sht }, "space", function () awful.util.spawn_with_shell("albert toggle")   end),
-    awful.key({ opt, sht }, "d", function () awful.util.spawn("xfce4-appfinder")       end),
-    awful.key({ cmd }, "l", function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ cmd }, "h", function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ cmd, sht }, "h", function () awful.tag.incnmaster( 1)      end),
-    awful.key({ cmd, sht }, "l", function () awful.tag.incnmaster(-1)      end),
-    awful.key({ cmd, ctl }, "h", function () awful.tag.incncol( 1)         end),
-    awful.key({ cmd, ctl }, "l", function () awful.tag.incncol(-1)         end),
-    awful.key({ cmd }, "space", function () awful.layout.inc(layouts,  1) end),
+    --awful.key({ ctl opt }, "h", function () awful.util.spawn_with_shell("xfce4-popup-clipman") end),
+    awful.key({ opt, sht }, "e", function () awful.util.spawn("gnome-character-map") end),
+    awful.key({ cmd }, "t", function () awful.util.spawn("sakura -c 89 -r 22") end),
+    awful.key({ cmd }, "e", function () awful.util.spawn("pcmanfm") end),
+    awful.key({ cmd }, "q", function () awful.util.spawn("xkill", false) end),
+    awful.key({ opt, ctl }, ".", function () awful.util.spawn_with_shell("mpc next") end),
+    awful.key({ opt, ctl }, ",", function () awful.util.spawn_with_shell("mpc prev") end),
+    awful.key({ opt, ctl }, "/", function () awful.util.spawn_with_shell("mpc volume +5") end),
+    awful.key({ opt, ctl }, "m", function () awful.util.spawn_with_shell("mpc volume -5") end),
+    awful.key({ opt, ctl }, "l", function () awful.util.spawn_with_shell("mpc toggle") end),
+    awful.key({ opt, ctl }, "k", function () awful.util.spawn_with_shell("mpc status") end),
+    awful.key({ sht }, "space", function () awful.util.spawn_with_shell("albert toggle") end),
+    awful.key({ opt, sht }, "d", function () awful.util.spawn("xfce4-appfinder") end),
+    awful.key({ cmd }, "l", function () awful.tag.incmwfact( 0.05) end),
+    awful.key({ cmd }, "h", function () awful.tag.incmwfact(-0.05) end),
+    awful.key({ cmd, sht }, "h", function () awful.tag.incnmaster( 1) end),
+    awful.key({ cmd, sht }, "l", function () awful.tag.incnmaster(-1) end),
+    awful.key({ cmd, ctl }, "h", function () awful.tag.incncol( 1) end),
+    awful.key({ cmd, ctl }, "l", function () awful.tag.incncol(-1) end),
+    awful.key({ cmd }, "space", function () awful.layout.inc(layouts, 1) end),
     awful.key({ cmd, sht }, "space", function () awful.layout.inc(layouts, -1) end),
-    --awful.key({ opt,           }, "c", function () os.execute("xsel -p -o | xsel -i -b") end), 
+    --awful.key({ opt }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
     awful.key({ opt }, "F3",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
@@ -599,11 +599,11 @@ globalkeys = awful.util.table.join(
 clientkeys = awful.util.table.join(
     awful.key({ cmd }, "u", awful.titlebar.toggle),
     awful.key({ cmd }, "c", function (c) c:kill() end),
-    awful.key({ cmd, ctl }, "space", awful.client.floating.toggle                        ),
-    awful.key({ cmd, ctl }, "Return", function (c) c:swap(awful.client.getmaster())   end),
+    awful.key({ cmd, ctl }, "space", awful.client.floating.toggle),
+    awful.key({ cmd, ctl }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ cmd }, "o", awful.client.movetoscreen),
     awful.key({ cmd }, "a", function (c) c.ontop = not c.ontop end),
-    awful.key({ cmd }, "y", awful.titlebar.toggle                                   ),
+    awful.key({ cmd }, "y", awful.titlebar.toggle),
     awful.key({ cmd }, "z", function (c) c.minimized = true end),
     awful.key({ cmd }, "f",
         function (c)
@@ -614,22 +614,22 @@ clientkeys = awful.util.table.join(
         function (c)
             if c.maximized_horizontal == true then
                 if c.maximized_vertical == false then
-                    c.maximized_vertical   = not c.maximized_vertical
+                    c.maximized_vertical = not c.maximized_vertical
                     c.border_width = "0"
                 else
                     c.maximized_horizontal = not c.maximized_horizontal
-                    c.maximized_vertical   = not c.maximized_vertical
+                    c.maximized_vertical = not c.maximized_vertical
                     c.border_width = beautiful.border_width
-                end        
+                end
             else
                 if c.maximized_vertical == true then
                     c.maximized_horizontal = not c.maximized_horizontal
                     c.border_width = "0"
                 else
                     c.maximized_horizontal = not c.maximized_horizontal
-                    c.maximized_vertical   = not c.maximized_vertical
+                    c.maximized_vertical = not c.maximized_vertical
                     c.border_width = "0"
-                end           
+                end
             end
         end),
     awful.key({ cmd }, "s",
@@ -638,11 +638,11 @@ clientkeys = awful.util.table.join(
         end),
     awful.key({ cmd }, "d",
         function (c)
-            c.maximized_vertical   = not c.maximized_vertical
+            c.maximized_vertical = not c.maximized_vertical
         end),
     awful.key({ cmd }, "b",
         function (c)
-            c.maximized_horizontal   = not c.maximized_horizontal
+            c.maximized_horizontal = not c.maximized_horizontal
         end),
     awful.key({ ctl, cmd }, "Left",
         function ()
@@ -776,7 +776,7 @@ client.connect_signal("manage", function (c, startup)
     end
     -- Honor size hints: if you want to drop the gaps between windows, set this to false.
     c.size_hints_honor = false
-    -- Floating clients don't overlap, cover 
+    -- Floating clients don't overlap, cover
     -- the titlebar or get placed offscreen
     awful.placement.no_overlap(c)
     awful.placement.no_offscreen(c)
@@ -828,7 +828,7 @@ awful.rules.rules = {
                       size_hints_honor = false,
                       buttons = clientbuttons },
        },
-    { rule = { class = "Sakura" }, 
+    { rule = { class = "Sakura" },
       properties = { floating = false } },
     { rule = { class = "Steam" },
       properties = { floating = true, tag = tags[1][6] } },
@@ -840,7 +840,7 @@ awful.rules.rules = {
       properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
     { rule = { name = "WeeChat" },
       properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
-    { rule = { class = browser}, 
+    { rule = { class = browser},
       properties = { floating = true, tag = tags[1][2] } },
 }
 

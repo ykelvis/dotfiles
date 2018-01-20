@@ -2,7 +2,7 @@
 function dmenu_start
 {
 	app=`dmenu_path | dmenu  -b -p 'Run:'`;
-	/bin/bash -c "exec $app" &
+	/bin/bash -c "export QT_IM_MODULE=fcitx; exec $app" &
 }
 
 function info_time
@@ -27,9 +27,10 @@ function info_sys
 	echo ==LASTUPDATE==
 	echo $(awk '/upgraded/ {line=$0;} END { $0=line; gsub(/[\[\]]/,"",$0); printf "%s %s",$1,$2;}' /var/log/pacman.log)
 	echo ==DISKUSAGE==
-	echo `df -h --output=avail,size,target|grep -E "/$" `
-	echo `df -h --output=avail,size,target|grep -E "/FORMER$"`
+	echo `df -h --output=avail,size,target|grep -E "/$"`
+	echo `df -h --output=avail,size,target|grep -E "/home$"`
 	echo `df -h --output=avail,size,target|grep -E "/tmp$"`
+	echo `df -h --output=avail,size,target|grep -E "/boot$"`
 }
 
 function info_net

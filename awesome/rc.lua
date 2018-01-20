@@ -74,7 +74,8 @@ cmd = "Mod4"
 ctl = "Control"
 sht = "Shift"
 opt = "Mod1"
-browser = "Chromium"
+browser = "chromium"
+browser_win = "Chromium"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
@@ -200,7 +201,7 @@ vicious.register(volwidget, vicious.widgets.volume, "<span color=\"#ADFF00\" fon
 volwidget:buttons(
     awful.util.table.join(
         awful.button({ }, 1, function () awful.util.spawn("amixer -q sset Master toggle") end),
-        awful.button({ }, 3, function () awful.util.spawn( terminal .. " -e alsamixer") end),
+        awful.button({ }, 3, function () awful.util.spawn(terminal .. " -e alsamixer") end),
         awful.button({ }, 4, function () awful.util.spawn("amixer -q sset Master 2%+,2%+") end),
         awful.button({ }, 5, function () awful.util.spawn("amixer -q sset Master 2%-,2%-") end)
     )
@@ -452,7 +453,7 @@ for s = 1, screen.count() do
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top",
       screen = s,
-      height = 25 })
+      height = 20 })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
@@ -514,7 +515,7 @@ globalkeys = awful.util.table.join(
 
     awful.key({ cmd }, "j",
         function ()
-            awful.client.focus.byidx( 1)
+            awful.client.focus.byidx(1)
             if client.focus then client.focus:raise() end
         end),
     awful.key({ cmd }, "k",
@@ -530,14 +531,14 @@ globalkeys = awful.util.table.join(
         end),
     awful.key({ opt, sht }, "Tab",
         function ()
-            awful.client.focus.byidx( 1)
+            awful.client.focus.byidx(1)
             if client.focus then client.focus:raise() end
         end),
     awful.key({ cmd }, "w", function () mymainmenu:show() end),
     -- Layout manipulation
-    awful.key({ cmd, sht }, "j", function () awful.client.swap.byidx(  1) end),
-    awful.key({ cmd, sht }, "k", function () awful.client.swap.byidx( -1) end),
-    awful.key({ cmd, ctl }, "j", function () awful.screen.focus_relative( 1) end),
+    awful.key({ cmd, sht }, "j", function () awful.client.swap.byidx(1) end),
+    awful.key({ cmd, sht }, "k", function () awful.client.swap.byidx(-1) end),
+    awful.key({ cmd, ctl }, "j", function () awful.screen.focus_relative(1) end),
     awful.key({ cmd, ctl }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ cmd }, "Tab",
         function ()
@@ -548,7 +549,7 @@ globalkeys = awful.util.table.join(
         end),
     -- Standard program
     awful.key({ cmd, ctl }, "e", function () run_or_raise("sakura -c 89 -r 22", { name = "sakura" }) end ),
-    awful.key({ cmd, ctl }, "s", function () run_or_raise(browser, {class = browser}) end),
+    awful.key({ cmd, ctl }, "s", function () run_or_raise(browser, {class = browser_win}) end),
     awful.key({ cmd, ctl }, "w", function () run_or_raise("zim", {class = "Zim"}) end),
     awful.key({ cmd, ctl }, "r", awesome.restart),
     awful.key({ cmd }, "#82", function () awful.util.spawn("amixer -q sset Master 2%-", false) end),
@@ -564,7 +565,6 @@ globalkeys = awful.util.table.join(
     awful.key({ cmd }, "#89", function () awful.util.spawn("xbacklight -inc 10", false) end),
     awful.key({ cmd }, "#88", function () awful.util.spawn("xbacklight -set 50", false) end),
     awful.key({ ctl, cmd }, "l", function () awful.util.spawn("bash -c 'i3lock -e -t -i ~/lock.png'") end),
-    --awful.key({ ctl opt }, "h", function () awful.util.spawn_with_shell("xfce4-popup-clipman") end),
     awful.key({ opt, sht }, "e", function () awful.util.spawn("gnome-character-map") end),
     awful.key({ cmd }, "t", function () awful.util.spawn("sakura -c 89 -r 22") end),
     awful.key({ cmd }, "e", function () awful.util.spawn("pcmanfm") end),
@@ -576,24 +576,17 @@ globalkeys = awful.util.table.join(
     awful.key({ opt, ctl }, "l", function () awful.util.spawn_with_shell("mpc toggle") end),
     awful.key({ opt, ctl }, "k", function () awful.util.spawn_with_shell("mpc status") end),
     awful.key({ sht }, "space", function () awful.util.spawn_with_shell("albert toggle") end),
+    awful.key({ cmd, ctl }, "h", function () awful.util.spawn_with_shell("copyq toggle") end),
     awful.key({ opt, sht }, "d", function () awful.util.spawn("xfce4-appfinder") end),
-    awful.key({ cmd }, "l", function () awful.tag.incmwfact( 0.05) end),
+    awful.key({ cmd }, "l", function () awful.tag.incmwfact(0.05) end),
     awful.key({ cmd }, "h", function () awful.tag.incmwfact(-0.05) end),
-    awful.key({ cmd, sht }, "h", function () awful.tag.incnmaster( 1) end),
+    awful.key({ cmd, sht }, "h", function () awful.tag.incnmaster(1) end),
     awful.key({ cmd, sht }, "l", function () awful.tag.incnmaster(-1) end),
-    awful.key({ cmd, ctl }, "h", function () awful.tag.incncol( 1) end),
+    awful.key({ cmd, ctl }, "h", function () awful.tag.incncol(1) end),
     awful.key({ cmd, ctl }, "l", function () awful.tag.incncol(-1) end),
     awful.key({ cmd }, "space", function () awful.layout.inc(layouts, 1) end),
     awful.key({ cmd, sht }, "space", function () awful.layout.inc(layouts, -1) end),
     --awful.key({ opt }, "c", function () os.execute("xsel -p -o | xsel -i -b") end),
-    awful.key({ opt }, "F3",
-              function ()
-                  awful.prompt.run({ prompt = "Run Lua code: " },
-                  mypromptbox[mouse.screen].widget,
-                  awful.util.eval, nil,
-                  awful.util.getdir("cache") .. "/history_eval")
-              end),
-    -- Menubar
     awful.key({ cmd }, "p", function() menubar.show() end)
 )
 clientkeys = awful.util.table.join(
@@ -603,7 +596,6 @@ clientkeys = awful.util.table.join(
     awful.key({ cmd, ctl }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ cmd }, "o", awful.client.movetoscreen),
     awful.key({ cmd }, "a", function (c) c.ontop = not c.ontop end),
-    awful.key({ cmd }, "y", awful.titlebar.toggle),
     awful.key({ cmd }, "z", function (c) c.minimized = true end),
     awful.key({ cmd }, "f",
         function (c)
@@ -674,7 +666,7 @@ clientkeys = awful.util.table.join(
         end),
     awful.key({ opt }, "l",
         function ()
-            awful.tag.incmwfact( 0.05)
+            awful.tag.incmwfact(0.05)
         end)
 )
 
@@ -698,7 +690,7 @@ for i = 1, keynumber do
                             tag:view_only()
                         end
                   end),
-        awful.key({ sht, ctl }, "#" .. i + 9,
+        awful.key({ sht, ctl, alt }, "#" .. i + 9,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -706,7 +698,7 @@ for i = 1, keynumber do
                             awful.tag.viewtoggle(tag)
                       end
                   end),
-        awful.key({ ctl, sht }, "#" .. i + 9,
+        awful.key({ sht, cmd }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -834,9 +826,7 @@ awful.rules.rules = {
       properties = { floating = true, tag = tags[1][6] } },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][3] } },
-    { rule = { class = "Cr3" },
-      properties = { tag = tags[1][1] }, callback = function(c) awful.placement.centered(c,nil) end },
-    { rule = { class = "Zim" },
+    { rule = { class = "zim" },
       properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
     { rule = { name = "WeeChat" },
       properties = { floating = true, tag = tags[1][5] }, maximized_vertical = true, maximized_horizontal = true },
@@ -844,16 +834,17 @@ awful.rules.rules = {
       properties = { floating = true, tag = tags[1][2] } },
 }
 
-awful.util.spawn_with_shell("[ -z `pgrep compton` ]&&compton")
-awful.util.spawn_with_shell("[ -z `pgrep zim` ]&&zim")
-awful.util.spawn_with_shell("[ -z `pgrep steam` ]&&steam")
-awful.util.spawn_with_shell("[ -z `pgrep albert` ]&&albert")
---naughty.notify({title="Welcome", text=""})
+awful.util.spawn_with_shell("fcitx -r")
 awful.util.spawn_with_shell("numlockx on")
 awful.util.spawn_with_shell("xbacklight -set 40")
-awful.util.spawn_with_shell("fcitx -r")
-awful.util.spawn_with_shell("[ -z `pgrep copyq` ]&&copyq")
+awful.util.spawn_with_shell("setxkbmap -layout us -option ctrl:nocaps")
 awful.util.spawn_with_shell("xautolock -time 5 -locker 'i3lock -e -t -i ~/lock.png'")
+awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*")
+awful.util.spawn_with_shell("[ -z `pgrep compton` ]&&compton")
+awful.util.spawn_with_shell("[ -z `pgrep zim` ]&&zim")
+--awful.util.spawn_with_shell("[ -z `pgrep steam` ]&&steam")
+awful.util.spawn_with_shell("[ -z `pgrep albert` ]&&albert")
+awful.util.spawn_with_shell("[ -z `pgrep copyq` ]&&copyq")
 awful.util.spawn_with_shell("[ -z `pgrep polkit-` ]&&/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 awful.util.spawn_with_shell("[ -z `pgrep pnmixer` ]&&pnmixer")
-awful.util.spawn_with_shell("feh --randomize --bg-fill ~/.wallpaper/*")
+--naughty.notify({title="Welcome", text=""})

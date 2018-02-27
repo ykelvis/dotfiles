@@ -98,11 +98,13 @@ local key2App = {
     d = 'com.sublimetext.3',
     y = 'io.mpv',
     b = 'com.apple.ActivityMonitor',
+    g = 'ru.keepcoder.Telegram',
     --g = 'org.telegram.desktop',
-    g = 'com.tdesktop.Telegram',
+    --g = 'com.tdesktop.Telegram',
     x = 'com.tapbots.TweetbotMac',
     c = 'com.apple.Dictionary',
-    v = 'com.apple.mail',
+    --v = 'com.apple.mail',
+    v = 'org.mozilla.thunderbird',
     z = 'com.canoejoy.Clearview'
 }
 for key, app in pairs(key2App) do

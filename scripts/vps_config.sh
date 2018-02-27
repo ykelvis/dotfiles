@@ -21,6 +21,7 @@ mv /etc/ssh/sshd_config /etc/ssh/sshd_config_orig
 cat << EOF > /etc/ssh/sshd_config
 Port $SSHPORT
 ListenAddress 0.0.0.0
+ListenAddress ::
 PermitRootLogin no
 LogLevel INFO
 StrictModes yes

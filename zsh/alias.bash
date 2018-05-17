@@ -217,6 +217,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+alias meminf="ps -eo rss,pmem,pcpu,vsize,args |  sort -k 1 -r -n | less"
 alias ll="ls -l"
 alias llt='ls -alhtr'
 alias lls='ls -alhSr'

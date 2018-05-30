@@ -98,7 +98,7 @@ class Suki:
 
 if __name__ == "__main__":
     import sys
-    bangumi = sys.argv[1]
-    username = ""
-    password = ""
+    username = sys.argv[1]
+    password = sys.argv[2]
+    bangumi = sys.argv[3]
     suki = Suki(username, password, bangumi)

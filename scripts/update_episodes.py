@@ -29,6 +29,13 @@ class Suki:
         json_bgm = requests.get(url_bgm).json()
         return (json_bgm, json_suki)
 
+    def set_on_air(self):
+        url_suki = "{}/{}".format(self.api_bangumi, self.bangumi_id)
+        json_suki = self.session.get(url_suki).json()
+        json_suki["data"]["status"] = 1
+        ret = self.session.put(url_suki, json=json_suki["data"])
+        print(ret)
+
     def run(self):
         jsons = self.get_jsons()
         dic = {}
@@ -44,7 +51,8 @@ class Suki:
                     break
             dic[i] = (_b, _s)
 
-        for k,v in dic.items():
+        changed, added = False, False
+        for k, v in dic.items():
             if v[0] is None:
                 print("episode", k, "not exist")
                 continue
@@ -63,6 +71,7 @@ class Suki:
                 print("adding {} / ep{}".format(v[0]["name"], v[0]["sort"]))
                 ret = self.session.post(self.api_episode, json=payload)
                 print(ret)
+                added = True
 
             # old episode
             else:
@@ -95,6 +104,10 @@ class Suki:
                     ret = self.session.put(url, json=payload)
                 else:
                     print("pass {} / ep{}".format(v[0]["name"], v[0]["sort"]))
+
+        if changed or added:
+            print("gonna set bangumi status to on_air")
+            self.set_on_air()
 
 if __name__ == "__main__":
     import sys

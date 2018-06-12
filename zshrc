@@ -7,6 +7,8 @@ autoload -U edit-command-line
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 autoload predict-on
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd histdb-update-outcome
 
 setopt EXTENDED_HISTORY
 setopt AUTO_LIST

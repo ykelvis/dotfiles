@@ -89,7 +89,8 @@ hs.hotkey.bind(cmd_ctrl,'f', function()
    hs.execute('open ~/Desktop') 
 end)
 local key2App = {
-    w = 'com.happenapps.Quiver',
+    --w = 'com.happenapps.Quiver',
+    w = 'abnerworks.Typora',
     e = 'com.googlecode.iterm2',
     r = 'com.apple.Safari',
     t = 'com.kapeli.dashdoc',

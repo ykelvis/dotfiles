@@ -46,10 +46,11 @@ mcd(){ mkdir -p "$1"; cd "$1"; }
 cls(){ cd "$1"; ls; }
 backup(){ cp "$1"{,.bak}; }
 md5check(){ md5sum "$1"|grep -i "$2"; }
+sha256check(){ shasum -a 256 "$1"|grep -i "$2"; }
 sha512check(){ shasum -a 512 "$1"|grep -i "$2"; }
 psg(){ ps aux | grep -v grep | grep -i -e VSZ -e "$1"; }
 listen(){ $1 lsof -P -i -n|grep LISTEN; }
-histg(){ fc -il 1|grep $1; }
+histg(){ fc -il 1|grep $*; }
 glogger(){ git log|grep -B4 $1; }
 makescript(){ fc -rnl -999|head -$1 > $2; }
 extract(){ 
@@ -88,7 +89,7 @@ sdu(){
          }'
 }
 ipip(){
-    local api
+    local api pipe
     case "$1" in
         "-4")
             api="http://v4.ipv6-test.com/api/myip.php"
@@ -98,16 +99,18 @@ ipip(){
             ;;
         "-q")
             api="http://freeapi.ipip.net/$2"
+            pipe="|jq"
             ;;
         "-v")
             api="https://api.ip.sb/geoip/$2"
+            pipe="|jq"
             ;;
         *)
             #api="http://ipv6-test.com/api/myip.php"
             api="http://myip.ipip.net"
             ;;
     esac
-    curl -s "$api"
+    sh -c "curl -s ${api} ${pipe}"
 }
 screen2clipboard () { # 截图到剪贴板 {{{2
   if [[ $OS == "Darwin" ]]; then
@@ -128,10 +131,10 @@ mvgb () { # 文件名从 GB 转码，带确认{{{2
   done
 }
 w_radar(){
-    (
     local p
+    local d=`pwd`
     mkdir -p /tmp/radar/;cd /tmp/radar
-    if [[ ${1} == '' ]]; then
+    if [[ -z ${1} ]]; then
         curl -s "http://bjweather.iyuebo.com/weather.php?a=rs" | jq -r '.redar[] | "\(.imgname)"'|xargs -I {} wget -q "http://bjweather.iyuebo.com/real_weather/radar/{}"
     else
         p=$1
@@ -140,12 +143,12 @@ w_radar(){
     convert -delay 30 -loop 0 *.png radar.gif
     mv radar.gif ~/Desktop
     rm -rf /tmp/radar
-    )
+    cd $d
 }
 export TODOTXT_DEFAULT_ACTION=ls
 alias t='todo.sh'
 tad(){
-    local da=${date +%Y-%m-%d};
+    local da=${date '+%Y-%m-%d'};
     t add $da $@;
 }
 proxy_on() {
@@ -226,6 +229,7 @@ alias vi="vim"
 alias aria2c="aria2c --file-allocation=none"
 alias mp="ncmpcpp"
 alias vmarch="VBoxManage startvm arch --type headless"
+alias genpasswd="sh -c 'cat /dev/urandom | env LC_CTYPE=C tr -dc a-zA-Z0-9 | head -c 100'"
 #fasd
 alias v="f -e vim"
 alias m="f -e open"
@@ -302,7 +306,6 @@ else
     alias b1="archlinuxcn-x86_64-build"
     alias b2="archlinuxcn-i686-build"
     alias b3="mv *pkg.tar.xz ~/repo"
-    alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
 fi
 
 MACHINE_TYPE=`uname -m`

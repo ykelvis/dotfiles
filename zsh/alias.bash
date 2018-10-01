@@ -73,6 +73,9 @@ extract(){
          echo "'$1' is not a valid file"
      fi 
 }
+dusort (){
+    du -sm "$@" | sort -n
+}
 sdu(){
     du -k $@| sort -n | awk '
          BEGIN {

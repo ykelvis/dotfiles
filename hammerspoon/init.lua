@@ -89,6 +89,7 @@ hs.hotkey.bind(cmd_ctrl,'f', function()
    hs.execute('open ~/Desktop') 
 end)
 local key2App = {
+    -- mdls -name kMDItemCFBundleIdentifier -r /Applications/xxx.app
     --w = 'com.happenapps.Quiver',
     w = 'abnerworks.Typora',
     e = 'com.googlecode.iterm2',
@@ -97,12 +98,13 @@ local key2App = {
     s = 'com.google.Chrome',
     --s = 'com.google.Chrome.canary',
     d = 'com.sublimetext.3',
-    y = 'io.mpv',
+    --y = 'io.mpv',
+    x = 'com.reederapp.rkit2.mac',
     b = 'com.apple.ActivityMonitor',
     g = 'ru.keepcoder.Telegram',
     --g = 'org.telegram.desktop',
     --g = 'com.tdesktop.Telegram',
-    x = 'com.tapbots.TweetbotMac',
+    y = 'com.tapbots.Tweetbot3Mac',
     c = 'com.apple.Dictionary',
     --v = 'com.apple.mail',
     v = 'org.mozilla.thunderbird',

@@ -41,6 +41,15 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 
 (bin-exist ffmpeg) && extract_mp3() { ffmpeg -i $1 -acodec libmp3lame -metadata TITLE="$2" ${2// /_}.mp3 }
 
+# ssh over proxy
+nc_ssh(){
+    local ip=$1
+    local SHELL=/bin/zsh
+    ssh -q -o ConnectTimeout=10 \
+           -o StrictHostKeyChecking=no root@${ip} \
+           -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p"
+}
+
 calc(){ awk "BEGIN{ print $* }" ; }
 mcd(){ mkdir -p "$1"; cd "$1"; }
 cls(){ cd "$1"; ls; }

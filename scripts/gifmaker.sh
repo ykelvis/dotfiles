@@ -1,4 +1,5 @@
 #!/bin/bash
+_palette="/tmp/palette.png"
 
 usage(){
     echo -e "Usage:"
@@ -12,26 +13,26 @@ usage(){
 }
 
 function convert_it(){
-    [[ -z $fps ]]&&fps=20
-    [[ -z $width ]]&&width=320
-    [[ -z $rotate ]]&&rotate=0
-    [[ ! -z $start_time ]]&&ss="-ss ${start_time}"
-    [[ ! -z $duration ]]&&t="-t ${duration}"
+    [[ -z $fps ]] && fps=20
+    [[ -z $width ]] && width=320
+    [[ ! -z $start_time ]] && ss="-ss ${start_time}"
+    [[ ! -z $duration ]] && t="-t ${duration}"
 
-    palette="/tmp/palette.png"
-    filters="transpose=${rotate},fps=${fps},scale=${width}:-1:flags=lanczos"
-    
-    echo -e "###### generating palatte ######"
-    command1="ffmpeg $ss $t -i $input_file -vf "$filters,palettegen" $palette -y"
+    echo -e "###### generating palette ######"
+    filters="scale=-1:-1:flags=lanczos"
+    command1="ffmpeg ${ss} ${t} -i ${input_file} -vf "${filters},palettegen" ${_palette} -y"
     echo -e running: ${command1}
-    bash -c "${command1} &> /dev/null"
+    bash -c "${command1} &> /dev/null" || exit 1
+
     echo -e "###### converting ######"
-    command2="ffmpeg $ss $t -i $input_file -i $palette -lavfi \"$filters [x]; [x][1:v] paletteuse\" $output_file -y"
+    filters="scale=${width}:-1:flags=lanczos,fps=${fps}"
+    [[ ! -z $rotate ]] && filters="${filters},$rotate"
+    command2="ffmpeg ${ss} ${t} -i ${input_file} -i ${_palette} -lavfi \"${filters} [x]; [x][1:v] paletteuse\" ${output_file} -y"
     echo -e "running: ${command2}"
-    bash -c "${command2} &> /dev/null"
+    bash -c "${command2} &> /dev/null" || exit 2
 }
 
-while getopts :f:w:r:s:t:o:i: OPTION
+while getopts :f:c:w:r:s:t:o:i: OPTION
 do
     case $OPTION in
         i)
@@ -63,6 +64,6 @@ do
 done
 if [[ -z $input_file ]] || [[ -z $output_file ]];then
     usage
-    exit -1
+    exit 3
 fi
-convert_it && echo -e "DONE. output_file is ${output_file}"
+convert_it && echo -e "DONE. output_file is ${output_file}" || exit 4

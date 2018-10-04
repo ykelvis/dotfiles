@@ -1,27 +1,37 @@
 #!/bin/bash
 
 usage(){
-    printf "Usage:\n-f fps\n-i input_file\n-o output_file\n-s start_time\n-t duration\n-w width\n"
+    echo -e "Usage:"
+    echo -e "\t-f fps"
+    echo -e "\t-i input_file"
+    echo -e "\t-o output_file"
+    echo -e "\t-s start_time"
+    echo -e "\t-t duration"
+    echo -e "\t-w width"
+    echo -e "\t-r rotate"
 }
 
-function convertit(){
-    [[ $fps == '' ]]&&fps=20
-    [[ $width == '' ]]&&width=320
-    [[ $start_time != "" ]]&&ss="-ss ${start_time}"
-    [[ $duration != "" ]]&&t="-t ${duration}"
-    
+function convert_it(){
+    [[ -z $fps ]]&&fps=20
+    [[ -z $width ]]&&width=320
+    [[ -z $rotate ]]&&rotate=0
+    [[ ! -z $start_time ]]&&ss="-ss ${start_time}"
+    [[ ! -z $duration ]]&&t="-t ${duration}"
+
     palette="/tmp/palette.png"
-    filters="fps=$fps,scale=$width:-1:flags=lanczos"
+    filters="transpose=${rotate},fps=${fps},scale=${width}:-1:flags=lanczos"
     
-    printf "#\n#\n#\n#\n#\n#\n"
-    echo running: ffmpeg $ss $t -i $input_file -vf "$filters,palettegen" -y $palette
-    ffmpeg $ss $t -i $input_file -vf "$filters,palettegen" -y $palette
-    printf "#\n#\n#\n#\n#\n#\n"
-    echo running: ffmpeg $ss $t -i $input_file -i $palette -lavfi "$filters [x]; [x][1:v] paletteuse" -y $output_file
-    ffmpeg $ss $t -i $input_file -i $palette -lavfi "$filters [x]; [x][1:v] paletteuse" -y $output_file
+    echo -e "###### generating palatte ######"
+    command1="ffmpeg $ss $t -i $input_file -vf "$filters,palettegen" $palette -y"
+    echo -e running: ${command1}
+    bash -c "${command1} &> /dev/null"
+    echo -e "###### converting ######"
+    command2="ffmpeg $ss $t -i $input_file -i $palette -lavfi \"$filters [x]; [x][1:v] paletteuse\" $output_file -y"
+    echo -e "running: ${command2}"
+    bash -c "${command2} &> /dev/null"
 }
 
-while getopts :f:w:s:t:o:i: OPTION
+while getopts :f:w:r:s:t:o:i: OPTION
 do
     case $OPTION in
         i)
@@ -42,14 +52,17 @@ do
         w)
             width=${OPTARG}
             ;;
+        r)
+            rotate=${OPTARG}
+            ;;
         \?)
             usage
             exit -1
             ;;
     esac
 done
-if [[ $input_file == '' ]] || [[ 'output_file' == '' ]];then
+if [[ -z $input_file ]] || [[ -z $output_file ]];then
     usage
     exit -1
 fi
-convertit
+convert_it && echo -e "DONE. output_file is ${output_file}"

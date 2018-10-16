@@ -9,7 +9,7 @@ class Suki:
         self.api_login = "{}/api/user/login".format(self.domain)
         self.api_episode = "{}/api/admin/episode".format(self.domain)
         self.api_bangumi = "{}/api/admin/bangumi".format(self.domain)
-        self.epi_range = list(range(1,13))
+        self.epi_range = list(range(1,12))
         self.login(username, password)
         self.run()
         return

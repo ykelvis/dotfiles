@@ -20,15 +20,17 @@ function convert_it(){
 
     echo -e "###### generating palette ######"
     filters="scale=-1:-1:flags=lanczos"
-    command1="ffmpeg ${ss} ${t} -i ${input_file} -vf "${filters},palettegen" ${_palette} -y"
-    echo -e running: ${command1}
+    command1="ffmpeg ${ss} ${t} -i \"${input_file}\" -vf "${filters},palettegen" ${_palette} -y"
+    echo -e "running:"
+    echo -e "${command1}"
     bash -c "${command1} &> /dev/null" || exit 1
 
     echo -e "###### converting ######"
     filters="scale=${width}:-1:flags=lanczos,fps=${fps}"
     [[ ! -z $rotate ]] && filters="${filters},$rotate"
-    command2="ffmpeg ${ss} ${t} -i ${input_file} -i ${_palette} -lavfi \"${filters} [x]; [x][1:v] paletteuse\" ${output_file} -y"
-    echo -e "running: ${command2}"
+    command2="ffmpeg ${ss} ${t} -i \"${input_file}\" -i ${_palette} -lavfi \"${filters} [x]; [x][1:v] paletteuse\" ${output_file} -y"
+    echo -e "running:"
+    echo -e "${command2}"
     bash -c "${command2} &> /dev/null" || exit 2
 }
 

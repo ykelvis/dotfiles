@@ -50,6 +50,13 @@ nc_ssh(){
            -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p"
 }
 
+cut_video(){
+    local start=$1
+    local end=$2 # -to 00:03
+    local filename=$3
+    ffmpeg -ss ${start} -to ${end} -i "${filename}" -vcodec copy -acodec copy output.mp4
+}
+
 calc(){ awk "BEGIN{ print $* }" ; }
 mcd(){ mkdir -p "$1"; cd "$1"; }
 cls(){ cd "$1"; ls; }

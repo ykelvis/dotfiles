@@ -2,6 +2,7 @@
 *.un~
 *.log
 *.state
+*.dat
 *.pid
 *.db
 /mpd/library/*

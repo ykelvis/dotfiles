@@ -57,6 +57,10 @@ cut_video(){
     ffmpeg -ss ${start} -to ${end} -i "${filename}" -vcodec copy -acodec copy output.mp4
 }
 
+log(){
+    echo -e "[$(date --rfc-3339=seconds)]: $*"
+}
+
 calc(){ awk "BEGIN{ print $* }" ; }
 mcd(){ mkdir -p "$1"; cd "$1"; }
 cls(){ cd "$1"; ls; }
@@ -332,13 +336,16 @@ SYS_TYPE=`uname -s`
 if [[ $OS == "Darwin" ]]; then
     alias gost="gost-osx-64"
     alias cow="cow-mac64"
+    alias gotop="gotop-osx-64"
 else
     if [[ ${MACHINE_TYPE} == "x86_64" ]]; then
         alias gost="gost-linux-64"
         alias cow="cow-linux64"
+        alias gotop="gotop-linux-64"
     else
         alias gost="gost-linux-32"
         alias cow="cow-linux32"
+        alias gotop="gotop-linux-32"
     fi
 fi
 

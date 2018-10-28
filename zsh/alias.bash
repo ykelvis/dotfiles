@@ -334,18 +334,21 @@ fi
 MACHINE_TYPE=`uname -m`
 SYS_TYPE=`uname -s`
 if [[ $OS == "Darwin" ]]; then
-    alias gost="gost-osx-64"
-    alias cow="cow-mac64"
-    alias gotop="gotop-osx-64"
+    alias gost="gost-osx64"
+    alias cow="cow-osx64"
+    alias gotop="gotop-osx64"
+    alias glider="glider-osx64"
 else
     if [[ ${MACHINE_TYPE} == "x86_64" ]]; then
-        alias gost="gost-linux-64"
+        alias gost="gost-linux64"
         alias cow="cow-linux64"
-        alias gotop="gotop-linux-64"
+        alias gotop="gotop-linux64"
+        alias glider="glider-linux64"
     else
-        alias gost="gost-linux-32"
+        alias gost="gost-linux32"
         alias cow="cow-linux32"
-        alias gotop="gotop-linux-32"
+        alias gotop="gotop-linux32"
+        alias glider="glider-linux32"
     fi
 fi
 

@@ -12,51 +12,26 @@ if [[ ${ret} != "" ]];then
     exit
 fi
 
-normal(){
-    cd ~
-    tmux new-session -d -s $name -n 0&&
-    tmux new-window -t $name:1 -n 1
-    tmux new-window -t "$name:99"
-    tmux send-keys -t work:99.0 cd\ ~/Desktop Enter
-    tmux select-window -t 0
-    tmux attach-session -t $name
-}
-
-nas(){
+normal() {
     cd ~
     tmux new-session -d -s $name -n 0
-    tmux split-window -h -p 50
-    tmux select-pane -U
-    tmux new-window -t $name:1 -n 1
     tmux new-window -t "$name:99"
-    tmux split-window -h
-    tmux send-keys -t work:99.0 !runproxy Enter
-    tmux send-keys -t work:99.1 !transmission Enter
     tmux select-window -t 0
     tmux attach-session -t $name
 }
 
-buildmatchine(){
+nas() {
     cd ~
-    tmux new-session -d -s $name -n archcn
-    tmux split-window -h -p 50
-    tmux new-window -t $name:1 -n 1
-    tmux split-window -h -p 50
-    tmux send-keys -t work:archcn.0 Enter cd\ ~/git/archlinuxcn Enter
-    tmux send-keys -t work:archcn.1 cd\ ~/git/archlinuxcn Enter
-    tmux select-window -t 0
+    tmux new-session -d -s $name -n 0
     tmux attach-session -t $name
 }
 
 case ${hostname} in
-    rigel)
-        normal
-        ;;
     *nas*)
         nas
         ;;
     *)
-        buildmatchine
+        normal
         ;;
 esac
 

@@ -46,6 +46,7 @@ nc_ssh(){
     local ip=$1
     local SHELL=/bin/zsh
     ssh -q -o ConnectTimeout=10 \
+           -o ServerAliveInterval=120 \
            -o StrictHostKeyChecking=no root@${ip} \
            -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p"
 }

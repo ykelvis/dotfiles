@@ -3,15 +3,14 @@ import requests
 import time
 
 class Suki:
-    def __init__(self, username, password, bangumi_id):
-        self.bangumi_id = bangumi_id
+    def __init__(self, username, password): #, bangumi_id):
+        # self.bangumi_id = bangumi_id
         self.domain = "https://suki.moe"
         self.api_login = "{}/api/user/login".format(self.domain)
         self.api_episode = "{}/api/admin/episode".format(self.domain)
         self.api_bangumi = "{}/api/admin/bangumi".format(self.domain)
-        self.epi_range = list(range(1,40))
+        self.epi_range = list(range(1,15))
         self.login(username, password)
-        self.run()
         return
 
     def login(self, username, password):
@@ -36,7 +35,8 @@ class Suki:
         ret = self.session.put(url_suki, json=json_suki["data"])
         print(ret)
 
-    def run(self):
+    def run(self, bangumi_id):
+        self.bangumi_id = bangumi_id
         jsons = self.get_jsons()
         dic = {}
         for i in self.epi_range:
@@ -113,5 +113,7 @@ if __name__ == "__main__":
     import sys
     username = sys.argv[1]
     password = sys.argv[2]
-    bangumi = sys.argv[3]
-    suki = Suki(username, password, bangumi)
+    bangumi = sys.argv[3:]
+    suki = Suki(username, password)
+    for i in bangumi:
+        suki.run(i)

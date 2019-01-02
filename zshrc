@@ -111,11 +111,6 @@ fi
 local _user="%{$_usercol%}%n@%M:"
 local _prompt="%{$fg[white]%}$"
 
-PROMPT="$_time$_user$_path$_prompt%b%f%k "
-if [[ ! -z "$SSH_CLIENT" ]]; then
-    PROMPT="%{$bg[blue]%}SSH%{$reset_color%}$PROMPT" # ssh icon
-fi
-
 setopt prompt_subst
 # Modify the colors and symbols in these variables as desired.
 GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
@@ -164,10 +159,16 @@ parse_git_state() {
 # If inside a Git repository, print its branch and state
 git_prompt_string() {
   local git_where="$(parse_git_branch)"
-  [ -n "$git_where" ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+  [ -n "$git_where" ] && echo "$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX$(parse_git_state)$GIT_PROMPT_SYMBOL"
 }
-# Set the right-hand prompt
-RPROMPT='$(git_prompt_string)'
+
+#PROMPT="$_time$_user$_path$_prompt%b%f%k "
+PROMPT=""
+if [[ ! -z "$SSH_CLIENT" ]]; then
+    PROMPT="%{$bg[blue]%}[SSH]%{$reset_color%}" # ssh icon
+fi
+PROMPT=$PROMPT$'%{$fg_bold[green]%}[%n@%m] %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_string)\
+%{$fg[blue]%}%D{[%X]} %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
 
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'

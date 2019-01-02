@@ -162,13 +162,12 @@ local _user_host="%{$_usercol%}[%n@%M]"
 
 setopt prompt_subst
 #PROMPT="$_time$_user$_path$_prompt%b%f%k "
-PROMPT=""
 if [[ ! -z "$SSH_CLIENT" ]]; then
-    PROMPT="%{$bg[blue]%}[SSH]%{$reset_color%}" # ssh icon
+    _ssh_info="%{$bg[blue]%}[SSH]%{$reset_color%}" # ssh icon
 fi
 local return_code="%(?..%{$fg[red]%}[%?]%{$resetcolor%})"
-PROMPT=$PROMPT$'$_user_host%{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%}$(git_prompt_string)\
-$_time${return_code}%{$fg[blue]%} -> %{$fg_bold[blue]%}%#%{$reset_color%} '
+PROMPT=$'$_user_host%{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%}$(git_prompt_string)\
+%{$reset_color%}$_ssh_info$_time${return_code}%{$fg[blue]%} -> %{$fg_bold[blue]%}%#%{$reset_color%} '
 
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'

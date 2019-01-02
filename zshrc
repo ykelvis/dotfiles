@@ -99,19 +99,6 @@ export LESSCHARSET=utf-8
 export READNULLCMD=less
 
 #prompt
-local _time="%{$fg[yellow]%}[%*]"
-local _path="%{$fg[magenta]%}%(8~|...|)%7~"
-local _usercol
-if [[ $EUID -lt 1000 ]]; then
-    # red for root, magenta for system users
-    _usercol="%(!.%{$fg[red]%}.%{$fg[green]%})"
-else
-    _usercol="$fg[cyan]"
-fi
-local _user="%{$_usercol%}%n@%M:"
-local _prompt="%{$fg[white]%}$"
-
-setopt prompt_subst
 # Modify the colors and symbols in these variables as desired.
 GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
 GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
@@ -162,13 +149,25 @@ git_prompt_string() {
   [ -n "$git_where" ] && echo "$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX$(parse_git_state)$GIT_PROMPT_SYMBOL"
 }
 
+local _time="%{$fg[yellow]%}[%*]"
+local _path="%{$fg[magenta]%}%(8~|...|)%7~"
+local _usercol
+if [[ $EUID -lt 500 ]]; then
+    # red for root, magenta for system users
+    _usercol="$fg[red]"
+else
+    _usercol="$fg[green]"
+fi
+local _user_host="%{$_usercol%}[%n@%M]"
+
+setopt prompt_subst
 #PROMPT="$_time$_user$_path$_prompt%b%f%k "
 PROMPT=""
 if [[ ! -z "$SSH_CLIENT" ]]; then
     PROMPT="%{$bg[blue]%}[SSH]%{$reset_color%}" # ssh icon
 fi
-PROMPT=$PROMPT$'%{$fg_bold[green]%}[%n@%m] %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_string)\
-%{$fg[blue]%}%D{[%X]} %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
+PROMPT=$PROMPT$'$_user_host %{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%} $(git_prompt_string)\
+$_time %{$fg[blue]%}->%{$fg_bold[blue]%} %#%{$reset_color%} '
 
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'

@@ -326,7 +326,7 @@ else
     alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |shuf -n1 -z | xargs -0 feh --bg-fill"
     alias hdon="xrandr --output HDMI-0 --auto --left-of LVDS-0"
     alias hdoff="xrandr --output HDMI-0 --off"
-    alias wow="LC_ALL='zh_CN.UTF-8' wine ~/WOW/Wow-64.exe -opengl"
+    alias wow="export DXVK_HUD=1;wine ~/World\ of\ Warcraft/Wow.exe"
     alias b1="archlinuxcn-x86_64-build"
     alias b2="archlinuxcn-i686-build"
     alias b3="mv *pkg.tar.xz ~/repo"

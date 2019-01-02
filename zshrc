@@ -168,7 +168,7 @@ if [[ ! -z "$SSH_CLIENT" ]]; then
 fi
 local return_code="%(?..%{$fg[red]%}[%?]%{$resetcolor%})"
 PROMPT=$PROMPT$'$_user_host%{$reset_color%}%{$fg[white]%}[%~]%{$reset_color%}$(git_prompt_string)\
-$_time${return_code}%{$fg[blue]%} -> %{$fg_bold[blue]%} %#%{$reset_color%} '
+$_time${return_code}%{$fg[blue]%} -> %{$fg_bold[blue]%}%#%{$reset_color%} '
 
 # 命令补全参数{{{
 #   zsytle ':completion:*:completer:context or command:argument:tag'

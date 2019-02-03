@@ -13,4 +13,4 @@ mpd/playlists
 /nvim/bundle/*
 ranger/history
 ranger/bookmarks
-
+scripts/expense

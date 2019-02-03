@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 import requests
 import time
+import logging
+
+logging.basicConfig(format='[%(levelname)s] %(message)s')
+log = logging.getLogger()
+log.setLevel('INFO')
 
 class Suki:
     def __init__(self, username, password): #, bangumi_id):
@@ -33,12 +38,14 @@ class Suki:
         json_suki = self.session.get(url_suki).json()
         json_suki["data"]["status"] = 1
         ret = self.session.put(url_suki, json=json_suki["data"])
-        print(ret)
+        log.info(ret)
 
     def run(self, bangumi_id):
         self.bangumi_id = bangumi_id
         jsons = self.get_jsons()
         dic = {}
+        log.info("############")
+        log.info("start checking: {}".format(jsons[1]["data"]["name"]))
         for i in self.epi_range:
             _b, _s = None, {}
             for x in jsons[0]["eps"]:
@@ -54,7 +61,7 @@ class Suki:
         changed, added = False, False
         for k, v in dic.items():
             if v[0] is None:
-                print("episode", k, "not exist")
+                log.info("episode {} not exist".format(k))
                 continue
 
             # new episode
@@ -68,33 +75,33 @@ class Suki:
                 payload["name"] = v[0]["name"]
                 payload["name_cn"] = v[0]["name_cn"]
                 payload["bangumi_id"] = self.bangumi_id
-                print("adding {} / ep{}".format(v[0]["name"], v[0]["sort"]))
+                log.info("adding {} / ep{}".format(v[0]["name"], v[0]["sort"]))
                 ret = self.session.post(self.api_episode, json=payload)
-                print(ret)
+                log.info(ret)
                 added = True
 
             # old episode
             else:
-                print("checking ep{}".format(k))
+                log.info("checking ep{}".format(k))
                 changed, payload = False, v[1]
                 name = False if v[0]["name"]==v[1].get("name", None) else v[0]["name"]
                 name_cn = False if v[0]["name_cn"]==v[1].get("name_cn", None) else v[0]["name_cn"]
                 bgm_id = False if v[0]["id"]==v[1].get("bgm_eps_id", None) else v[0]["id"]
                 airdate = False if v[0]["airdate"]==v[1].get("airdate", None) else v[0]["airdate"]
                 if name:
-                    print("name {} -> {}".format(v[1].get("name", "None"), v[0]["name"]))
+                    log.info("name {} -> {}".format(v[1].get("name", "None"), v[0]["name"]))
                     payload["name"] = v[0]["name"]
                     changed = True
                 if name_cn:
-                    print("name_cn {} -> {}".format(v[1].get("name_cn", "None"), v[0]["name_cn"]))
+                    log.info("name_cn {} -> {}".format(v[1].get("name_cn", "None"), v[0]["name_cn"]))
                     payload["name_cn"] = v[0]["name_cn"]
                     changed = True
                 if bgm_id:
-                    print("bgm_id {} -> {}".format(v[1].get("bgm_eps_id", "None"), v[0]["id"]))
+                    log.info("bgm_id {} -> {}".format(v[1].get("bgm_eps_id", "None"), v[0]["id"]))
                     payload["bgm_eps_id"] = v[0]["id"]
                     changed = True
                 if airdate:
-                    print("airdate {} -> {}".format(v[1].get("airdate", "None"), v[0]["airdate"]))
+                    log.info("airdate {} -> {}".format(v[1].get("airdate", "None"), v[0]["airdate"]))
                     payload["airdate"] = v[0]["airdate"]
                     changed = True
                 if changed:
@@ -103,10 +110,10 @@ class Suki:
                     url = "{}/{}".format(self.api_episode, suki_epi_id)
                     ret = self.session.put(url, json=payload)
                 else:
-                    print("pass {} / ep{}".format(v[0]["name"], v[0]["sort"]))
+                    log.info("pass {} / ep{}".format(v[0]["name"], v[0]["sort"]))
 
         if changed or added:
-            print("gonna set bangumi status to on_air")
+            log.info("gonna set bangumi status to on_air")
             self.set_on_air()
 
 if __name__ == "__main__":

@@ -44,11 +44,13 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 # ssh over proxy
 nc_ssh(){
     local ip=$1
+    local command=$2
     local SHELL=/bin/zsh
     ssh -q -o ConnectTimeout=10 \
            -o ServerAliveInterval=120 \
            -o StrictHostKeyChecking=no root@${ip} \
-           -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p"
+           -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p" \
+           "${command}"
 }
 
 cut_video(){
@@ -60,6 +62,10 @@ cut_video(){
 
 log(){
     echo -e "[$(date --rfc-3339=seconds)]: $*"
+}
+
+what_to_eat(){
+    echo "吃 `echo "$1" | tr "|" "\n" | shuf | head -1` !"
 }
 
 calc(){ awk "BEGIN{ print $* }" ; }

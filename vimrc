@@ -6,21 +6,16 @@ filetype indent on
 " {{{ plugin
 call plug#begin('~/.vim/bundle') 
 Plug 'lucidstack/ctrlp-mpc.vim'
-Plug 'rust-lang/rust.vim', {'for': 'rust' }
-Plug 'Raimondi/delimitMate'
-Plug 'altercation/vim-colors-solarized'
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
 " Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'easymotion/vim-easymotion'
 Plug 'jiangmiao/auto-pairs'
 " Plug 'jlanzarotta/bufexplorer'
-Plug 'jwhitley/vim-matchit'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'kien/rainbow_parentheses.vim'
+Plug 'junegunn/rainbow_parentheses.vim'
 " Plug 'klen/python-mode'
-Plug 'vim-scripts/taglist.vim'
 Plug 'majutsushi/tagbar'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
 Plug 'mattn/emmet-vim'
 " Plug 'scrooloose/syntastic'
 Plug 'scrooloose/nerdcommenter'
@@ -31,7 +26,7 @@ Plug 'tomasr/molokai'
 Plug 'plasticboy/vim-markdown'
 Plug 'tpope/vim-fugitive'
 Plug 'maksimr/vim-jsbeautify'
-" Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
 Plug 'mhinz/vim-signify'
 call plug#end()
@@ -204,16 +199,17 @@ map ]c <Plug>Markdown_MoveToCurHeader
 map ]u <Plug>Markdown_MoveToParentHeader
 
 " rainbow parenthese
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+augroup rainbow_lisp
+  autocmd!
+  autocmd FileType lisp,clojure,scheme,python RainbowParentheses
+augroup END
 
 " taglist
 " nmap <Leader>tt :TlistToggle(CR)
+
 " YouCompleteMe
-" let g:ycm_autoclose_preview_window_after_completion=1
-" map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " tagbar
 nmap <Leader>tb :TagbarToggle<CR>
@@ -246,17 +242,34 @@ let g:rustfmt_autosave = 1
 let g:ctrlp_extensions = ["buffertag", "tag", "line", "dir", "tmux", "mpc"]
 
 " jedi-vim
-let g:jedi#goto_command = "<leader>d"
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = ",<tab>"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#popup_select_first = 1
-" doc in tab not buffer
-let g:jedi#use_tabs_not_buffers = 0 
+"let g:jedi#goto_command = "<leader>d"
+"let g:jedi#goto_assignments_command = "<leader>g"
+"let g:jedi#goto_definitions_command = ""
+"let g:jedi#documentation_command = "K"
+"let g:jedi#usages_command = "<leader>n"
+"let g:jedi#completions_command = ",<tab>"
+"let g:jedi#rename_command = "<leader>r"
+"let g:jedi#popup_select_first = 1
+"" doc in tab not buffer
+"let g:jedi#use_tabs_not_buffers = 0 
 " }}}
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+
+" vim-multiple-cursors
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<A-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
 
 " misc {{{
 if has("autocmd")

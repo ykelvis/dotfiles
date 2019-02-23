@@ -44,11 +44,13 @@ help() { man zshbuiltins | sed -ne "/^       $1 /,/^\$/{s/       //; p}"}
 # ssh over proxy
 nc_ssh(){
     local ip=$1
+    local command=$2
     local SHELL=/bin/zsh
     ssh -q -o ConnectTimeout=10 \
            -o ServerAliveInterval=120 \
            -o StrictHostKeyChecking=no root@${ip} \
-           -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p"
+           -o "ProxyCommand=/usr/bin/nc -x 127.0.0.1:8081 %h %p" \
+           "${command}"
 }
 
 cut_video(){
@@ -60,6 +62,10 @@ cut_video(){
 
 log(){
     echo -e "[$(date --rfc-3339=seconds)]: $*"
+}
+
+what_to_eat(){
+    echo "吃 `echo "$1" | tr "|" "\n" | shuf | head -1` !"
 }
 
 calc(){ awk "BEGIN{ print $* }" ; }
@@ -250,6 +256,7 @@ alias llt='ls -alhtr'
 alias lls='ls -alhSr'
 alias l="ls -al"
 alias vi="vim"
+alias vim="nvim"
 alias aria2c="aria2c --file-allocation=none"
 alias mp="ncmpcpp"
 alias vmarch="VBoxManage startvm arch --type headless"
@@ -314,13 +321,13 @@ else
     alias pacddep="pacman -D --asdep"
     alias pacsdeps='sudo pacman -S --asdeps'
     alias pacqtdq="pacman -Qtdq > /dev/null && sudo pacman -Rns \$(pacman -Qtdq | sed -e ':a;N;$!ba;s/\n/ /g')"
-    alias yaog='yaourt -G'
-    alias yaob='yaourt -B'
-    alias yaos='yaourt -S'
-    alias yaoqdt='yaourt -Qdt'
-    alias yaoss='yaourt -Ss'
-    alias yaoqbak='yaourt -Q --backupfile'
-    alias yaosyua='yaourt -Syua --devel '
+    alias aurg='yay -G'
+    alias aurb='yay -B'
+    alias aurs='yay -S'
+    alias aurqdt='yay -Qdt'
+    alias aurss='yay -Ss'
+    alias aurqbak='yay -Q --backupfile'
+    alias aursyua='yay -Syua --devel '
     alias splitmusic='cue2tracks -R -c flac -o "%n - %t" "$@" *.cue'
     alias dstatt='dstat -cdlmnpsy'
     alias wallpaper="find ~/.wallpaper -type f \( -name '*.jpg' -o -name '*.png' \) -print0 |shuf -n1 -z | xargs -0 feh --bg-fill"

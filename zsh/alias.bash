@@ -262,7 +262,7 @@ alias mp="ncmpcpp"
 alias vmarch="VBoxManage startvm arch --type headless"
 alias genpasswd="sh -c 'cat /dev/urandom | env LC_CTYPE=C tr -dc a-zA-Z0-9 | head -c 100'"
 #fasd
-alias v="f -e vim"
+alias v="f -e $EDITOR"
 alias m="f -e open"
 alias a="fasd -a"         #any
 alias s="fasd -si"        #show / search / select

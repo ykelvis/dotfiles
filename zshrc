@@ -263,3 +263,5 @@ fi
 #then
     #tm
 #fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

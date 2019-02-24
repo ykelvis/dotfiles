@@ -59,13 +59,14 @@ call dein#add('christoomey/vim-tmux-navigator')                       " Easy nav
 """" Autocomplete
 call dein#add('Shougo/deoplete.nvim')                                 " Autocomplete engine
 call dein#add('Shougo/neco-vim')                                      " Vim
-"call dein#add('eagletmt/neco-ghc')                                    " Haskell
 call dein#add('zchee/deoplete-jedi')                                  " Python
 call dein#add('carlitux/deoplete-ternjs')                             " Javascript
 "call dein#add('fishbullet/deoplete-ruby')                             " Ruby
 call dein#add('wellle/tmux-complete.vim')                             " Tmux panes
 call dein#add('zchee/deoplete-go', {'build': 'make'})                 " Go
 call dein#add('zchee/deoplete-zsh')                                   " ZSH
+call dein#add('SirVer/ultisnips')
+call dein#add('honza/vim-snippets')
 
 """" Git
 call dein#add('tpope/vim-fugitive')                                   " Git integration
@@ -398,12 +399,6 @@ let g:tern#arguments = ["--persistent"]
 nmap <Leader>= <Plug>(EasyAlign)
 xmap <Leader>= <Plug>(EasyAlign)
 
-"""" Ghc-mod
-nnoremap <silent> <leader>ht :w<CR>:GhcModType<CR>:GhcModTypeClear<CR>
-nnoremap <silent> <leader>hT :w<CR>mh0:GhcModTypeInsert<CR>`h
-nnoremap <silent> <leader>hi :w<CR>:GhcModInfo<CR>
-nnoremap <silent> <leader>hI :HoogleInfo<CR>
-
 """" GitGutter
 let g:gitgutter_map_keys = 0
 
@@ -433,18 +428,9 @@ let hscoptions="𝐒𝐓𝐄𝐌wRTBQZDC"
 """" Haskell vim
 let g:haskell_indent_disable = 1
 
-"""" Hlint refactor
-let g:hlintRefactor#disableDefaultKeybindings = 1
-
-nnoremap <silent> <leader>hr :call ApplyOneSuggestion()<CR>
-nnoremap <silent> <leader>hR :call ApplyAllSuggestions()<CR>
-
 """" Markdown composer
 let g:markdown_composer_open_browser = 0
 let g:markdown_composer_custom_css = ['https://cdn.rawgit.com/maximbaz/github-markdown-css/gh-pages/github-markdown.css']
-
-"""" Neco-ghc
-let g:necoghc_enable_detailed_browse = 1
 
 """" Smalls
 let g:smalls_auto_jump = 1
@@ -479,10 +465,6 @@ map ][ <Plug>Markdown_MoveToNextSiblingHeader
 map [] <Plug>Markdown_MoveToPreviousSiblingHeader
 map ]c <Plug>Markdown_MoveToCurHeader
 map ]u <Plug>Markdown_MoveToParentHeader
-
-" ctrlp-mpc.vim
-let g:ctrlp_extensions = ["buffertag", "tag", "line", "dir", "tmux", "mpc"]
-
 
 """" vim-rooter
 let g:rooter_use_lcd = 1

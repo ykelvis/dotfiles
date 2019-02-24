@@ -1,6 +1,6 @@
 """ Plugins
-"""" Dein-begin
 
+"""" Dein-begin
 if &runtimepath !~# '/dein.vim'
   let s:dein_dir = expand('~/.cache/dein/repos/github.com/Shougo/dein.vim')
 
@@ -25,7 +25,6 @@ call dein#add('maximbaz/lightline-trailing-whitespace')               " Trailing
 call dein#add('maximbaz/lightline-ale')                               " ALE indicator
 call dein#add('gcavallanti/vim-noscrollbar')                          " Scrollbar for statusline
 call dein#add('cskeeters/vim-smooth-scroll')                          " Smooth scroll
-call dein#add('moll/vim-bbye')                                        " Keep window when closing a buffer
 call dein#add('romainl/vim-qf')                                       " Quickfix / Loclist improvements
 call dein#add('scrooloose/nerdtree')
 
@@ -50,8 +49,7 @@ call dein#add('matze/vim-move')                                       " Move blo
 
 """" Navigate code
 call dein#add('osyo-manga/vim-anzu')                                  " Show search count
-call dein#add('haya14busa/vim-asterisk')                              " Star * improvements
-call dein#add('t9md/vim-smalls')                                      " Quick jump anywhere
+call dein#add('t9md/vim-smalls')
 
 """" Navigate files, buffers and panes
 call dein#add('airblade/vim-rooter')                                  " Change working directory to the project root
@@ -374,12 +372,6 @@ let g:lightline#bufferline#shorten_path = 0           " Don't compress ~/my/fold
 """" Lightline trailing whitespace
 let g:lightline#trailing_whitespace#indicator = '•'
 
-"""" Asterisk
-map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-map #  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
-map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-map g# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
-
 """" DelimitMate
 let delimitMate_expand_cr = 2
 let delimitMate_expand_space = 1
@@ -405,15 +397,6 @@ let g:tern#arguments = ["--persistent"]
 """" EasyAlign
 nmap <Leader>= <Plug>(EasyAlign)
 xmap <Leader>= <Plug>(EasyAlign)
-
-"""" FZF
-" Make :Ag not match file names, only file contents
-command! -bang -nargs=* AgContents call fzf#vim#ag(<q-args>, '--hidden', {'options': '--delimiter : --nth 4..'}, <bang>0)
-
-nnoremap <silent> <Leader>f :Files<CR>
-nnoremap <silent> <Leader>F :Files ~<CR>
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>G :AgContents<CR>
 
 """" Ghc-mod
 nnoremap <silent> <leader>ht :w<CR>:GhcModType<CR>:GhcModTypeClear<CR>
@@ -456,20 +439,6 @@ let g:hlintRefactor#disableDefaultKeybindings = 1
 nnoremap <silent> <leader>hr :call ApplyOneSuggestion()<CR>
 nnoremap <silent> <leader>hR :call ApplyAllSuggestions()<CR>
 
-"""" Incsearch
-let g:incsearch#auto_nohlsearch = 1
-
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-
-map z/ <Plug>(incsearch-fuzzy-/)
-map z? <Plug>(incsearch-fuzzy-?)
-map zg/ <Plug>(incsearch-fuzzy-stay)
-
-map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)zMzv
-map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)zMzv
-
 """" Markdown composer
 let g:markdown_composer_open_browser = 0
 let g:markdown_composer_custom_css = ['https://cdn.rawgit.com/maximbaz/github-markdown-css/gh-pages/github-markdown.css']
@@ -483,21 +452,6 @@ let g:smalls_auto_jump = 1
 nmap s <Plug>(smalls)
 xmap s <Plug>(smalls)
 omap s <Plug>(smalls)
-
-"""" Sneak
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
 
 """" UltiSnips
 let g:UltiSnipsExpandTrigger="<tab>"

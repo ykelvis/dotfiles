@@ -369,7 +369,7 @@ let delimitMate_balance_matchpairs = 1
 let g:move_key_modifier = 'C-S'
 
 """" coc
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-tslint', 'coc-eslint', 'coc-html', 'coc-css', 'coc-jest', 'coc-emoji', 'coc-prettier', 'coc-wxml', 'coc-yaml', 'coc-pyls', 'coc-highlight', 'coc-dictionary', 'coc-tag', 'coc-lists', 'coc-yank']
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-tslint', 'coc-eslint', 'coc-html', 'coc-css', 'coc-jest', 'coc-emoji', 'coc-prettier', 'coc-wxml', 'coc-yaml', 'coc-pyls', 'coc-highlight', 'coc-dictionary', 'coc-tag', 'coc-lists', 'coc-yank', 'coc-snippets']
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :

@@ -1,5 +1,4 @@
 """ Plugins
-
 """" Dein-begin
 if &runtimepath !~# '/dein.vim'
   let s:dein_dir = expand('~/.cache/dein/repos/github.com/Shougo/dein.vim')
@@ -19,71 +18,61 @@ call dein#add('haya14busa/dein-command.vim')
 
 """" Look & feel
 call dein#add('tomasr/molokai')
-call dein#add('itchyny/lightline.vim')                                " Bottom bar
-call dein#add('mgee/lightline-bufferline')                            " Top bar
-call dein#add('maximbaz/lightline-trailing-whitespace')               " Trailing whitespace indicator
-call dein#add('maximbaz/lightline-ale')                               " ALE indicator
-call dein#add('gcavallanti/vim-noscrollbar')                          " Scrollbar for statusline
-call dein#add('cskeeters/vim-smooth-scroll')                          " Smooth scroll
-call dein#add('romainl/vim-qf')                                       " Quickfix / Loclist improvements
+call dein#add('itchyny/lightline.vim')
+call dein#add('mgee/lightline-bufferline')
+call dein#add('maximbaz/lightline-trailing-whitespace')
+call dein#add('maximbaz/lightline-ale')
+call dein#add('gcavallanti/vim-noscrollbar')
+call dein#add('cskeeters/vim-smooth-scroll')
 call dein#add('scrooloose/nerdtree')
 
 """" Format code
-call dein#add('tpope/vim-sleuth')                                     " Automatically detect tabs vs spaces
-call dein#add('sbdchd/neoformat')                                     " Automatically format code
-call dein#add('dhruvasagar/vim-table-mode')                           " Format tables
+call dein#add('tpope/vim-sleuth')
+call dein#add('sbdchd/neoformat')
+call dein#add('dhruvasagar/vim-table-mode')
 
 """" Manipulate code
 call dein#add('terryma/vim-multiple-cursors')
-call dein#add('tpope/vim-repeat')                                     " Repeat for plugins
-call dein#add('vim-scripts/visualrepeat')                             " Repeat for plugins in visual mode
-call dein#add('tpope/vim-surround')                                   " Surround
-call dein#add('tpope/vim-abolish')                                    " Substitute with Smart Case (:S//)
-call dein#add('Raimondi/delimitMate')                                 " Insert closing brackets automatically
-call dein#add('vim-scripts/VisIncr')                                  " Generate increasing number column
-call dein#add('junegunn/vim-easy-align')                              " Easy align around equals
+call dein#add('tpope/vim-repeat')
+call dein#add('vim-scripts/visualrepeat')
+call dein#add('machakann/vim-sandwich')
+call dein#add('tpope/vim-abolish')
+call dein#add('Raimondi/delimitMate')
+call dein#add('vim-scripts/VisIncr')
+call dein#add('junegunn/vim-easy-align')
 call dein#add('scrooloose/nerdcommenter')
-call dein#add('tpope/vim-endwise')                                    " Automatically put 'end' in some langs
-call dein#add('alvan/vim-closetag')                                   " Automatically put closing tag in XML
-call dein#add('matze/vim-move')                                       " Move blocks of code
+call dein#add('tpope/vim-endwise')
+call dein#add('alvan/vim-closetag')
+call dein#add('matze/vim-move')
 
 """" Navigate code
-call dein#add('osyo-manga/vim-anzu')                                  " Show search count
+call dein#add('osyo-manga/vim-anzu')
 call dein#add('t9md/vim-smalls')
 
 """" Navigate files, buffers and panes
-call dein#add('airblade/vim-rooter')                                  " Change working directory to the project root
-call dein#add('benizi/vim-automkdir')                                 " Automatically create missing folders on save
-call dein#add('christoomey/vim-tmux-navigator')                       " Easy navigation between vim and tmux panes
+call dein#add('airblade/vim-rooter')
+call dein#add('benizi/vim-automkdir')
 
 """" Autocomplete
-call dein#add('Shougo/deoplete.nvim')                                 " Autocomplete engine
-call dein#add('Shougo/neco-vim')                                      " Vim
-call dein#add('zchee/deoplete-jedi')                                  " Python
-call dein#add('carlitux/deoplete-ternjs')                             " Javascript
-"call dein#add('fishbullet/deoplete-ruby')                             " Ruby
-call dein#add('wellle/tmux-complete.vim')                             " Tmux panes
-call dein#add('zchee/deoplete-go', {'build': 'make'})                 " Go
-call dein#add('zchee/deoplete-zsh')                                   " ZSH
-call dein#add('SirVer/ultisnips')
 call dein#add('honza/vim-snippets')
+call dein#add('neoclide/coc.nvim', {
+        \'build': 'yarn install',
+        \})
 
 """" Git
-call dein#add('tpope/vim-fugitive')                                   " Git integration
-call dein#add('airblade/vim-gitgutter')                               " Git gutter
+call dein#add('tpope/vim-fugitive')
+call dein#add('airblade/vim-gitgutter')
 
 """" Render code
-call dein#add('sheerun/vim-polyglot')                                 " Many many syntaxes
-call dein#add('ap/vim-css-color')                                     " Colors in CSS
-call dein#add('euclio/vim-markdown-composer',
-      \ {'build': 'cargo build --release'})                           " Instantly preview markdown
+call dein#add('sheerun/vim-polyglot')
+call dein#add('ap/vim-css-color')
 
 """" Lint code
 call dein#add('w0rp/ale')
 
 """" Language-specific
 """"" Go
-call dein#add('fatih/vim-go')                                         " Go development
+call dein#add('fatih/vim-go')
 
 """" Dein-end
 call dein#end()
@@ -97,47 +86,45 @@ endif
 filetype plugin indent on
 syntax on
 let &fillchars="vert:|,fold: ,diff: "
-set cursorline                                                     " Spot the cursor easier
-set diffopt+=iwhite                                                " Ignore whitespace changes
-set expandtab                                                      " Use spaces by default, not tabs
-set formatoptions+=l                                               " Don't wrap long lines when editing them
-set formatoptions+=n                                               " Recognize numbered lists
-set formatoptions+=o                                               " Continue comment when pressing o or O
-set formatoptions+=r                                               " Continue comment when pressing Enter
-set formatoptions-=c                                               " Don't wrap long comments
-set formatoptions-=t                                               " Don't wrap long lines when typing them
-set hidden                                                         " Keep buffer around even if it is not displayed right now
-set ignorecase                                                     " Ignore search case
-set langmap+=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ " Cyrillic layout in normal mode
-set langmap+=фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz " Cyrillic layout in normal mode
-set langmap+=ЖжЭэХхЪъ;\:\;\"\'{[}]                                 " Cyrillic layout in normal mode
-set lazyredraw                                                     " Don't redraw when there is no need for it
-set linebreak                                                      " Wrap lines intelligently, e.g. by end of words
-set list                                                           " Display unusual whitespace characters
-set listchars=tab:»·,trail:·,nbsp:·                                " Which whitespace characters to display and how
-set mouse=a                                                        " Enable mouse support
-set noshowmode                                                     " Don't show current mode in echo
-set nostartofline                                                  " Don't move cursor on the line when moving around
-set noswapfile                                                     " Don't use swap files, use git
-set nrformats=                                                     " Use only decimal numbers base when incrementing numbers
+set cursorline
+set diffopt+=iwhite
+set expandtab
+set formatoptions+=l
+set formatoptions+=n
+set formatoptions+=o
+set formatoptions+=r
+set formatoptions-=c
+set formatoptions-=t
+set hidden
+set cmdheight=2
+set ignorecase
+set lazyredraw
+set linebreak
+set list
+set listchars=tab:»·,trail:·,nbsp:·
+"set mouse=a
+set noshowmode
+set nostartofline
+set noswapfile
+set nrformats=
 set relativenumber
-set report=0                                                       " Always report how many lines substitute changed
-set scrolloff=3                                                    " Number of lines to keep above and below cursor
-set shiftround                                                     " Round indent to a multiple of shiftwidth
-set shiftwidth=2                                                   " Tab shifts by this number of spaces
-set shortmess+=I                                                   " Don't show intro msg when starting vim
-set shortmess+=c                                                   " Don't echo while autocompletion in insert mode
+set report=0
+set scrolloff=3
+set shiftround
+set shiftwidth=2
+set shortmess+=I
+set shortmess+=c
+set signcolumn=yes
 set showcmd
 set showtabline=2
-set sidescrolloff=3                                                " Number of columns to keep on the left/right of the cursor
+set sidescrolloff=3
 set smartcase
 set spelllang=en,da,ru
 set splitbelow
 set splitright
 set tabstop=2
-set title                                                          " Change terminal title based on the file name
+set title
 set updatetime=100
-set virtualedit=all
 set wildmode=longest,list,full
 
 """" Theme
@@ -199,8 +186,10 @@ cnoremap <C-k> <Up>
 cnoremap w!! w !sudo tee > /dev/null %
 
 """" Navigate through visual lines
-nnoremap <expr> j v:count ? 'j' : 'gj'
-nnoremap <expr> k v:count ? 'k' : 'gk'
+"nnoremap <expr> j v:count ? 'j' : 'gj'
+"nnoremap <expr> k v:count ? 'k' : 'gk'
+nnoremap j gj
+nnoremap k gk
 
 """" Indent / unindent
 nnoremap <S-Tab> <<
@@ -212,9 +201,6 @@ xnoremap <S-Tab> <gv
 nmap <PageDown> <C-d>
 nmap <PageUp> <C-u>
 nmap <C-e> <C-u>
-
-"""" Fix 'gx' to support '?' in URLs
-nmap gx mxviugx<Esc>`x
 
 """" Change tab size
 nnoremap <silent><Leader>cst :setlocal ts=4 sts=4 noet <bar> retab! <bar> setlocal ts=2 sts=2 et <bar> retab<CR>
@@ -253,10 +239,10 @@ nnoremap <leader>b6 :b6<CR>
 nnoremap <leader>b7 :b7<CR>
 nnoremap <leader>b8 :b8<CR>
 nnoremap <leader>b9 :b9<CR>
-"
+
 """ Plugins configuration
 """" ALE
-let g:ale_open_list = 1
+let g:ale_open_list = 0
 let g:ale_loclist_msg_format='%linter%: %code: %%s'
 
 let g:ale_linters = {
@@ -267,10 +253,15 @@ let g:ale_go_gometalinter_lint_package = 1
 
 """" Lightline
 let g:lightline = {
-      \   'colorscheme': 'gruvbox',
+      \   'colorscheme': 'wombat',
       \   'active': {
-      \     'left': [ [ 'mode' ], [ 'pwd' ] ],
-      \     'right': [ [ 'linter_ok', 'linter_checking', 'linter_errors', 'linter_warnings', 'trailing', 'lineinfo' ], [ 'fileinfo' ], [ 'scrollbar' ] ],
+      \     'left': [ [ 'mode' ],
+      \               [ 'pwd' ],
+      \               [ 'linter_ok', 'linter_checking', 'linter_errors', 'linter_warnings'] ],
+      \     'right': [ [ 'trailing' ],
+      \                [ 'lineinfo' ],
+      \                [ 'fileinfo' ],
+      \                [ 'scrollbar' ] ],
       \   },
       \   'inactive': {
       \     'left': [ [ 'pwd' ] ],
@@ -280,8 +271,8 @@ let g:lightline = {
       \     'left': [ [ 'buffers' ] ],
       \     'right': [ [ 'close' ] ],
       \   },
-      \   'separator': { 'left': '', 'right': '' },
-      \   'subseparator': { 'left': '', 'right': '' },
+      \   'separator': { 'left': '', 'right': '' },
+      \   'subseparator': { 'left': '', 'right': '' },
       \   'mode_map': {
       \     'n' : 'N',
       \     'i' : 'I',
@@ -358,17 +349,11 @@ function! LightlineWorkingDirectory()
   return &ft =~ 'help\|qf' ? '' : fnamemodify(getcwd(), ":~:.")
 endfunction
 
-"""" Lightline ALE
-let g:lightline#ale#indicator_warnings = ' '
-let g:lightline#ale#indicator_errors = ' '
-let g:lightline#ale#indicator_checking = ' '
-
 """" lightline-bufferline
-let g:lightline#bufferline#filename_modifier = ':~:.' " Show filename relative to current directory
-let g:lightline#bufferline#unicode_symbols = 1        " Use fancy unicode symbols for various indicators
-let g:lightline#bufferline#modified = ''             " Default pencil is too ugly
-let g:lightline#bufferline#unnamed = '[No Name]'      " Default name when no buffer is opened
-let g:lightline#bufferline#shorten_path = 0           " Don't compress ~/my/folder/name to ~/m/f/n
+let g:lightline#bufferline#filename_modifier = ':~:.'
+let g:lightline#bufferline#unicode_symbols = 1
+let g:lightline#bufferline#unnamed = '[No Name]'
+let g:lightline#bufferline#shorten_path = 0
 
 """" Lightline trailing whitespace
 let g:lightline#trailing_whitespace#indicator = '•'
@@ -380,20 +365,93 @@ let delimitMate_nesting_quotes = ['"', '`']
 let delimitMate_excluded_regions = ""
 let delimitMate_balance_matchpairs = 1
 
-"""" Deoplete
-let g:deoplete#enable_at_startup = 1
+"""" vim-move
+let g:move_key_modifier = 'C-S'
 
-call deoplete#custom#source('_', 'min_pattern_length', 1)
-call deoplete#custom#source('around', 'rank', 100)
-call deoplete#custom#source('ultisnips', 'rank', 200)
+"""" coc
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-tslint', 'coc-eslint', 'coc-html', 'coc-css', 'coc-jest', 'coc-emoji', 'coc-prettier', 'coc-wxml', 'coc-yaml', 'coc-pyls', 'coc-highlight', 'coc-dictionary', 'coc-tag', 'coc-lists', 'coc-yank']
 
-"""" Deoplete-jedi (Python completion)
-let deoplete#sources#jedi#show_docstring = 1
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-"""" Deoplete-ternjs (JS completion)
-let g:tern_request_timeout = 1
-let g:tern#command = ["tern"]
-let g:tern#arguments = ["--persistent"]
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+"""""  Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+"""""  Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+"""""  Coc only does snippet and additional edit on confirm.
+""""" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+"""""  Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+"""""  Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+"""""  Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+"""""  Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+"""""  Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+"""""  Remap for format selected region
+vmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+"""""  Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+vmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+"""""  Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+"""""  Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+"""""  Use `:Format` for format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+"""""  Use `:Fold` for fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+"""""  Using CocList
+"""""  Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+"""""  Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+"""""  Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+"""""  Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+"""""  Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+"""""  Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+"""""  Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+"""""  Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 """" EasyAlign
 nmap <Leader>= <Plug>(EasyAlign)
@@ -409,9 +467,8 @@ nmap <Leader>gu <Plug>GitGutterUndoHunk
 nmap <Leader>gp <Plug>GitGutterPreviewHunk
 
 """" Go
-let g:go_fmt_autosave = 0   " This is already done by Neoformat
-let g:go_auto_type_info = 1 " Show type of anything under cursor
-
+let g:go_fmt_autosave = 0
+let g:go_auto_type_info = 1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
@@ -422,32 +479,27 @@ let g:go_highlight_methods = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_types = 1
 
-"""" Haskell Conceal
-let hscoptions="𝐒𝐓𝐄𝐌wRTBQZDC"
-
-"""" Haskell vim
-let g:haskell_indent_disable = 1
-
-"""" Markdown composer
-let g:markdown_composer_open_browser = 0
-let g:markdown_composer_custom_css = ['https://cdn.rawgit.com/maximbaz/github-markdown-css/gh-pages/github-markdown.css']
-
 """" Smalls
 let g:smalls_auto_jump = 1
-
 nmap s <Plug>(smalls)
 xmap s <Plug>(smalls)
 omap s <Plug>(smalls)
 
-"""" UltiSnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+"""" coc-snippets
+imap <C-l> <Plug>(coc-snippets-expand)
+vmap <C-j> <Plug>(coc-snippets-select)
+let g:coc_snippet_next = '<c-j>'
+let g:coc_snippet_prev = '<c-k>'
 
-augroup fix-ultisnips-overriding-tab-visual-mode
-  autocmd!
-  autocmd VimEnter * xnoremap <Tab> >gv
-augroup END
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#rpc#request('doKeymap', ['snippets-expand', "\<TAB>"])
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " nerdtree
 let NERDTreeShowHidden=1
@@ -457,14 +509,6 @@ map <leader>nf :NERDTreeFind<cr>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
-
-" vim markdown
-map [[ <Plug>Markdown_MoveToPreviousHeader
-map ]] <Plug>Markdown_MoveToNextHeader
-map ][ <Plug>Markdown_MoveToNextSiblingHeader
-map [] <Plug>Markdown_MoveToPreviousSiblingHeader
-map ]c <Plug>Markdown_MoveToCurHeader
-map ]u <Plug>Markdown_MoveToParentHeader
 
 """" vim-rooter
 let g:rooter_use_lcd = 1
@@ -479,10 +523,6 @@ let g:table_mode_verbose = 0
 let g:table_mode_corner = '|'
 let g:table_mode_auto_align = 1
 
-"""" vim-qf
-let g:qf_auto_open_quickfix = 0
-let g:qf_auto_open_loclist = 0
-
 """ Functions
 """" Removes trailing whitespace
 function! RemoveTrailingSpaces()
@@ -494,124 +534,11 @@ endfunction
 
 nnoremap <silent> <F10> :call RemoveTrailingSpaces()<CR>
 
-"""" Smart HOME & END
-function! SmartHome(mode)
-  let curcol = col(".")
-  "gravitate towards beginning for wrapped lines
-  if curcol > indent(".") + 2
-    call cursor(0, curcol - 1)
-  endif
-  if curcol == 1 || curcol > indent(".") + 1
-    if &wrap
-      normal g^
-    else
-      normal ^
-    endif
-  else
-    if &wrap
-      normal g0
-    else
-      normal 0
-    endif
-  endif
-  if a:mode == "v"
-    normal msgv`s
-  endif
-  return ""
-endfunction
-
-function! SmartEnd(mode)
-  let prev_virtualedit = &virtualedit
-  set virtualedit=
-  let curcol = col(".")
-  let lastcol = a:mode == "i" ? col("$") : col("$") - 1
-  "gravitate towards ending for wrapped lines
-  if curcol < lastcol - 1
-    let l:charlen = byteidx(getreg('1'), 1)
-    call cursor(0, curcol + l:charlen)
-  endif
-  if curcol < lastcol
-    if &wrap
-      normal g$
-    else
-      normal $
-    endif
-  else
-    normal g_
-  endif
-  "correct edit mode cursor position, put after current character
-  if a:mode == "i"
-    let l:charlen = byteidx(getreg('1'), 1)
-    call cursor(0, col(".") + l:charlen)
-  endif
-  if a:mode == "v"
-    normal msgv`s
-  endif
-  let &virtualedit = prev_virtualedit
-  return ""
-endfunction
-
-nnoremap <silent><Home> :call SmartHome("n")<CR>
-nnoremap <silent><End> :call SmartEnd("n")<CR>
-inoremap <silent><Home> <C-r>=SmartHome("i")<CR>
-inoremap <silent><End> <C-r>=SmartEnd("i")<CR>
-vnoremap <silent><Home> <Esc>:call SmartHome("v")<CR>
-vnoremap <silent><End> <Esc>:call SmartEnd("v")<CR>
-
-"""" Toggle automatic code formatting
-function! ToggleAutoFormatCode()
-  if !exists('#AutoFormatCode#BufWritePre')
-    augroup AutoFormatCode
-      autocmd!
-      autocmd BufWritePre * silent! Neoformat
-    augroup END
-  else
-    augroup AutoFormatCode
-      autocmd!
-    augroup END
-  endif
-endfunction
-command! ToggleAutoFormatCode :call ToggleAutoFormatCode()
-call ToggleAutoFormatCode() " Enable by default
-
 """" Repeat macro over visual selection
 function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
-
-"""" Set terminal title
-function! SetTerminalTitle()
-  let bufnr = bufnr('%')
-  if buflisted(bufnr)
-    if bufname(bufnr) == ''
-      let &titlestring = 'unnamed'
-    else
-      let &titlestring = expand('%:~')
-    endif
-  endif
-endfunction
-
-xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-
-""" AutoCmd
-augroup helper-windows-close
-  autocmd!
-  autocmd BufWinEnter * if &buftype == 'quickfix' | nnoremap <buffer> q :cclose <bar> :lclose <CR> | endif
-  autocmd BufWinEnter * if &buftype == 'help' | nnoremap <buffer> q :helpclose <CR> | endif
-  autocmd InsertLeave * pclose
-augroup END
-
-augroup reload-files-changed-outside
-  autocmd!
-  autocmd BufEnter,FocusGained * checktime
-augroup END
-
-augroup title
-  autocmd!
-  autocmd BufEnter * call SetTerminalTitle()
-augroup END
-
 
 "" vim:foldmethod=expr:foldlevel=0
 "" vim:foldexpr=getline(v\:lnum)=~'^""'?'>'.(matchend(getline(v\:lnum),'""*')-2)\:'='

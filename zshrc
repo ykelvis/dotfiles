@@ -52,6 +52,8 @@ export HIST_STAMPS="yyyy-mm-dd"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin/vendor_perl:/usr/bin/core_perl
 export PATH=$PATH:$HOME/.scripts:$HOME/.local/bin/node_modules/.bin:$HOME/.local/bin:$HOME/Dropbox/conf/scripts
+export GOPATH=$HOME/git/GOPATH
+export PATH=$PATH:$GOPATH/bin
 export ANSIBLE_FORCE_COLOR=true
 
 bindkey '^xe' edit-command-line

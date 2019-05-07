@@ -250,6 +250,7 @@ let g:ale_linters = {
       \ 'python': ["flake8"],
       \ }
 let g:ale_go_gometalinter_lint_package = 1
+let g:ale_python_flake8_options = '--ignore=E501'
 
 """" Lightline
 let g:lightline = {
@@ -259,6 +260,7 @@ let g:lightline = {
       \               [ 'pwd' ],
       \               [ 'linter_ok', 'linter_checking', 'linter_errors', 'linter_warnings'] ],
       \     'right': [ [ 'trailing' ],
+      \                [ 'percent' ],
       \                [ 'lineinfo' ],
       \                [ 'fileinfo' ],
       \                [ 'scrollbar' ] ],

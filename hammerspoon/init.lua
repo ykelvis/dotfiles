@@ -96,6 +96,7 @@ local key2App = {
     r = 'com.apple.Safari',
     t = 'com.kapeli.dashdoc',
     s = 'com.google.Chrome',
+    --s = 'org.mozilla.firefox',
     --s = 'com.google.Chrome.canary',
     d = 'com.sublimetext.3',
     --y = 'io.mpv',
@@ -137,6 +138,8 @@ wifiWatcher = hs.wifi.watcher.new(ssidChangedCallback)
 wifiWatcher:start()
 
 function usbDeviceCallback(data)
+    print("usbDeviceCallback: "..hs.inspect(data))
+
     if (data["productName"] == "HHKB Professional") then
         if (data["eventType"] == "added") then
             send_notification('HHKB','HHKB on')

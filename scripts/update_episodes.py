@@ -7,14 +7,15 @@ logging.basicConfig(format='[%(levelname)s] %(message)s')
 log = logging.getLogger()
 log.setLevel('INFO')
 
+
 class Suki:
-    def __init__(self, username, password): #, bangumi_id):
+    def __init__(self, username, password):
         # self.bangumi_id = bangumi_id
         self.domain = "https://suki.moe"
         self.api_login = "{}/api/user/login".format(self.domain)
         self.api_episode = "{}/api/admin/episode".format(self.domain)
         self.api_bangumi = "{}/api/admin/bangumi".format(self.domain)
-        self.epi_range = list(range(1,15))
+        self.epi_range = list(range(1, 30))
         self.login(username, password)
         return
 
@@ -23,6 +24,7 @@ class Suki:
         self.session.headers = {'User-Agent': 'Mozilla/5.0', 'Content-Type': 'application/json'}
         payload = {"name": username, "password": password, "remember": True}
         ret = self.session.post(self.api_login, json=payload)
+        log.info("login: \n{}".format(ret))
         return
 
     def get_jsons(self):
@@ -30,7 +32,7 @@ class Suki:
         json_suki = self.session.get(url_suki).json()
         bgm_id = json_suki["data"]["bgm_id"]
         url_bgm = "http://api.bgm.tv/subject/{}?responseGroup=large".format(bgm_id)
-        json_bgm = requests.get(url_bgm).json()
+        json_bgm = self.session.get(url_bgm).json()
         return (json_bgm, json_suki)
 
     def set_on_air(self):
@@ -84,10 +86,10 @@ class Suki:
             else:
                 log.info("checking ep{}".format(k))
                 changed, payload = False, v[1]
-                name = False if v[0]["name"]==v[1].get("name", None) else v[0]["name"]
-                name_cn = False if v[0]["name_cn"]==v[1].get("name_cn", None) else v[0]["name_cn"]
-                bgm_id = False if v[0]["id"]==v[1].get("bgm_eps_id", None) else v[0]["id"]
-                airdate = False if v[0]["airdate"]==v[1].get("airdate", None) else v[0]["airdate"]
+                name = False if v[0]["name"] == v[1].get("name", None) else v[0]["name"]
+                name_cn = False if v[0]["name_cn"] == v[1].get("name_cn", None) else v[0]["name_cn"]
+                bgm_id = False if v[0]["id"] == v[1].get("bgm_eps_id", None) else v[0]["id"]
+                airdate = False if v[0]["airdate"] == v[1].get("airdate", None) else v[0]["airdate"]
                 if name:
                     log.info("name {} -> {}".format(v[1].get("name", "None"), v[0]["name"]))
                     payload["name"] = v[0]["name"]
@@ -115,6 +117,7 @@ class Suki:
         if changed or added:
             log.info("gonna set bangumi status to on_air")
             self.set_on_air()
+
 
 if __name__ == "__main__":
     import sys

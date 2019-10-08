@@ -250,7 +250,7 @@ let g:ale_linters = {
       \ 'python': ["flake8"],
       \ }
 let g:ale_go_gometalinter_lint_package = 1
-let g:ale_python_flake8_options = '--ignore=E501'
+let g:ale_python_flake8_options = '--ignore=E501,E116,E114,E117'
 
 """" Lightline
 let g:lightline = {
